@@ -7,7 +7,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-br" className='dark'>
       <body>
         <Header />
-        <div className='mx-40'>
+        <div className='mx-80'>
             {children}
         </div>
       </body>

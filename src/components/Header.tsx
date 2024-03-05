@@ -10,7 +10,7 @@ export function Header(){
                 <Image src={sino_icon} alt='' width='20'/>        
             </div>
             <div className='mr-4 bg-gradient-to-b from-white/30 to-white/20 p-3 rounded-xl'>
-                <Link href='crud'>
+                <Link href=''>
                     <Image src={menu_icon} alt='' width='25'/>
                 </Link>        
             </div>

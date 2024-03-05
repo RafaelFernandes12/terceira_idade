@@ -15,8 +15,12 @@ const config: Config = {
       },
       backgroundColor: {
         darkBlue: "#161250",
+        hoverColor:'#191280',
         violet: "#9D9DBC"
-      }
+      },
+      borderWidth: {
+        1:'1px'
+      },
     },
   },
   plugins: [],

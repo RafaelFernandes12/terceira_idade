@@ -8,7 +8,7 @@ export function SearchBar(){
                 <Image src={search_bar} alt=''/>
             </button>
             <input placeholder="Procurar por nome" className='w-full border-2 border-black rounded-xl p-2 pl-10'/>
-            <button className='absolute right-44'>
+            <button className='absolute right-[340px]'>
                 <Image src={x} alt=''/>
             </button>
         </div>
