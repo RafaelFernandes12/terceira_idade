@@ -34,8 +34,8 @@ export default async function Home() {
       <div className="grid grid-cols-4 m-0">
       {courses.map((response => {
         return(
-          <div key={response.id} className="w-32 flex items-center flex-col m-auto">
-            <Image src={dumbell} alt='' className="bg-violet p-4 rounded-lg w-full m-auto"/>
+          <div key={response.id} className="w-48 flex items-center flex-col m-auto">
+            <img src={response.data.imgUrl} alt='' className="bg-violet p-4 rounded-lg w-full h-full m-auto"/>
             <span className="w-full truncate">{response.data.name}</span>
               <ThreeDots id={response.id}/>
           </div>
