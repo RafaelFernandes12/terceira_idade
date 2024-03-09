@@ -3,7 +3,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '@/config/firestore';
 import uniqid from 'uniqid';
 
-export async function createCourse(name: string, img: any){
+export async function createCourse(name: string, img: any, type: string){
 
   const imgs = ref(storage,`Imgs/${uniqid()}`)
   const valRef = collection(db,'courses')
@@ -15,5 +15,5 @@ export async function createCourse(name: string, img: any){
   const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
   // Adding document to Firestore with the download URL
-  await addDoc(valRef, { name: name, imgUrl: downloadURL });
+  await addDoc(valRef, { name: name, imgUrl: downloadURL, type: type });
 }

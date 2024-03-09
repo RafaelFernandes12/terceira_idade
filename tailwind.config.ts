@@ -21,6 +21,9 @@ const config: Config = {
       borderWidth: {
         1:'1px'
       },
+      fontFamily: {
+        'poppins': ['Poppins'],
+     }
     },
   },
   plugins: [],
