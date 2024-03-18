@@ -1,12 +1,12 @@
 'use client'
 
-import { SearchBar } from "@/components/SearchBar";
 import { getCourses } from "@/operations/getCourses";
 import AddIcon from '@mui/icons-material/Add';
-import Link from "next/link";
-import { ThreeDots } from "./components/ThreeDots";
-import { useEffect, useState } from "react";
 import { DocumentData } from "firebase/firestore";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ThreeDots } from "./components/ThreeDots";
+import { SearchBar } from "./components/SearchBar";
 
 interface coursesProps {
   id: string,
@@ -17,20 +17,24 @@ export default function Home() {
 
   const [courses,setCourses] = useState<coursesProps[]>([])
   const [courseType,setCourseType] = useState('Extensão')
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     getCourses().then(response => {
       setCourses(response)
+      console.log(courses)
+
     })
-  })
+  },[])
   function handleCourseType(filterCourse: string){
     if(filterCourse === 'Extensão') setCourseType('Extensão')
     if(filterCourse === 'Ensino') setCourseType('Ensino')
   }
+  function handleInputChange(value:any){ setSearch(value)}
 
   return (
     <div>
-      <SearchBar />
+      <SearchBar onChange={handleInputChange} />
       <div className="border-2 border-black rounded-lg p-4">
       <div className="flex justify-between mx-6 mb-10 mt-4">
           {courseType === 'Extensão' ?         
@@ -62,12 +66,15 @@ export default function Home() {
       <div className="grid grid-cols-4 m-0">
       {courses.map((response => {
         const matchType = response.data.type === courseType
-        if(matchType){
+
+        if(matchType && response.data.name.toLowerCase().startsWith(search.toLowerCase())){
           return(
-            <div key={response.id} className="w-48 flex items-center flex-col m-auto">
-              <img src={response.data.imgUrl} alt='' className="bg-violet p-4 rounded-lg w-full h-full m-auto"/>
-              <span className="w-full truncate">{response.data.name}</span>
+            <div key={response.id} className="w-52 h-52 flex items-center flex-col m-auto mb-14">
+              <img src={response.data.imgUrl} alt='' className="bg-violet p-4 rounded-lg w-full h-full m-auto object-cover"/>
+              <div className="flex  items-center justify-between w-full">
+                <span className="w-full truncate">{response.data.name}</span>
                 <ThreeDots id={response.id}/>
+              </div>
             </div>
           )
         }

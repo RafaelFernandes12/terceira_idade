@@ -2,65 +2,107 @@
 
 import { ErrorText } from '@/components/ErrorText';
 import { createCourse } from '@/operations/createCourse';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import Link from 'next/link';
 import { useState } from 'react';
+import InputField from "../components/InputField";
+import SelectField from '../components/SelectField';
+import SubmitButton from '../components/SubmitButton';
 
-export default function CreateCourse(){
+const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+const types = ['Extensão', 'Ensino']
 
-    const [name, setName] = useState('')
-    const [error, setError] = useState('')
-    const [img,setImg] = useState<any>()
-    const [type, setType] = useState('Extensão')
+export default function CreateCourse() {
+    const [name, setName] = useState('adwa');
+    const [courseImg, setCourseImg] = useState<any>();
+    const [professorName, setProfessorName] = useState('dwadawda');
+    const [professorImg, setProfessorImg] = useState<any>();
+    const [error, setError] = useState('');
+    const [type, setType] = useState('Extensão');
+    const [local, setLocal] = useState({
+        date: ['Terça'],
+        hour: 'adwad',
+        place: 'wadawdawd'
+    });
 
-    async function addCourse(e:any){
-        e.preventDefault()
-        if(name && img && type) {
-            createCourse(name,img,type)
-            alert('criado com sucesso')
-        }
-        else {
-            setError('Todas os campos tem que estar preenchidos')            
+
+    async function addCourse(e: any) {
+        e.preventDefault();
+        if (name && courseImg && type && local.date.length > 0 && local.hour && local.place) {
+            createCourse({ name, courseImg, type, professorName, professorImg, local });
+            alert('Criado com sucesso');
+        } else {
+            setError('Todos os campos devem estar preenchidos');
         }
     }
 
-    return(
+    function handleInputName(value: string) { setName(value); }
+    function handleInputProfessorName(value: string) { setProfessorName(value); }
+    function handleInputType(value: string) { setType(value); }
+    function handleInputChange(propertyName: string, value: any) {
+        setLocal(prevLocal => ({
+            ...prevLocal,
+            [propertyName]: value
+        }));
+    }
+
+    return (
         <form className='flex flex-col justify-center' onSubmit={addCourse}>
             <h1 className='font-semibold text-2xl my-7'>Criar curso</h1>
             <div className='mb-4'>
-                <TextField label='Nome:' className='w-full rounded-lg' 
-                value={name}
-                onChange={e => setName(e.target.value)}
+                <InputField 
+                    label='Nome:' 
+                    value={name} 
+                    onChange={handleInputName} 
+                />
+                <label>Foto do curso: </label>
+                <input
+                    placeholder=''
+                    type='file' 
+                    onChange={e => setCourseImg(e.currentTarget.files![0])} 
                 />
 
-                <TextField type='file' onChange={e => setImg(e.currentTarget.files![0])}/>
-                <FormControl sx={{ m: 1, minWidth: 120 }} size="medium">
-                    <InputLabel id="demo-select-small-label">Tipo</InputLabel>
-                    <Select
-                        labelId="demo-select-small-label"
-                        id="demo-select-small"
-                        value={type}
-                        label="Extensão"
-                        defaultValue='Extensão'
-                        onChange={e => setType(e.target.value)}
-                    >
-                        <MenuItem value="Extensão">Extensão</MenuItem>
-                        <MenuItem value="Ensino">Ensino</MenuItem>
-                    </Select>
-                </FormControl>
-            </div>
-            <div>
-                <button className='bg-darkBlue w-24 rounded-md text-white p-2 mr-4' type='submit'>Criar</button>
-                <Link href='/dashboard'>
-                    <button className='border-1 border-zinc-500 w-24 rounded-md text-black p-2'>Cancelar</button>
-                </Link>
-            </div>
-            <ErrorText error={error}/>
+                <SelectField 
+                    inputLabel='Tipo' 
+                    value={type} 
+                    label='Extensão' 
+                    onChange={handleInputType} 
+                    itens={types} 
+                    isMultiple={false}
+                />
+                
+                <SelectField 
+                    inputLabel='Dia' 
+                    value={local.date} 
+                    label='Dia' 
+                    onChange={(e:any) => handleInputChange('date',e.target.value)} 
+                    itens={daysOfWeek} 
+                    isMultiple={true}
+                />
 
+                <InputField 
+                    label='Nome do Professor:' 
+                    value={professorName}
+                    onChange={handleInputProfessorName} 
+                 />
+                <label>Foto do professor do curso: </label>
+                <input 
+                    type='file' 
+                    onChange={e => setProfessorImg(e.currentTarget.files![0])} 
+                />
+
+                <InputField 
+                    label='Hora do curso:' 
+                    value={local.hour} 
+                    onChange={(e: string) => handleInputChange('hour', e)} 
+                />
+                <InputField 
+                    label='Lugar do curso:' 
+                    value={local.place} 
+                    onChange={(e: string) => handleInputChange('place', e)} 
+                />
+            </div>
+            <SubmitButton submit='submit'/>
+            <ErrorText error={error} />
         </form>
-    )
+    );
 }

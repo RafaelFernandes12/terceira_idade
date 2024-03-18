@@ -1,48 +1,116 @@
 'use client'
-import { useEffect, useState } from 'react'
-import TextField from '@mui/material/TextField';
+
 import { ErrorText } from '@/components/ErrorText';
-import Link from 'next/link';
 import { editCourse } from '@/operations/editCourse';
+import TextField from '@mui/material/TextField';
+import { useEffect, useState } from 'react';
+import InputField from '../../components/InputField';
+import SelectField from '../../components/SelectField';
+import SubmitButton from '../../components/SubmitButton';
 
-export default function EditCourse(){
+const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+const types = ['Extensão', 'Ensino']
 
-    const [newName,setNewName] = useState('')
-    const [error,setError] = useState('')
-
-    const [id, setId] = useState('');
+export default function CreateCourse() {
+    const [name, setName] = useState('');
+    const [courseImg, setCourseImg] = useState<any>();
+    const [professorName, setProfessorName] = useState('');
+    const [professorImg, setProfessorImg] = useState<any>();
+    const [error, setError] = useState('');
+    const [type, setType] = useState('Extensão');
+    const [id, setId] = useState('')
+    const [local, setLocal] = useState({
+        date: [],
+        hour: '',
+        place: ''
+    });
 
     useEffect(() => {
         const pathParts = window.location.pathname.split('/');
         const playlistId = pathParts[pathParts.length - 1];
-
+    
         setId(playlistId);
     }, []);
 
-    async function changeCourse(){
-        if(newName) {
-            editCourse(id,newName)
-        }
-        else {
-            setError('Todas os campos tem que estar preenchidos')            
+    async function addCourse(e: any) {
+        e.preventDefault();
+        if (name && courseImg && type && local.date.length > 0 && local.hour && local.place) {
+            editCourse({ id, name, courseImg, type, professorName, professorImg, local });
+            alert('Criado com sucesso');
+        } else {
+            setError('Todos os campos devem estar preenchidos');
         }
     }
 
-    return(
-        <div className='flex flex-col justify-center'>
-            <h1 className='font-semibold text-2xl my-7'>Editar curso</h1>
+    function handleInputName(value: string) { setName(value); }
+    function handleInputProfessorName(value: string) { setProfessorName(value); }
+    function handleInputType(value: string) { setType(value); }
+
+    function handleInputChange(propertyName: string, value: any) {
+        setLocal(prevLocal => ({
+            ...prevLocal,
+            [propertyName]: value
+        }));
+    }
+
+    return (
+        <form className='flex flex-col justify-center' onSubmit={addCourse}>
+            <h1 className='font-semibold text-2xl my-7'>Criar curso</h1>
             <div className='mb-4'>
-                <TextField label='Nome:' className='w-full rounded-lg' 
-                onChange={e => setNewName(e.target.value)}
+                <InputField 
+                    label='Nome:' 
+                    value={name} 
+                    onChange={handleInputName} 
+                />
+
+                <TextField 
+                    type='file' 
+                    onChange={e => setCourseImg(e.currentTarget.files![0])} 
+                />
+
+                <SelectField 
+                    inputLabel='Tipo' 
+                    value={type} 
+                    label='Extensão' 
+                    onChange={handleInputType} 
+                    itens={types} 
+                    isMultiple={false}
+                />
+                
+                <SelectField 
+                    inputLabel='Dia' 
+                    value={local.date} 
+                    label='Dia' 
+                    onChange={(e:any) => handleInputChange('date',e.target.value)} 
+                    itens={daysOfWeek} 
+                    isMultiple={true}
+                />
+
+                <InputField 
+                    label='Nome do Professor:' 
+                    value={professorName}
+                    onChange={handleInputProfessorName} 
+                 />
+
+                <TextField 
+                    type='file' 
+                    onChange={e => setProfessorImg(e.currentTarget.files![0])} 
+                />
+
+                <InputField 
+                    label='Hora do curso:' 
+                    value={local.hour} 
+                    onChange={(e: string) => handleInputChange('hour', e)} 
+                />
+                <InputField 
+                    label='Lugar do curso:' 
+                    value={local.place} 
+                    onChange={(e: string) => handleInputChange('place', e)} 
                 />
             </div>
-            <div>
-                <button className='bg-darkBlue w-24 rounded-md text-white p-2 mr-4'onClick={changeCourse}>Editar</button>
-                <Link href='/dashboard'>
-                    <button className='border-1 border-zinc-500 w-24 rounded-md text-black p-2'>Cancelar</button>
-                </Link>
-            </div>
-            <ErrorText error={error}/>
-        </div>
-    )
+            <SubmitButton submit='submit'/>
+            <ErrorText error={error} />
+        </form>
+    );
 }
+
