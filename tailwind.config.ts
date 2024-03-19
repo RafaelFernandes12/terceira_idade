@@ -8,18 +8,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
+      backgroundImage: {},
       backgroundColor: {
         darkBlue: "#161250",
-        hoverColor:'#191280',
+        hoverColor:"#191280",
         violet: "#9D9DBC"
       },
       borderWidth: {
-        1:'1px'
+        1:"1px"
       },
     },
   },

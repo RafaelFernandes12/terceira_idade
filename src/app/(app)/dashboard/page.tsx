@@ -1,12 +1,12 @@
-import { SearchBar } from '@/components/SearchBar';
+import { SearchBar } from "@/components/SearchBar";
 import { getCourses } from "@/operations/getCourses";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 import { ThreeDots } from "./components/ThreeDots";
 
 export default async function Home() {
 
-  const courses = await getCourses()
+  const courses = await getCourses();
 
   return (
     <div>
@@ -37,7 +37,7 @@ export default async function Home() {
                 <span className="w-full truncate">{response.data.name}</span>
                 <ThreeDots id={response.id} />
               </div>
-            )
+            );
           }))}
         </div>
       </div>

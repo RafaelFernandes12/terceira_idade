@@ -1,5 +1,5 @@
-import { Header } from '@/components/Header'
-import '../globals.css'
+import { Header } from "@/components/Header";
+import "../globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 
@@ -8,9 +8,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Header />
         <div className='mx-80'>
-            {children}
+          {children}
         </div>
       </body>
     </html>
-  )
+  );
 }
