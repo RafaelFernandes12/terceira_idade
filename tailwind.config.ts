@@ -8,15 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {},
-      backgroundColor: {
-        darkBlue: "#161250",
-        hoverColor:"#191280",
-        violet: "#9D9DBC"
-      },
-      borderWidth: {
-        1:"1px"
-      },
+      colors: {
+        "background-light": "#ECF1F8",
+      }
     },
   },
   plugins: [],
