@@ -1,7 +1,7 @@
-import sino_icon from "../assets/sino_icon.svg";
-import menu_icon from "../assets/menu_icon.svg";
 import Image from "next/image";
 import Link from "next/link";
+import menu_icon from "../assets/menu_icon.svg";
+import sino_icon from "../assets/sino_icon.svg";
 
 export function Header(){
   return(
