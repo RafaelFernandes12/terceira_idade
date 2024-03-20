@@ -1,17 +1,16 @@
 "use client";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {deleteCourse} from "@/operations/deleteCourse";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import IconButton from "@mui/material/IconButton";
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 
-interface deleteCourseProps {
+interface idProps{
     id: string
 }
 
-export function ThreeDots({id} : deleteCourseProps){
+export function ThreeDots({id}: idProps){
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -22,21 +21,38 @@ export function ThreeDots({id} : deleteCourseProps){
   const handleClose = () => {
     setAnchorEl(null);
   };
-  function destroyCourse(){
-    deleteCourse(id);
-  }
 
-  return(
-    <>
-      <IconButton onClick={handleClick}>
+  return (
+    <div>
+      <IconButton
+        aria-label="more"
+        id="long-button"
+        aria-controls={open ? "long-menu" : undefined}
+        aria-expanded={open ? "true" : undefined}
+        aria-haspopup="true"
+        onClick={handleClick}
+      >
         <MoreVertIcon />
       </IconButton>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+
+      <Menu
+        id="long-menu"
+        MenuListProps={{
+          "aria-labelledby": "long-button",
+        }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+      >
         <Link href={`editCourse/${id}`}>
-          <MenuItem>Editar</MenuItem>
+          <MenuItem>
+                Editar
+          </MenuItem>
         </Link>
-        <MenuItem onClick={destroyCourse}>Excluir</MenuItem>
+        <MenuItem>           
+              Excluir
+        </MenuItem>
       </Menu>
-    </>
+    </div>
   );
 }
