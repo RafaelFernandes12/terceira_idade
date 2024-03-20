@@ -1,5 +1,5 @@
-import { doc, deleteDoc } from "firebase/firestore";
-import {db} from "@/config/firestore";
+import { db } from "@/config/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 
 export async function deleteCourse(id: string){
   

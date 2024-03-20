@@ -8,28 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
-<<<<<<< HEAD
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
-      backgroundColor: {
-        darkBlue: "#161250",
-        hoverColor:'#191280',
-        violet: "#9D9DBC"
-      },
-      borderWidth: {
-        1:'1px'
-      },
       fontFamily: {
-        'poppins': ['Poppins'],
-     }
-=======
+        "poppins": ["Poppins"],
+      },
       colors: {
         "background-light": "#ECF1F8",
       }
->>>>>>> 260196be67f598b853b712a5bc2be7ad2d78d871
     },
   },
   plugins: [],
