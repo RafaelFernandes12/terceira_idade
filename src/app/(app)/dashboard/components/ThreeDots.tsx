@@ -1,12 +1,10 @@
 'use client'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import {deleteCourse} from '@/operations/deleteCourse'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
 import Link from 'next/link';
-import { courseProps } from '@/types/courseProps';
 
 interface idProps{
     id: string

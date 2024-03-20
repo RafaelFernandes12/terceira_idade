@@ -2,7 +2,6 @@
 
 import { ErrorText } from '@/components/ErrorText';
 import { createCourse } from '@/operations/createCourse';
-import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import InputField from "../components/InputField";
 import SelectField from '../components/SelectField';

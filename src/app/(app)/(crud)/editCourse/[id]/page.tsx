@@ -2,7 +2,6 @@
 
 import { ErrorText } from '@/components/ErrorText';
 import { editCourse } from '@/operations/editCourse';
-import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import InputField from '../../components/InputField';
 import SelectField from '../../components/SelectField';
@@ -11,7 +10,7 @@ import SubmitButton from '../../components/SubmitButton';
 const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
 const types = ['Extensão', 'Ensino']
 
-export default function CreateCourse() {
+export default function EditCourse() {
     const [name, setName] = useState('');
     const [courseImg, setCourseImg] = useState<any>();
     const [professorName, setProfessorName] = useState('');
@@ -27,9 +26,9 @@ export default function CreateCourse() {
 
     useEffect(() => {
         const pathParts = window.location.pathname.split('/');
-        const playlistId = pathParts[pathParts.length - 1];
+        const courseId = pathParts[pathParts.length - 1];
     
-        setId(playlistId);
+        setId(courseId);
     }, []);
 
     async function addCourse(e: any) {
@@ -63,7 +62,7 @@ export default function CreateCourse() {
                     onChange={handleInputName} 
                 />
 
-                <TextField 
+                <input 
                     type='file' 
                     onChange={e => setCourseImg(e.currentTarget.files![0])} 
                 />
@@ -92,7 +91,7 @@ export default function CreateCourse() {
                     onChange={handleInputProfessorName} 
                  />
 
-                <TextField 
+                <input 
                     type='file' 
                     onChange={e => setProfessorImg(e.currentTarget.files![0])} 
                 />
