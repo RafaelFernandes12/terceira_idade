@@ -37,7 +37,7 @@ export default function CreateCourse() {
 
   function handleInputName(value: string) { setName(value); }
   function handleInputProfessorName(value: string) { setProfessorName(value); }
-  function handleInputType(value: string) { setType(value); }
+  function handleInputType(value: string) { setType(value); console.log(type);}
   function handleInputChange(propertyName: string, value: any) {
     setLocal(prevLocal => ({
       ...prevLocal,

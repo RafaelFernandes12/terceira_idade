@@ -1,4 +1,6 @@
 "use client";
+
+import { deleteCourse } from "@/operations/deleteCourse";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -21,7 +23,6 @@ export function ThreeDots({id}: idProps){
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <div>
       <IconButton
@@ -49,7 +50,7 @@ export function ThreeDots({id}: idProps){
                 Editar
           </MenuItem>
         </Link>
-        <MenuItem>           
+        <MenuItem onClick={() => deleteCourse(id)}>           
               Excluir
         </MenuItem>
       </Menu>

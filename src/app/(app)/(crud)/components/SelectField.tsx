@@ -14,7 +14,9 @@ interface selectFieldProps {
     isMultiple: boolean
 }
 
-export default function SelectField({inputLabel, label,value,onChange,itens,isMultiple} : selectFieldProps){
+export default function SelectField({inputLabel,label,value,onChange,itens,isMultiple} : selectFieldProps){
+
+
   if(isMultiple){
     return(
       <FormControl sx={{ minWidth: 120}} size="medium">
@@ -38,7 +40,7 @@ export default function SelectField({inputLabel, label,value,onChange,itens,isMu
         <Select
           value={value}
           label={label}
-          onChange={e => onChange(e)}
+          onChange={e => onChange(e.target.value)}
         >
           {itens.map(item => {
             return <MenuItem key={item} value={item}>{item}</MenuItem>;
