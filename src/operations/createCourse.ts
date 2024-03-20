@@ -1,16 +1,16 @@
-import { addDoc, collection } from "firebase/firestore"; 
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { db, storage } from '@/config/firestore';
-import uniqid from 'uniqid';
+import { db, storage } from "@/config/firestore";
 import { courseProps } from "@/types/courseProps";
+import { addDoc, collection } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import uniqid from "uniqid";
 
 export async function createCourse({
   name,courseImg,type,professorName,professorImg,local
 }: courseProps){
 
-  const courseImgs = ref(storage,`courseImgs/${uniqid()}`)
-  const professorImgs = ref(storage,`professorImgs/${uniqid()}`)
-  const valRef = collection(db,'courses')
+  const courseImgs = ref(storage,`courseImgs/${uniqid()}`);
+  const professorImgs = ref(storage,`professorImgs/${uniqid()}`);
+  const valRef = collection(db,"courses");
   
   const courseSnapshot = await uploadBytes(courseImgs, courseImg);
   const downloadCourseURL = await getDownloadURL(courseSnapshot.ref);

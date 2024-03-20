@@ -8,6 +8,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
+<<<<<<< HEAD
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -24,6 +25,11 @@ const config: Config = {
       fontFamily: {
         'poppins': ['Poppins'],
      }
+=======
+      colors: {
+        "background-light": "#ECF1F8",
+      }
+>>>>>>> 260196be67f598b853b712a5bc2be7ad2d78d871
     },
   },
   plugins: [],
