@@ -3,13 +3,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_CENTER_ID,
-  appId: process.env.NEXT_PUBLIC_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID
+  apiKey: "AIzaSyBmRV1UtOodq3h2wU6qYCKgdmugspO-VkU",
+  authDomain: "terceiraidade-fb754.firebaseapp.com",
+  projectId: "terceiraidade-fb754",
+  storageBucket: "terceiraidade-fb754.appspot.com",
+  messagingSenderId: "738511571131",
+  appId: "1:738511571131:web:ad82744dca8b668a39019e",
+  measurementId: "G-SWY37YLC75"
 };
 
 const app = initializeApp(firebaseConfig);

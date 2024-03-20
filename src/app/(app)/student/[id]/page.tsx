@@ -1,4 +1,3 @@
-
 interface IdProps {
   params: {
     id: string
