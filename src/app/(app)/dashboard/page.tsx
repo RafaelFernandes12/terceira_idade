@@ -22,10 +22,10 @@ export default function Dashboard() {
   useEffect(() => {
     getCourses().then(response => {
       setCourses(response);
-      console.log(courses);
-
     });
   },[]);
+  console.log(courses.map(item => item.data.name));
+
   function handleCourseType(filterCourse: string){
     if(filterCourse === "Extensão") setCourseType("Extensão");
     if(filterCourse === "Ensino") setCourseType("Ensino");

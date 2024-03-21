@@ -1,6 +1,7 @@
 import search_bar from "@/assets/search_bar.svg";
 import x from "@/assets/x.svg";
 import Image from "next/image";
+
 export function SearchBar(){
   return (
     <div className='flex items-center w-full my-5'>

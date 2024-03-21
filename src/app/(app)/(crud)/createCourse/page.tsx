@@ -25,7 +25,7 @@ export default function CreateCourse() {
   });
 
 
-  async function addCourse(e: any) {
+  async function addCourse(e:any) {
     e.preventDefault();
     if (name && courseImg && type && local.date.length > 0 && local.hour && local.place) {
       createCourse({ name, courseImg, type, professorName, professorImg, local });
