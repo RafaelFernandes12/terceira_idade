@@ -1,57 +1,76 @@
+"use client";
+
 import { getCourse } from "@/operations/getCourse";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
- 
+import { DocumentData } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import DataTable from "../components/DataTable";
+import StudentData from "../components/StudentsData";
+
 interface IdProps {
     params: {
         id: string
     }
 }
-// const NoSSR = dynamic(() => import('../components/no-ssr'), { ssr: false })
 
-export default async function Course({params}: IdProps) {
+export default function Course({ params }: IdProps) {
+  const [courseType, setCourseType] = useState("DadosGerais");
+  const [course, setCourse] = useState<DocumentData | null>(null);
 
-  const course = await getCourse(params.id);
+  useEffect(() => {
+    getCourse(params.id).then(response => {
+      console.log(response.local);
+      setCourse(response);
+    }).catch(error => {
+      console.error("Error fetching course:", error);
+    });
+  }, []);
+
+  function handleCourseType(filterCourse: string) {
+    setCourseType(filterCourse);
+  }
 
   return (
-        
     <div className="border-2 border-black rounded-lg p-4 ">
-      {/* <NoSSR /> */}
-      <div className="border-b-2 border-black w-full font-medium my-4 text-2xl">{course.name}</div>
-      <ul className="flex items-center gap-4 my-4">
-        <li>Dados gerais</li>
-        <li>Participantes</li>
-      </ul>
-      <div className="flex items-center gap-4 border-y-1 border-gray-400 p-4">
-        <img src={course.professorImg} className="w-28 h-28"/>
-        <p>{course.professorName}</p>
-      </div>
-      <h1>Cronograma</h1>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableRow>
-            <TableCell>Dias</TableCell>
-            <TableCell>Lugar</TableCell>
-            <TableCell>Hora</TableCell>
-          </TableRow>
-          <TableBody>
-            <TableRow
-              key={course.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {course.local.date}
-              </TableCell>
-              <TableCell>{course.local.hour}</TableCell>
-              <TableCell>{course.local.place}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {course ? (
+        <>
+          <div className="border-b-2 border-black w-full font-medium my-4 text-4xl">{course.name}</div>
+          <div>
+            {courseType === "DadosGerais" ?
+              <>
+                <ul className="inline-flex gap-3 mb-4">
+                  <button onClick={() => handleCourseType("DadosGerais")}>
+                    <li className="font-regular text-lg border-b-2 border-[#161250]">Dados gerais</li>
+                  </button>
+                  <button onClick={() => handleCourseType("Participantes")}>
+                    <li>Participantes</li>
+                  </button>
+                </ul>
+                <DataTable
+                  professorImg={course.professorImg}
+                  professorName={course.professorName}
+                  local={course.local}
+                />
+              </>
+              :
+              <>
+                <ul className="inline-flex gap-3 mb-4">
+                  <button onClick={() => handleCourseType("DadosGerais")}>
+                    <li>Dados gerais</li>
+                  </button>
+                  <button onClick={() => handleCourseType("Participantes")}>
+                    <li className="font-regular  text-lg border-b-2 border-[#161250]">
+                      Participantes
+                    </li>
+                  </button>
+                </ul>
+                <StudentData />
+              </>
+            }
+          </div>
+        </>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
