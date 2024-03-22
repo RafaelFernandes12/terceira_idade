@@ -10,6 +10,7 @@ export default function CreateCourse() {
 
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
+  const [foto, setFoto] = useState<any>();
   const [data_nascimento, setData_nascimento] = useState("");
   const [responsavel_nome, setResponsavel_nome] = useState("");
   const [responsavel_vinculo, setResponsavel_vinculo] = useState("");
@@ -28,7 +29,7 @@ export default function CreateCourse() {
   async function addStudent(e: any) {
     e.preventDefault();
     if (name && cpf && data_nascimento && responsavel_nome && responsavel_vinculo && telefone_contato && telefone_emergencia) {
-      createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia });
+      createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia,foto });
       alert("Criado com sucesso");
     } else {
       setError("Todos os campos devem estar preenchidos");
@@ -44,7 +45,11 @@ export default function CreateCourse() {
           value={name}
           onChange={handleInputName}
         />
-
+        <input
+          placeholder=''
+          type='file' 
+          onChange={e => setFoto(e.currentTarget.files![0])} 
+        />
         <InputField
           label='CPF:'
           value={cpf}

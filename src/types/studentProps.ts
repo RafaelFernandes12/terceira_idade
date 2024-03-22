@@ -6,7 +6,7 @@ export interface studentProps {
   responsavel_vinculo: string,
   telefone_contato: string,
   telefone_emergencia: string,
-  foto: string,
+  foto: any,
   rg_frente?: string,
   rg_verso?: string,
   residencia?: string,

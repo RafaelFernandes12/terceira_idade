@@ -6,13 +6,14 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
 
 export async function createStudent({
-  name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia
+  name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia,foto
 }: studentProps) {
 
   const valRef = collection(db, "students");
 
   const studentImgs = ref(storage,`studentImgs/${uniqid()}`);
-  const studentSnapshot = await uploadBytes(studentImgs, profile);
+
+  const studentSnapshot = await uploadBytes(studentImgs, foto);
   const downloadstudentURL = await getDownloadURL(studentSnapshot.ref);
 
   await addDoc(valRef, {
