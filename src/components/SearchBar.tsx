@@ -1,17 +1,18 @@
-import search_bar from "@/assets/search_bar.svg";
-import x from "@/assets/x.svg";
+"use client";
+
+import loupe from "@/assets/loupe.svg";
 import Image from "next/image";
 
-export function SearchBar(){
+export function SearchBar({onChange}: any){
+
   return (
     <div className='flex items-center w-full my-5'>
       <button className='absolute ml-2'>
-        <Image src={search_bar} alt=''/>
+        <Image src={loupe} alt=''/>
       </button>
-      <input placeholder="Procurar por nome" className='w-full border-2 border-black rounded-xl p-2 pl-10'/>
-      <button className='absolute right-[340px]'>
-        <Image src={x} alt=''/>
-      </button>
+      <input placeholder="Procurar por nome" className='w-full border-2 border-black rounded-xl p-2 pl-10'
+        onChange={e => onChange(e.target.value)}
+      />
     </div>
   );
 }

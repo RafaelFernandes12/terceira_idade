@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { DocumentData } from "firebase/firestore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { SearchBar } from "./components/SearchBar";
+import { SearchBar } from "../../../components/SearchBar";
 import { ThreeDots } from "./components/ThreeDots";
 
 interface coursesProps {
@@ -31,7 +31,7 @@ export default function Dashboard() {
     if(filterCourse === "Ensino") setCourseType("Ensino");
   }
   function handleInputChange(value:any){ setSearch(value);}
-
+  
   return (
     <div>
       <SearchBar onChange={handleInputChange} />
