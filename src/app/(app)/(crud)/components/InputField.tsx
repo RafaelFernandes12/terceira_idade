@@ -11,11 +11,11 @@ interface TextFieldProps {
 export default function InputField({label,value,onChange} : TextFieldProps){
 
   return(
-    <TextField className='w-full rounded-lg my-4' label={label} 
+    <TextField 
+      className='w-full rounded-lg my-4' 
+      label={label} 
       value={value}
       onChange={e => onChange(e.target.value)}
     />
-
-                
   );
 }

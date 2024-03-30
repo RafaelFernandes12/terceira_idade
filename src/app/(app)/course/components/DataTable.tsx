@@ -1,3 +1,4 @@
+import { courseProps } from "@/types/courseProps";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -5,16 +6,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-
-interface courseProps {
-  professorImg: string,
-  professorName: string,
-  local: {
-    date: string[],
-    hour: string,
-    place:string
-  }
-}
 
 export default function DataTable({ professorImg, professorName, local }: courseProps) {
 
@@ -28,7 +19,6 @@ export default function DataTable({ professorImg, professorName, local }: course
         <p>{professorName}</p>
       </div>
       <h1 className="mt-10">Cronograma</h1>
-      <div></div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -39,15 +29,19 @@ export default function DataTable({ professorImg, professorName, local }: course
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {local.date}
-              </TableCell>
-              <TableCell>{local.hour}</TableCell>
-              <TableCell>{local.place}</TableCell>
-            </TableRow>
+            {local.map((item,index) => {
+              return (
+                <TableRow key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 }
+                  }}
+                >
+                  <TableCell component="th" scope="row">{item.date}</TableCell>
+                  <TableCell>{item.place}</TableCell>
+                  <TableCell>{item.startHour} - {item.endHour}</TableCell>
+                </TableRow>
+              );
+            })}
+            
           </TableBody>
         </Table>
       </TableContainer>

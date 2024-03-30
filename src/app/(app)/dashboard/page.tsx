@@ -71,6 +71,7 @@ export default function Dashboard() {
               return(
                 <div key={response.id} className="w-52 h-52 flex items-center flex-col m-auto mb-14">
                   <Link href={`course/${response.id}`} className="bg-violet p-4 rounded-lg m-auto w-full h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={response.data.imgUrl} alt='' className="object-cover w-full h-full"/>
                   </Link>
                   <div className="flex  items-center justify-between w-full">
