@@ -1,4 +1,3 @@
-
 import { SideMenu } from "@/components/SideMenu";
 import "./globals.css";
 

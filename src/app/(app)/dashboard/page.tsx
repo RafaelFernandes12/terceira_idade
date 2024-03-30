@@ -24,7 +24,6 @@ export default function Dashboard() {
       setCourses(response);
     });
   },[]);
-  console.log(courses.map(item => item.data.name));
 
   function handleCourseType(filterCourse: string){
     if(filterCourse === "Extensão") setCourseType("Extensão");
@@ -63,7 +62,7 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-4 m-0">
+        <div className="grid 2xl:grid-cols-4 m-0 lg:grid-cols-3 md:grid-cols-2">
           {courses.map((response => {
             const matchType = response.data.type === courseType;
 
