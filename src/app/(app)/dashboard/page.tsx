@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { DocumentData } from "firebase/firestore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { SearchBar } from "./components/SearchBar";
+import { SearchBar } from "../../../components/SearchBar";
 import { ThreeDots } from "./components/ThreeDots";
 
 interface coursesProps {
@@ -31,7 +31,7 @@ export default function Dashboard() {
     if(filterCourse === "Ensino") setCourseType("Ensino");
   }
   function handleInputChange(value:any){ setSearch(value);}
-
+  
   return (
     <div>
       <SearchBar onChange={handleInputChange} />
@@ -71,6 +71,7 @@ export default function Dashboard() {
               return(
                 <div key={response.id} className="w-52 h-52 flex items-center flex-col m-auto mb-14">
                   <Link href={`course/${response.id}`} className="bg-violet p-4 rounded-lg m-auto w-full h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={response.data.imgUrl} alt='' className="object-cover w-full h-full"/>
                   </Link>
                   <div className="flex  items-center justify-between w-full">
