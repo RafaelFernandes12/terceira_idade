@@ -14,13 +14,13 @@ export default function DataTable({ professorImg, professorName, local }: course
       <p className="font-medium p-2 text-lg">Professor</p>
       <div className="flex items-center gap-4 border-y-1 border-gray-400 p-4">
         <picture>
-          <img src={professorImg} className="w-60 h-w-60 rounded-full" alt='' />
+          <img src={professorImg} className="w-60 h-60 rounded-full max-md:w-36 max-md:h-36" alt='' />
         </picture>
         <p>{professorName}</p>
       </div>
       <h1 className="mt-10">Cronograma</h1>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Dias</TableCell>

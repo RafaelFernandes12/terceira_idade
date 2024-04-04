@@ -64,9 +64,9 @@ export default function CreateCourse() {
         />
         <label>Foto do curso: </label>
         <input
-          placeholder=''
           type='file' 
           onChange={e => setCourseImg(e.currentTarget.files![0])} 
+          className="mb-2 max-sm:text-xs"
         />
         <SelectField 
           inputLabel='Tipo' 
@@ -84,8 +84,9 @@ export default function CreateCourse() {
         <input 
           type='file' 
           onChange={e => setProfessorImg(e.currentTarget.files![0])} 
+          className="mb-2 max-sm:text-xs"
         />
-        <div className="flex gap-4 items-center my-4">
+        <div className="flex gap-4 items-center my-4 max-md:flex-col">
           {local.map((item, index) => (
             <div key={index}>
               <SelectField

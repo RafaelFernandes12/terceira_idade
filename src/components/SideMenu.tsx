@@ -11,7 +11,7 @@ export function SideMenu(){
   const pathname = usePathname();
 
   return(
-    <div className="bg-white rounded-[10px] py-[20px] px-[40px] flex-auto max-w-[360px] max-lg:hidden">
+    <div className="bg-white rounded-[10px] py-[20px] px-[40px] flex-auto w-72 max-lg:hidden">
       <p>CPSI Web</p>
       <hr/>
       <ul>

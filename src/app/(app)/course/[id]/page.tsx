@@ -33,16 +33,16 @@ export default function Course({ params }: IdProps) {
     <div className="border-2 border-black rounded-lg p-4 ">
       {course ? (
         <>
-          <div className="border-b-2 border-black w-full font-medium my-4 text-4xl">{course.name}</div>
+          <div className="border-b-2 border-black w-full font-medium my-4 text-4xl max-md:text-2xl">{course.name}</div>
           <div>
             {courseType === "DadosGerais" ?
               <>
                 <ul className="inline-flex gap-3 mb-4">
                   <button onClick={() => handleCourseType("DadosGerais")}>
-                    <li className="font-regular text-lg border-b-2 border-[#161250]">Dados gerais</li>
+                    <li className="font-regular text-lg border-b-2 border-[#161250] max-sm:text-xs">Dados gerais</li>
                   </button>
                   <button onClick={() => handleCourseType("Participantes")}>
-                    <li>Participantes</li>
+                    <li className="max-sm:text-xs">Participantes</li>
                   </button>
                 </ul>
                 <DataTable
@@ -55,10 +55,10 @@ export default function Course({ params }: IdProps) {
               <>
                 <ul className="inline-flex gap-3 mb-4">
                   <button onClick={() => handleCourseType("DadosGerais")}>
-                    <li>Dados gerais</li>
+                    <li className="max-sm:text-xs">Dados gerais</li>
                   </button>
                   <button onClick={() => handleCourseType("Participantes")}>
-                    <li className="font-regular  text-lg border-b-2 border-[#161250]">
+                    <li className="font-regular  text-lg border-b-2 border-[#161250] max-sm:text-xs">
                       Participantes
                     </li>
                   </button>

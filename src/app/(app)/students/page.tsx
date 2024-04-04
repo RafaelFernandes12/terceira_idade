@@ -34,8 +34,8 @@ export default function Students() {
               <div key={response.data.cpf} className="border-1 border-gray-500 rounded-3xl flex responses-center p-4 my-6 justify-between">
                 <div className="flex items-center">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={response.data.foto} alt='' className="w-32 h-auto rounded-full"/>
-                  <div className="flex gap-2 flex-col ml-4">
+                  <img src={response.data.foto} alt='' className="w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20"/>
+                  <div className="flex gap-2 flex-col ml-4 max-sm:text-xs">
                     <span>{response.data.name}</span>
                     <span>{response.data.cpf}</span>
                   </div>
@@ -48,8 +48,8 @@ export default function Students() {
             return (
               <div key={response.data.cpf} className="border-1 border-gray-500 rounded-3xl flex responses-center p-4 my-6">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={response.data.foto} alt='' className="w-32 h-auto rounded-full"/>
-                <div className="flex gap-2 flex-col ml-4">
+                <img src={response.data.foto} alt='' className="w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20"/>
+                <div className="flex gap-2 flex-col ml-4 max-sm:text-xs">
                   <span>{response.data.name}</span>
                   <span>{response.data.cpf}</span>
                 </div>
