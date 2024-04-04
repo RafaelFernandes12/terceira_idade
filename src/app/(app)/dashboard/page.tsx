@@ -39,25 +39,26 @@ export default function Dashboard() {
           {courseType === "Extensão" ?         
             <ul className="inline-flex gap-3">
               <button onClick={() => handleCourseType("Extensão")}>
-                <li className="font-regular text-lg border-b-2 border-[#161250]">Extensão</li>
+                <li className="font-regular text-lg border-b-2 border-[#161250] max-md:text-sm">Extensão</li>
               </button>
               <button onClick={() => handleCourseType("Ensino")}>
-                <li>Ensino</li>
+                <li className="max-md:text-sm">Ensino</li>
               </button>
             </ul> 
             :
             <ul className="inline-flex gap-3">
               <button onClick={() => handleCourseType("Extensão")}>
-                <li >Extensão</li>
+                <li className="max-md:text-sm">Extensão</li>
               </button>
               <button onClick={() => handleCourseType("Ensino")}>
-                <li className="font-regular  text-lg border-b-2 border-[#161250]">Ensino</li>
+                <li className="font-regular  text-lg border-b-2 border-[#161250] max-md:text-sm">Ensino</li>
               </button>
             </ul> 
           }
 
-          <Link href='createCourse' className="bg-darkBlue text-white rounded-lg p-1 px-6 flex space-between items-center"
-          >Criar curso
+          <Link href='createCourse' 
+            className="bg-darkBlue text-white rounded-lg p-1 px-6 flex space-between items-center max-sm:p-0.5"
+          ><p className="max-sm:hidden">Criar curso</p>
             <AddIcon />
           </Link>
         </div>

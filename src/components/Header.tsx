@@ -1,18 +1,15 @@
 import Image from "next/image";
-import Link from "next/link";
-import menu_icon from "../assets/menu_icon.svg";
-import sino_icon from "../assets/sino_icon.svg";
+import CPSIWeb from "../assets/CPSI Web.svg";
+import { ResponsiveMenu } from "./ResponsiveMenu";
 
 export function Header(){
   return(
-    <div className='flex justify-between items-center bg-darkBlue p-6'>
-      <div className='ml-4 bg-gradient-to-b from-white/30 to-white/20 p-3 rounded-xl'>
-        <Image src={sino_icon} alt='' width='20'/>        
+    <div className='flex justify-between items-center bg-darkBlue p-6 lg:hidden w-full'>
+      <div className='ml-4'>
+        <Image src={CPSIWeb} alt=''/>        
       </div>
       <div className='mr-4 bg-gradient-to-b from-white/30 to-white/20 p-3 rounded-xl'>
-        <Link href=''>
-          <Image src={menu_icon} alt='' width='25'/>
-        </Link>        
+        <ResponsiveMenu />
       </div>
     </div>
   );
