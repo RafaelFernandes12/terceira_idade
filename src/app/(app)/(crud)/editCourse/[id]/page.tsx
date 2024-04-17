@@ -32,9 +32,9 @@ export default function EditCourse() {
 
   async function addCourse(e: any) {
     e.preventDefault();
-    if (name && courseImg && type && local.length > 0) {
+    if (name) {
       editCourse({ id, name, courseImg, type, professorName, professorImg, local });
-      alert("Criado com sucesso");
+      console.log("oi");
     } else {
       setError("Todos os campos devem estar preenchidos");
     }
@@ -63,7 +63,7 @@ export default function EditCourse() {
 
   return (
     <div className='flex flex-col justify-center'>
-      <h1 className='font-semibold text-2xl my-7'>Criar curso</h1>
+      <h1 className='font-semibold text-2xl my-7'>Editar curso</h1>
       <div className='mb-4'>
         <InputField 
           label='Nome:' 
