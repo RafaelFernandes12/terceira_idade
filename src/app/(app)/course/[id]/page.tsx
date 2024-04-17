@@ -23,7 +23,7 @@ export default function Course({ params }: IdProps) {
     }).catch(error => {
       console.error("Error fetching course:", error);
     });
-  }, []);
+  }, [params.id]);
 
   function handleCourseType(filterCourse: string) {
     setCourseType(filterCourse);

@@ -16,6 +16,7 @@ export default function Students() {
 
   const [search, setSearch] = useState("");
   const [students,setStudents] = useState<studentProps[]>([]);
+
   function handleInputChange(value:any){ setSearch(value);}
 
   useEffect(() => {

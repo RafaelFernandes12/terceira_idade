@@ -1,4 +1,3 @@
-import profile from "@/assets/profile.svg";
 import { db, storage } from "@/config/firestore";
 import { studentProps } from "@/types/studentProps";
 import { addDoc, collection } from "firebase/firestore";
