@@ -26,6 +26,7 @@ const config: Config = {
       },
       colors: {
         "background-light": "#ECF1F8",
+        "darkBlue": "#292272"
       },
     },
   },

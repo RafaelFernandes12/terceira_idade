@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
+import SubmitButton from "../components/SubmitButton";
 
 const daysOfWeek = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 const types = ["Extensão", "Ensino"];
@@ -23,10 +24,9 @@ export default function CreateCourse() {
 
 
   async function addCourse(e:any) {
-    e.preventDefault();
-    if (name && courseImg && type && local.length > 0) {
+    if (name ) {
       createCourse({ name, courseImg, type, professorName, professorImg, local });
-      alert("Criado com sucesso");
+      console.log("oi");
     } else {
       setError("Todos os campos devem estar preenchidos");
     }
@@ -126,12 +126,7 @@ export default function CreateCourse() {
           </button>
         </div>
       </div>
-      <div>
-        <button className='bg-darkBlue w-24 rounded-md text-white p-2 mr-4' onClick={addCourse}>Criar</button>
-        <Link href='/dashboard'>
-          <button className='border-1 border-zinc-500 w-24 rounded-md text-black p-2'>Cancelar</button>
-        </Link>
-      </div>
+      <SubmitButton onClick={addCourse} path="/dashboard"/>
       <ErrorText error={error} />
     </div>
   );

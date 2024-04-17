@@ -8,7 +8,7 @@ export function Header(){
       <div className='ml-4'>
         <Image src={CPSIWeb} alt=''/>        
       </div>
-      <div className='mr-4 bg-gradient-to-b from-white/30 to-white/20 p-3 rounded-xl'>
+      <div className='mr-4 bg-white/25 p-3 rounded-xl'>
         <ResponsiveMenu />
       </div>
     </div>

@@ -1,4 +1,4 @@
-export default function SobreNos() {
+export default function Sobre() {
 
   return (
     <div className="flex items-center flex-col max-w-[860px] m-auto">

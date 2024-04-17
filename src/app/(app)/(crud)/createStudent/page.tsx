@@ -27,17 +27,16 @@ export default function CreateCourse() {
   function handleInputTelefone_emergencia(value: string) { setTelefone_emergencia(value); }
 
   async function addStudent(e: any) {
-    e.preventDefault();
-    if (name && cpf && data_nascimento && responsavel_nome && responsavel_vinculo && telefone_contato && telefone_emergencia) {
+    if (name ) {
       createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia,foto });
-      alert("Criado com sucesso");
+      console.log("hello");
     } else {
       setError("Todos os campos devem estar preenchidos");
     }
   }
 
   return (
-    <form className='flex flex-col justify-center' onSubmit={addStudent}>
+    <div className='flex flex-col justify-center'>
       <h1 className='font-semibold text-2xl my-7'>Adicionar Estudante</h1>
       <div className='mb-4'>
         <InputField
@@ -87,8 +86,8 @@ export default function CreateCourse() {
         />
 
       </div>
-      <SubmitButton submit='submit' />
+      <SubmitButton onClick={addStudent} path="/students"/>
       <ErrorText error={error} />
-    </form>
+    </div>
   );
 }
