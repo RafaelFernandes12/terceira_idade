@@ -1,8 +1,10 @@
 "use client";
 import { SearchBar } from "@/components/SearchBar";
 import { getStudents } from "@/operations/getStudents";
+import AddIcon from "@mui/icons-material/Add";
 import ErrorIcon from "@mui/icons-material/Error";
 import { DocumentData } from "firebase/firestore";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface studentProps {
@@ -25,13 +27,23 @@ export default function Students() {
   return (
     <>
       <SearchBar onChange={handleInputChange}/>
-      {students.map(response => {
+      <div className="flex justify-end">
+        <Link href='createStudent' 
+          className="bg-darkBlue text-white rounded-lg p-1 px-4 flex justify-between items-center w-fit max-sm:p-0.5"
+        >
+          <p className="max-sm:hidden">Criar curso</p>
+          <AddIcon />
+        </Link>
+      </div>
+      {students.map((response, index) => {
 
         if(response && response.data.name.toLowerCase().startsWith(search.toLowerCase())){
           if(response.data.cardiologista === "" || response.data.residencia === "" || response.data.dermatologista === "" ||
           response.data.rg_frente === "" || response.data.rg_verso === ""){
             return (
-              <div key={response.data.cpf} className="border-1 border-gray-500 rounded-3xl flex responses-center p-4 my-6 justify-between">
+              <Link
+                href={`/student/${response.id}`} 
+                key={index} className="border-1 border-gray-500 rounded-3xl flex responses-center p-4 my-6 justify-between">
                 <div className="flex items-center">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={response.data.foto} alt='' className="w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20"/>
@@ -41,7 +53,7 @@ export default function Students() {
                   </div>
                 </div>
                 <ErrorIcon className="text-red-800 " />
-              </div>
+              </Link>
             );
           }
           else {

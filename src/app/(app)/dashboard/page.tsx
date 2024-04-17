@@ -23,7 +23,7 @@ export default function Dashboard() {
     getCourses().then(response => {
       setCourses(response);
     });
-  },[]);
+  },[courses]);
 
   function handleCourseType(filterCourse: string){
     if(filterCourse === "Extensão") setCourseType("Extensão");
@@ -36,29 +36,19 @@ export default function Dashboard() {
       <SearchBar onChange={handleInputChange} />
       <div className="border-2 border-black rounded-lg p-4">
         <div className="flex justify-between mx-6 mb-10 mt-4">
-          {courseType === "Extensão" ?         
-            <ul className="inline-flex gap-3">
-              <button onClick={() => handleCourseType("Extensão")}>
-                <li className="font-regular text-lg border-b-2 border-[#161250] max-md:text-sm">Extensão</li>
-              </button>
-              <button onClick={() => handleCourseType("Ensino")}>
-                <li className="max-md:text-sm">Ensino</li>
-              </button>
-            </ul> 
-            :
-            <ul className="inline-flex gap-3">
-              <button onClick={() => handleCourseType("Extensão")}>
-                <li className="max-md:text-sm">Extensão</li>
-              </button>
-              <button onClick={() => handleCourseType("Ensino")}>
-                <li className="font-regular  text-lg border-b-2 border-[#161250] max-md:text-sm">Ensino</li>
-              </button>
-            </ul> 
-          }
+          <ul className="inline-flex gap-3">
+            <button onClick={() => handleCourseType("Extensão")}>
+              <li className={`font-regular text-lg max-md:text-sm ${courseType === "Extensão" ? "border-b-2 border-[#161250]" : ""}`}>Extensão</li>
+            </button>
+            <button onClick={() => handleCourseType("Ensino")}>
+              <li className={`font-regular text-lg max-md:text-sm ${courseType === "Ensino" ? "border-b-2 border-[#161250]" : ""}`}>Ensino</li>
+            </button>
+          </ul>
 
           <Link href='createCourse' 
-            className="bg-darkBlue text-white rounded-lg p-1 px-6 flex space-between items-center max-sm:p-0.5"
-          ><p className="max-sm:hidden">Criar curso</p>
+            className="bg-darkBlue text-white rounded-lg p-1 px-6 flex justify-between items-center max-sm:p-0.5"
+          >
+            <p className="max-sm:hidden">Criar curso</p>
             <AddIcon />
           </Link>
         </div>

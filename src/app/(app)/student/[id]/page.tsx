@@ -17,7 +17,8 @@ export default async function Student({params}: IdProps) {
           <h1>Dados Pessoais</h1>
           <hr/>
           <div className="flex gap-4">
-            <img src={student.foto} alt="" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={student.foto} alt="" className="w-40 h-40"/>
             <p>Nome : {student.name}</p>
           </div>
           <hr/>

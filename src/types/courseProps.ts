@@ -1,3 +1,4 @@
+import { studentProps } from "./studentProps";
 export interface courseProps {
   id?: string,
   name?: string,
@@ -11,5 +12,6 @@ export interface courseProps {
     endHour: string,
     place: string,
   }[]
+  students?: studentProps[]
 }
 
