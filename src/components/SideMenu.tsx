@@ -3,45 +3,8 @@ import ClassIcon from "@mui/icons-material/Class";
 import GroupsIcon from "@mui/icons-material/Groups";
 import SmsFailedRoundedIcon from "@mui/icons-material/SmsFailedRounded";
 import ToggleOnRoundedIcon from "@mui/icons-material/ToggleOnRounded";
-import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-
-interface listItemProps{
-  path:string,
-  name: string,
-  children: React.ReactNode
-}
-
-function ListItem({path, name, children} : listItemProps){
-
-  const pathname = usePathname();
-
-  return(
-    <>
-      {
-        pathname.includes(name) ? 
-          <li className={`my-4 flex items-center rounded-full ${pathname.includes(name) ? "bg-darkBlue/20": ""}`}>
-            <motion.a href={path}
-              className="rounded-full py-1 px-2"
-            >
-              {children}
-            </motion.a>
-          </li>
-          : 
-          <li className={`my-4 flex items-center rounded-full ${pathname.includes(name) ? "bg-darkBlue/20": ""}`}>
-            <motion.a href={path}
-              className="rounded-full py-1 px-2"
-              initial={{width: 0, display: "flex"}}
-              whileHover={{width: "calc(100%)", backgroundColor:"rgb(22 18 80 / 0.2)"}}
-              transition={{ duration: 0.3 }}
-            >
-              {children}
-            </motion.a>
-          </li>
-      }
-    </>
-  );
-}
+import { ListItem } from "./ListItem";
 
 export function SideMenu(){
 
@@ -52,12 +15,12 @@ export function SideMenu(){
       <p className="text-darkBlue text-xl"><span className="font-medium">CPSI</span> Web</p>
       <hr/>
       <ul>
-        <ListItem path="/dashboard" name="dashboard">
-          <ClassIcon className={`mr-2 ${pathname.includes("dashboard") ? "text-darkBlue": "" }`}/> 
-          <span className={`${pathname.includes("dashboard") ? "text-darkBlue": "" }`}>Cursos</span>
+        <ListItem path="/" name="Course">
+          <ClassIcon className={`mr-2 ${pathname === "/" ? "text-darkBlue": "" }`}/> 
+          <span className={`${pathname === "/" ? "text-darkBlue": "" }`}>Cursos</span>
         </ListItem>
 
-        <ListItem path="/students" name="student">
+        <ListItem path="/students" name="/student">
           <GroupsIcon className={`mr-2 ${pathname.includes("student") ? "text-darkBlue": "" }`}/> 
           <span className={`${pathname.includes("student") ? "text-darkBlue": "" }`}>Alunos</span>
         </ListItem> 
@@ -69,7 +32,7 @@ export function SideMenu(){
             Alterar tema
         </li>
 
-        <ListItem path="/sobre" name="sobre">
+        <ListItem path="/sobre" name="/sobre">
           <SmsFailedRoundedIcon className={`mr-2 ${pathname.includes("sobre") ? "text-darkBlue": "" }`}/> 
           <span className={`${pathname.includes("sobre") ? "text-darkBlue": "" }`}>Sobre</span>
         </ListItem>

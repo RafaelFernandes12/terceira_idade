@@ -126,7 +126,7 @@ export default function CreateCourse() {
           </button>
         </div>
       </div>
-      <SubmitButton onClick={addCourse} path="/dashboard"/>
+      <SubmitButton onClick={addCourse} path="/"/>
       <ErrorText error={error} />
     </div>
   );

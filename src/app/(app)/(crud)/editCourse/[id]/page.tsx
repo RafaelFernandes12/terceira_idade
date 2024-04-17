@@ -135,7 +135,7 @@ export default function EditCourse() {
       </div>
       <div>
         <button className='bg-darkBlue w-24 rounded-md text-white p-2 mr-4' onClick={addCourse}>Criar</button>
-        <Link href='/dashboard'>
+        <Link href='/'>
           <button className='border-1 border-zinc-500 w-24 rounded-md text-black p-2'>Cancelar</button>
         </Link>
       </div>
