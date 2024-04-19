@@ -14,7 +14,7 @@ export function ListItem({path, name, children} : listItemProps){
     <>
       {
         pathname.toLocaleLowerCase().includes(`${name.toLocaleLowerCase()}`) || pathname === `${path}` ? 
-          <li className={"my-4 flex items-center rounded-full bg-darkBlue/20 w-3/4"}>
+          <li className={"my-4 flex items-center rounded-full bg-darkBlue/20 max-sm:w-3/4"}>
             <motion.a href={path}
               className="rounded-full py-1 px-2"
             >
@@ -22,7 +22,7 @@ export function ListItem({path, name, children} : listItemProps){
             </motion.a>
           </li>
           : 
-          <li className={"my-4 flex items-center rounded-full w-3/4"}>
+          <li className={"my-4 flex items-center rounded-full max-sm:w-3/4"}>
             <motion.a href={path}
               className="rounded-full py-1 px-2"
               initial={{width: 0, display: "flex"}}
