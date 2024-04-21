@@ -3,15 +3,13 @@ import { studentProps } from "@/types/studentProps";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
-
 export async function createStudent({
-  name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia,foto
+  name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia,foto,studentId,courseId
 }: studentProps) {
 
-  const valRef = collection(db, "students");
+  const valRef = collection(db, `students/${studentId}/attending/${courseId}`);
 
-  const studentImgs = ref(storage,`studentImgs/${uniqid()}`);
-
+  const studentImgs = ref(storage,`${foto === "generic"? `studentImgs/${uniqid()}.generic`: `studentImgs/${uniqid()}`}`);
   const studentSnapshot = await uploadBytes(studentImgs, foto);
   const downloadstudentURL = await getDownloadURL(studentSnapshot.ref);
 
@@ -29,6 +27,6 @@ export async function createStudent({
     residencia: "",
     cardiologista: "",
     dermatologista: ""
-  }
-  );
+  });
+
 }

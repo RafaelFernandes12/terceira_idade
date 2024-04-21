@@ -5,7 +5,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
 
 export async function createCourse({
-  name,courseImg,type,professorName,professorImg,local
+  courseId,name,courseImg,type,professorName,professorImg,local,studentId
 }: courseProps){
 
   const courseImgs = ref(storage,`courseImgs/${uniqid()}`);
@@ -17,6 +17,8 @@ export async function createCourse({
 
   const professorSnapshot = await uploadBytes(professorImgs, professorImg);
   const downloadProfessorURL = await getDownloadURL(professorSnapshot.ref);
+
+  
 
   await addDoc(valRef, { 
     name: name, 

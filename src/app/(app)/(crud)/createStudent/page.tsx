@@ -1,16 +1,16 @@
 "use client";
 
+import profile from "@/assets/profile.svg";
 import { ErrorText } from "@/components/ErrorText";
 import { createStudent } from "@/operations/createStudent";
 import { useState } from "react";
 import InputField from "../components/InputField";
 import SubmitButton from "../components/SubmitButton";
-
-export default function CreateCourse() {
+export default function CreateStudent() {
 
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
-  const [foto, setFoto] = useState<any>();
+  const [foto, setFoto] = useState<any>("generic");
   const [data_nascimento, setData_nascimento] = useState("");
   const [responsavel_nome, setResponsavel_nome] = useState("");
   const [responsavel_vinculo, setResponsavel_vinculo] = useState("");
@@ -27,8 +27,9 @@ export default function CreateCourse() {
   function handleInputTelefone_emergencia(value: string) { setTelefone_emergencia(value); }
 
   async function addStudent(e: any) {
-    if (name ) {
+    if (name) {
       createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia,foto });
+      console.log(foto);
       console.log("hello");
     } else {
       setError("Todos os campos devem estar preenchidos");

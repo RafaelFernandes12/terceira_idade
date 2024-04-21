@@ -18,12 +18,12 @@ export default function Course({ params }: IdProps) {
 
   useEffect(() => {
     getCourse(params.id).then(response => {
-      console.log(response.local);
       setCourse(response);
+      console.log(course);
     }).catch(error => {
       console.error("Error fetching course:", error);
     });
-  }, [params.id]);
+  }, []);
 
   function handleCourseType(filterCourse: string) {
     setCourseType(filterCourse);

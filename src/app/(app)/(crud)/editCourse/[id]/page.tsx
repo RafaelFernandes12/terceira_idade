@@ -1,16 +1,16 @@
 "use client";
 
 import { ErrorText } from "@/components/ErrorText";
+import { daysOfWeek, types } from "@/data";
 import { editCourse } from "@/operations/editCourse";
 import { TextField } from "@mui/material";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InputField from "../../components/InputField";
 import SelectField from "../../components/SelectField";
-
-const daysOfWeek = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
-const types = ["Extensão", "Ensino"];
-
+import {SubmitButton} from "../../components/SubmitButton";
+import { useRouter } from "next/navigation";
 
 export default function EditCourse() {
 
@@ -20,21 +20,30 @@ export default function EditCourse() {
   const [professorImg, setProfessorImg] = useState<any>();
   const [error, setError] = useState("");
   const [type, setType] = useState("Extensão");
-  const [id, setId] = useState("");
+  const [courseId, setCourseId] = useState("");
   const [local, setLocal] = useState<Array<any>>([]);
 
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
-    const courseId = pathParts[pathParts.length - 1];
+    const urlId = pathParts[pathParts.length - 1];
     
-    setId(courseId);
+    setCourseId(urlId);
   }, []);
-
-  async function addCourse(e: any) {
-    e.preventDefault();
+  const router = useRouter();
+  async function addCourse() {
     if (name) {
-      editCourse({ id, name, courseImg, type, professorName, professorImg, local });
-      console.log("oi");
+      editCourse({ courseId, name, courseImg, type, professorName, professorImg, local });
+      toast.success("Editado com sucesso", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      router.push("/");
     } else {
       setError("Todos os campos devem estar preenchidos");
     }
@@ -133,13 +142,20 @@ export default function EditCourse() {
           </button>
         </div>
       </div>
-      <div>
-        <button className='bg-darkBlue w-24 rounded-md text-white p-2 mr-4' onClick={addCourse}>Criar</button>
-        <Link href='/'>
-          <button className='border-1 border-zinc-500 w-24 rounded-md text-black p-2'>Cancelar</button>
-        </Link>
-      </div>
+      <SubmitButton text="Editar" onClick={addCourse} path="/"/>
       <ErrorText error={error} />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import { getStudent } from "@/operations/getStudent";
-import DoneIcon from "@mui/icons-material/Done";
 import ErrorIcon from "@mui/icons-material/Error";
 import { ClassTime } from "../components/ClassTime";
 import { ContentBox } from "../components/ContentBox";
 import { TableRow } from "../components/TableRow";
+import { Person } from "@mui/icons-material";
 interface IdProps {
   params: {
     id: string
@@ -30,7 +30,10 @@ export default async function Student({params}: IdProps) {
           <ContentBox title="Dados pessoais">
             <div className="flex items-center gap-4 p-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={student.foto} alt="" className="w-40 h-40 rounded-full"/>
+              <img src={student.foto} alt='' className={`w-40 h-40 rounded-full max-sm:w-20 max-sm:h-20 
+                ${student.foto.includes("generic") ? "hidden" : "" }`}/>
+              <Person className={`w-40 h-40 rounded-full max-sm:w-20 max-sm:h-20 
+                ${student.foto.includes("generic") ? "" : "hidden" }`}/>
               <p>{student.name}</p>
               
             </div>

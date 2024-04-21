@@ -1,35 +1,45 @@
 "use client";
 
 import { ErrorText } from "@/components/ErrorText";
+import { daysOfWeek, types } from "@/data";
 import { createCourse } from "@/operations/createCourse";
 import { TextField } from "@mui/material";
-import Link from "next/link";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
-import SubmitButton from "../components/SubmitButton";
-
-const daysOfWeek = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
-const types = ["Extensão", "Ensino"];
+import {SubmitButton} from "../components/SubmitButton";
 
 export default function CreateCourse() {
     
-  const [name, setName] = useState("adwa");
+  const [name, setName] = useState("");
   const [courseImg, setCourseImg] = useState<any>();
-  const [professorName, setProfessorName] = useState("dwadawda");
+  const [professorName, setProfessorName] = useState("");
   const [professorImg, setProfessorImg] = useState<any>();
   const [error, setError] = useState("");
   const [type, setType] = useState("Extensão");
   const [local, setLocal] = useState<Array<any>>([]);
 
-
-  async function addCourse(e:any) {
-    if (name ) {
+  async function addCourse() {
+    if (name) {
       createCourse({ name, courseImg, type, professorName, professorImg, local });
-      console.log("oi");
+      toast.success("Criado com sucesso", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     } else {
       setError("Todos os campos devem estar preenchidos");
     }
+    setName("");
+    setProfessorName("");
+    setLocal([]);
   }
 
   function handleInputName(value: string) { setName(value); }
@@ -126,8 +136,20 @@ export default function CreateCourse() {
           </button>
         </div>
       </div>
-      <SubmitButton onClick={addCourse} path="/"/>
+      <SubmitButton text="Criar" onClick={addCourse} path="/"/>
       <ErrorText error={error} />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

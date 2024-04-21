@@ -15,4 +15,6 @@ export const data = [{
   cpf: "321.456.789-00"
 },
 ];
+export const daysOfWeek = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+export const types = ["Extensão", "Ensino"];
     

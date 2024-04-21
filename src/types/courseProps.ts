@@ -1,17 +1,19 @@
 import { studentProps } from "./studentProps";
+
 export interface courseProps {
-  id?: string,
+  courseId?: string,
   name?: string,
   courseImg?: any,
   type?: string,
-  professorName: string,
-  professorImg: any,
-  local: {
+  professorName?: string,
+  professorImg?: any,
+  local?: {
     date: string,
     startHour: string,
     endHour: string,
     place: string,
-  }[]
+  }[],
+  studentId?: string,
   students?: studentProps[]
 }
 

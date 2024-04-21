@@ -1,12 +1,13 @@
 "use client";
 
+import { SearchBar } from "@/components/SearchBar";
+import { ThreeDots } from "@/components/ThreeDots";
+import { deleteCourse } from "@/operations/deleteCourse";
 import { getCourses } from "@/operations/getCourses";
 import AddIcon from "@mui/icons-material/Add";
 import { DocumentData } from "firebase/firestore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { SearchBar } from "@/components/SearchBar";
-import { ThreeDots } from "@/components/ThreeDots";
 
 interface coursesProps {
   id: string,
@@ -66,7 +67,7 @@ export default function Dashboard() {
                   </Link>
                   <div className="flex  items-center justify-between w-full">
                     <span className="w-full truncate">{response.data.name}</span>
-                    <ThreeDots id={response.id}/>
+                    <ThreeDots id={response.id} edit="editCourse" remove={deleteCourse}/>
                   </div>
                 </div>
               );

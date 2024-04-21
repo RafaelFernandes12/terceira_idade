@@ -1,6 +1,5 @@
 "use client";
 
-import { deleteCourse } from "@/operations/deleteCourse";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -8,11 +7,13 @@ import MenuItem from "@mui/material/MenuItem";
 import Link from "next/link";
 import { useState } from "react";
 
-interface idProps{
-    id: string
+interface threeDotsProps{
+    id: string,
+    edit:string,
+    remove:(id: string) => void
 }
 
-export function ThreeDots({id}: idProps){
+export function ThreeDots({id,edit,remove}: threeDotsProps){
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -45,12 +46,12 @@ export function ThreeDots({id}: idProps){
         open={open}
         onClose={handleClose}
       >
-        <Link href={`editCourse/${id}`}>
+        <Link href={`${edit}/${id}`}>
           <MenuItem>
                 Editar
           </MenuItem>
         </Link>
-        <MenuItem onClick={() => deleteCourse(id)}>           
+        <MenuItem onClick={() => remove(id)}>           
               Excluir
         </MenuItem>
       </Menu>

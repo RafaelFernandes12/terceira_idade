@@ -1,4 +1,7 @@
+import { courseProps } from "./courseProps";
+
 export interface studentProps {
+  studentId?:string,
   name?: string,
   cpf?: string,
   data_nascimento?: string,
@@ -12,5 +15,7 @@ export interface studentProps {
   rg_verso?: string,
   residencia?: string,
   cardiologista?: string,
-  dermatologista?: string
+  dermatologista?: string,
+  courseId?:string,
+  courses?: courseProps[]
 }
