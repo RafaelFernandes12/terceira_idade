@@ -1,11 +1,10 @@
 "use client";
 
-import profile from "@/assets/profile.svg";
 import { ErrorText } from "@/components/ErrorText";
 import { createStudent } from "@/operations/createStudent";
 import { useState } from "react";
 import InputField from "../components/InputField";
-import SubmitButton from "../components/SubmitButton";
+import { SubmitButton } from "../components/SubmitButton";
 export default function CreateStudent() {
 
   const [name, setName] = useState("");
