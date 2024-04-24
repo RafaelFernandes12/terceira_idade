@@ -1,19 +1,22 @@
 import { db, storage } from "@/config/firestore";
 import { studentProps } from "@/types/studentProps";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc, getDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
+
 export async function createStudent({
-  name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia,foto,studentId,courseId
+  name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia, foto, courseId
 }: studentProps) {
 
-  const valRef = collection(db, `students/${studentId}/attending/${courseId}`);
+  const valRef = collection(db, "students");
 
-  const studentImgs = ref(storage,`${foto === "generic"? `studentImgs/${uniqid()}.generic`: `studentImgs/${uniqid()}`}`);
+  // Upload student photo to storage
+  const studentImgs = ref(storage, `${foto === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`);
   const studentSnapshot = await uploadBytes(studentImgs, foto);
   const downloadstudentURL = await getDownloadURL(studentSnapshot.ref);
 
-  await addDoc(valRef, {
+  // Add new student to students collection
+  const docRef = await addDoc(valRef, {
     name: name,
     cpf: cpf,
     data_nascimento: data_nascimento,
@@ -26,7 +29,21 @@ export async function createStudent({
     rg_verso: "",
     residencia: "",
     cardiologista: "",
-    dermatologista: ""
+    dermatologista: "",
+    courseId: courseId
   });
 
+  const studentIds = courseId!.map(async (course) => {
+    const courseRef = doc(db, "courses", course);
+    const courseDoc = await getDoc(courseRef);
+    const existingStudentIds = courseDoc?.data()?.studentId;
+    return { courseId: course, existingStudentIds: existingStudentIds };
+  });
+
+  studentIds.forEach(async (studentIdObj) => {
+    const { courseId, existingStudentIds } = await studentIdObj;
+    const updatedStudentIds = [...existingStudentIds, docRef.id];
+    const courseRef = doc(db, "courses", courseId);
+    await updateDoc(courseRef, { studentId: updatedStudentIds });
+  });
 }

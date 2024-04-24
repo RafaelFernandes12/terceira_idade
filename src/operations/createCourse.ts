@@ -26,7 +26,7 @@ export async function createCourse({
     type: type,
     professorName:professorName,
     professorImg:downloadProfessorURL,
-    local:local 
+    local:local,
   }
   );
 }

@@ -4,19 +4,14 @@ import { SearchBar } from "@/components/SearchBar";
 import { ThreeDots } from "@/components/ThreeDots";
 import { deleteCourse } from "@/operations/deleteCourse";
 import { getCourses } from "@/operations/getCourses";
+import { idDataProps } from "@/types/idDataProps";
 import AddIcon from "@mui/icons-material/Add";
-import { DocumentData } from "firebase/firestore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface coursesProps {
-  id: string,
-  data: DocumentData
-}
-
 export default function Dashboard() {
 
-  const [courses,setCourses] = useState<coursesProps[]>([]);
+  const [courses,setCourses] = useState<idDataProps[]>([]);
   const [courseType,setCourseType] = useState("Extensão");
   const [search, setSearch] = useState("");
 
@@ -24,7 +19,7 @@ export default function Dashboard() {
     getCourses().then(response => {
       setCourses(response);
     });
-  },[courses]);
+  },[]);
 
   function handleCourseType(filterCourse: string){
     if(filterCourse === "Extensão") setCourseType("Extensão");

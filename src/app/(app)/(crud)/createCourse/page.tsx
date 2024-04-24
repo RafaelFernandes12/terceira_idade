@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
-import {SubmitButton} from "../components/SubmitButton";
+import { SubmitButton } from "../components/SubmitButton";
 
 export default function CreateCourse() {
     
@@ -37,9 +37,6 @@ export default function CreateCourse() {
     } else {
       setError("Todos os campos devem estar preenchidos");
     }
-    setName("");
-    setProfessorName("");
-    setLocal([]);
   }
 
   function handleInputName(value: string) { setName(value); }

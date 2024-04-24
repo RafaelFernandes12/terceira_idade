@@ -1,5 +1,3 @@
-import { courseProps } from "./courseProps";
-
 export interface studentProps {
   studentId?:string,
   name?: string,
@@ -16,6 +14,5 @@ export interface studentProps {
   residencia?: string,
   cardiologista?: string,
   dermatologista?: string,
-  courseId?:string,
-  courses?: courseProps[]
+  courseId?:string[],
 }

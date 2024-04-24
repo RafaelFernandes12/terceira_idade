@@ -1,9 +1,11 @@
+import { getCourses } from "@/operations/getCourses";
 import { getStudent } from "@/operations/getStudent";
+import { Person } from "@mui/icons-material";
 import ErrorIcon from "@mui/icons-material/Error";
 import { ClassTime } from "../components/ClassTime";
 import { ContentBox } from "../components/ContentBox";
 import { TableRow } from "../components/TableRow";
-import { Person } from "@mui/icons-material";
+
 interface IdProps {
   params: {
     id: string
@@ -14,6 +16,8 @@ export default async function Student({params}: IdProps) {
 
   const id = params.id;
   const student = await getStudent(id);
+  const courses = await getCourses();
+  
   return (
     <div>
       <div className={`m-auto rounded-2xl w-full p-2 pb-6 bg-red-500/20 mb-10
@@ -52,9 +56,9 @@ export default async function Student({params}: IdProps) {
               <p>Tel. Emergência : {student.telefone_emergencia}</p>
             </div>
           </ContentBox>
-
+          
           <ContentBox title="Atividade">
-            <ClassTime name={student.name}/>
+            <ClassTime data={courses} id={student.courseId?.map(item => item)} />
           </ContentBox>
           <ContentBox title="Documentação">
             <table className="mb-10 m-auto w-11/12 mt-8">

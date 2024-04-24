@@ -4,7 +4,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
 
-export async function editCourse({courseId, name,courseImg,type,professorName,professorImg,local}: courseProps){
+export async function editCourse({courseId, name,courseImg,type,professorName,professorImg,local,studentId}: courseProps){
 
   const courseRef = doc(db, "courses", courseId!);
   const courseImgs = ref(storage,`courseImgs/${uniqid()}`);
@@ -22,7 +22,8 @@ export async function editCourse({courseId, name,courseImg,type,professorName,pr
     type: type,
     professorName:professorName,
     professorImg:downloadProfessorURL,
-    local:local 
+    local:local,
+    studentId: studentId 
   }
   );
 }

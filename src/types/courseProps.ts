@@ -1,5 +1,3 @@
-import { studentProps } from "./studentProps";
-
 export interface courseProps {
   courseId?: string,
   name?: string,
@@ -13,7 +11,6 @@ export interface courseProps {
     endHour: string,
     place: string,
   }[],
-  studentId?: string,
-  students?: studentProps[]
+  studentId?: string[],
 }
 

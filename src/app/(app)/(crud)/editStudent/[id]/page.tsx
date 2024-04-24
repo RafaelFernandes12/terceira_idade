@@ -1,10 +1,11 @@
 "use client";
 
 import { ErrorText } from "@/components/ErrorText";
-import { createStudent } from "@/operations/createStudent";
 import { editCourseStudentId } from "@/operations/editCourseStudentId";
+import { editStudent } from "@/operations/editStudent";
 import { getCourses } from "@/operations/getCourses";
 import { idDataProps } from "@/types/idDataProps";
+import { idProps } from "@/types/idProps";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -12,10 +13,12 @@ import Select from "@mui/material/Select";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import InputField from "../components/InputField";
-import { SubmitButton } from "../components/SubmitButton";
+import InputField from "../../components/InputField";
+import { SubmitButton } from "../../components/SubmitButton";
 
-export default function CreateStudent() {
+
+
+export default function EditStudent({params}:idProps) {
 
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
@@ -45,9 +48,12 @@ export default function CreateStudent() {
     });
   },[]);
 
+  const studentId = params.id;
+
   async function addStudent() {
     if (name) {
-      createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, telefone_contato, telefone_emergencia,foto,courseId });
+      editStudent({ studentId, name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, 
+        telefone_contato, telefone_emergencia,foto,courseId });
       toast.success("Criado com sucesso", {
         position: "top-center",
         autoClose: 5000,
@@ -58,6 +64,11 @@ export default function CreateStudent() {
         progress: undefined,
         theme: "colored",
       });
+      if(courseId.length < 0){
+        courseId.map(id => {
+          editCourseStudentId({courseId:id});
+        });
+      }
 
     } else {
       setError("Todos os campos devem estar preenchidos");

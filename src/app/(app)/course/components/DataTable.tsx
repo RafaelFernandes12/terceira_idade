@@ -29,7 +29,7 @@ export default function DataTable({ professorImg, professorName, local }: course
             </TableRow>
           </TableHead>
           <TableBody>
-            {local.map((item,index) => {
+            {local?.map((item,index) => {
               return (
                 <TableRow key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 }
