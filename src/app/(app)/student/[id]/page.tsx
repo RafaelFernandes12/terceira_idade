@@ -60,6 +60,7 @@ export default async function Student({params}: IdProps) {
           <ContentBox title="Atividade">
             <ClassTime data={courses} id={student.courseId?.map(item => item)} />
           </ContentBox>
+          
           <ContentBox title="Documentação">
             <table className="mb-10 m-auto w-11/12 mt-8">
               <tbody>

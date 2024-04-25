@@ -36,10 +36,11 @@ export function ViewStudents({data}: viewStudentsProps ){
             <div key={response.id} className="flex items-center justify-between border-1 border-gray-500 rounded-3xl p-4 my-6 ">
               <Link
                 href={`/student/${response.id}`} 
-                className="w-11/12">
-                <ErrorIcon className={`text-red-500 ${response.data.cardiologista === "" || 
-                  response.data.residencia === "" || response.data.dermatologista === "" ||
-                  response.data.rg_frente === "" || response.data.rg_verso === "" ? "" : "hidden"}`} 
+                className="">
+                <ErrorIcon className={`text-red-500 ${response.data.cardiologista === undefined || 
+                  response.data.residencia === undefined || response.data.dermatologista === undefined ||
+                  response.data.rg_frente === undefined || response.data.rg_verso === undefined 
+                  || response.data.vacina === undefined  ? "" : "hidden"}`} 
                 />
                 <div className="flex gap-4 items-center">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -50,7 +51,7 @@ export function ViewStudents({data}: viewStudentsProps ){
                     ${response.data.foto.includes("generic") ? "" : "hidden" }`}/>
 
                   <div className="flex gap-2 flex-col ml-4 max-sm:text-xs">
-                    <p className="w-96 break-words">{response.data.name}</p>
+                    <p className="w-96 max-sm:w-36 break-words">{response.data.name}</p>
                     <p>{response.data.cpf}</p>
                   </div>
                 </div>

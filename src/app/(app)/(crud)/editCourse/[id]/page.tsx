@@ -2,38 +2,32 @@
 
 import { ErrorText } from "@/components/ErrorText";
 import { daysOfWeek, types } from "@/data";
-import { editCourse } from "@/operations/editCourse";
 import { TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InputField from "../../components/InputField";
 import SelectField from "../../components/SelectField";
-import {SubmitButton} from "../../components/SubmitButton";
-import { useRouter } from "next/navigation";
+import { SubmitButton } from "../../components/SubmitButton";
+import { idProps } from "@/types/idProps";
+import { editCourse } from "@/operations/editCourse";
 
-export default function EditCourse() {
-
+export default function CreateCourse({params}: idProps) {
+    
   const [name, setName] = useState("");
-  const [courseImg, setCourseImg] = useState<any>();
+  const [courseImg, setCourseImg] = useState<any>("generic");
   const [professorName, setProfessorName] = useState("");
-  const [professorImg, setProfessorImg] = useState<any>();
+  const [professorImg, setProfessorImg] = useState<any>("generic");
   const [error, setError] = useState("");
   const [type, setType] = useState("Extensão");
-  const [courseId, setCourseId] = useState("");
   const [local, setLocal] = useState<Array<any>>([]);
+  const id = params.id;
 
-  useEffect(() => {
-    const pathParts = window.location.pathname.split("/");
-    const urlId = pathParts[pathParts.length - 1];
-    
-    setCourseId(urlId);
-  }, []);
-  const router = useRouter();
+
   async function addCourse() {
     if (name) {
-      editCourse({ courseId, name, courseImg, type, professorName, professorImg, local });
-      toast.success("Editado com sucesso", {
+      editCourse({courseId:id, name, courseImg, type, professorName, professorImg, local });
+      toast.success("Criado com sucesso", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -43,7 +37,6 @@ export default function EditCourse() {
         progress: undefined,
         theme: "colored",
       });
-      router.push("/");
     } else {
       setError("Todos os campos devem estar preenchidos");
     }
@@ -72,19 +65,23 @@ export default function EditCourse() {
 
   return (
     <div className='flex flex-col justify-center'>
-      <h1 className='font-semibold text-2xl my-7'>Editar curso</h1>
+      <h1 className='font-semibold text-2xl my-7'>Criar curso</h1>
       <div className='mb-4'>
-        <InputField 
-          label='Nome:' 
-          value={name} 
-          onChange={handleInputName} 
-        />
-        <label>Foto do curso: </label>
-        <input
-          placeholder=''
-          type='file' 
-          onChange={e => setCourseImg(e.currentTarget.files![0])} 
-        />
+        <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
+          <InputField 
+            label='Nome:' 
+            value={name} 
+            onChange={handleInputName} 
+          />
+          <div className="flex flex-col">
+            <label>Foto do curso: </label>
+            <input
+              type='file' 
+              onChange={e => setCourseImg(e.currentTarget.files![0])} 
+              className="mb-2 max-sm:text-xs"
+            />
+          </div>
+        </div>
         <SelectField 
           inputLabel='Tipo' 
           value={type} 
@@ -92,17 +89,22 @@ export default function EditCourse() {
           onChange={handleInputType} 
           itens={types} 
         />
-        <InputField 
-          label='Nome do Professor:' 
-          value={professorName}
-          onChange={handleInputProfessorName} 
-        />
-        <label>Foto do professor do curso: </label>
-        <input 
-          type='file' 
-          onChange={e => setProfessorImg(e.currentTarget.files![0])} 
-        />
-        <div className="flex gap-4 items-center my-4">
+        <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0">
+          <InputField 
+            label='Nome do Professor:' 
+            value={professorName}
+            onChange={handleInputProfessorName} 
+          />
+          <div className="flex flex-col">
+            <label>Foto do professor do curso: </label>
+            <input 
+              type='file' 
+              onChange={e => setProfessorImg(e.currentTarget.files![0])} 
+              className="mb-2 max-sm:text-xs"
+            />
+          </div>
+        </div>
+        <div className="flex gap-4 items-center my-4 max-md:flex-col">
           {local.map((item, index) => (
             <div key={index}>
               <SelectField
@@ -135,12 +137,12 @@ export default function EditCourse() {
               />
             </div>
           ))}
-          <button
-            className="bg-black rounded-md p-2 text-white" 
-            onClick={handleCreateNewLocal}>
-            Add Local
-          </button>
         </div>
+        <button
+          className="bg-black rounded-md p-2 text-white" 
+          onClick={handleCreateNewLocal}>
+            Adicionar Local
+        </button>
       </div>
       <SubmitButton text="Editar" onClick={addCourse} path="/"/>
       <ErrorText error={error} />
@@ -159,4 +161,3 @@ export default function EditCourse() {
     </div>
   );
 }
-

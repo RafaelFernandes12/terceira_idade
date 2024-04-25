@@ -34,10 +34,10 @@ export default function Dashboard() {
         <div className="flex justify-between mx-6 mb-10 mt-4">
           <ul className="inline-flex gap-3">
             <button onClick={() => handleCourseType("Extensão")}>
-              <li className={`font-regular text-lg max-md:text-sm ${courseType === "Extensão" ? "border-b-[3px] border-darkBlue" : ""}`}>Extensão</li>
+              <li className={`font-regular text-lg max-sm:text-sm ${courseType === "Extensão" ? "border-b-[3px] border-darkBlue" : ""}`}>Extensão</li>
             </button>
             <button onClick={() => handleCourseType("Ensino")}>
-              <li className={`font-regular text-lg max-md:text-sm ${courseType === "Ensino" ? "border-b-[3px] border-darkBlue" : ""}`}>Ensino</li>
+              <li className={`font-regular text-lg max-sm:text-sm ${courseType === "Ensino" ? "border-b-[3px] border-darkBlue" : ""}`}>Ensino</li>
             </button>
           </ul>
 
@@ -58,7 +58,13 @@ export default function Dashboard() {
                 <div key={response.id} className="w-52 h-52 flex items-center flex-col m-auto mb-14">
                   <Link href={`course/${response.id}`} className="bg-darkBlue/50 p-4 rounded-lg m-auto w-full h-full">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={response.data.imgUrl} alt='' className="object-cover w-full h-full"/>
+                    <img src={response.data.imgUrl} alt='' className={`object-cover w-full h-full 
+                      ${response.data.imgUrl?.includes(".generic") ? "" : "hidden" }`}/>
+                    <div className={`flex items-center justify-center h-full w-full
+                      ${response.data.imgUrl?.includes(".generic") ? "hidden" : "" }`}>
+                      <span className={`text-center rotate-[315deg] w-full  
+                      `}>Adicionar Foto do curso</span>
+                    </div>
                   </Link>
                   <div className="flex  items-center justify-between w-full">
                     <span className="w-full truncate">{response.data.name}</span>

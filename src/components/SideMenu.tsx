@@ -20,7 +20,7 @@ export function SideMenu(){
           <span className={`${pathname === "/" ? "text-darkBlue": "" }`}>Cursos</span>
         </ListItem>
 
-        <ListItem path="/students" name="/student">
+        <ListItem path="/students" name="student">
           <GroupsIcon className={`mr-2 ${pathname.includes("student") ? "text-darkBlue": "" }`}/> 
           <span className={` ${pathname.includes("student") ? "text-darkBlue": "" }`}>Alunos</span>
         </ListItem> 

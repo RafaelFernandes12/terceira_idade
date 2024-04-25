@@ -24,23 +24,25 @@ export function ClassTime({id,data} : idDataProps) {
       <table className="mb-10 m-auto w-11/12">
         <thead className="border-2 border-black border-collapse">
           <tr className="w-full">
-            <th className="border-2 border-collapse border-black p-6 w-1/3">ATIVIDADE</th>
-            <th className="border-2 border-collapse border-black p-6 w-1/3">TURMA</th>
-            <th className="border-2 border-collapse border-black p-6 w-1/3">PROFESSOR</th>
+            <th className="border-2 border-collapse border-black p-6 max-sm:text-sm w-1/3">ATIVIDADE</th>
+            <th className="border-2 border-collapse border-black p-6 max-sm:text-sm w-1/3">TURMA</th>
+            <th className="border-2 border-collapse border-black p-6 max-sm:text-sm w-1/3">PROFESSOR</th>
           </tr>
         </thead>
         <tbody>
           {
             data ? 
               data.map((item: any) => {
-                if(id.includes(item.id)){
+                const matchType = item.data.type === courseType;
+                if(id.includes(item.id) && matchType){
+
                   return( 
                     <tr key={item.id} className="text-xl uppercase w-full">
-                      <td className="border-2 border-collapse border-black p-8 text-center w-1/3">
-                        <p className="max-w-20 m-auto">{item.data.name}</p>
+                      <td className="border-2 border-collapse border-black p-8 text-center w-1/3 max-sm:p-2">
+                        <p className="break-words m-auto max-sm:text-sm ">{item.data.name}</p>
                       </td>
-                      <td className="border-2 border-collapse border-black p-8 text-center text-base w-1/3">
-                        <div className="grid grid-cols-2">
+                      <td className="border-2 border-collapse border-black p-8 text-center text-base w-1/3 max-sm:p-2">
+                        <div className="grid grid-cols-2 max-sm:grid-cols-1 max-sm:text-xs gap-1">
                           {item.data.local.map((value:any, index:number) => {
                             return(
                               <div key={index}>
@@ -54,8 +56,8 @@ export function ClassTime({id,data} : idDataProps) {
                           })}
                         </div>
                       </td>
-                      <td className="border-2 border-collapse border-black p-8 text-center w-1/3">
-                        <p className="max-w-20 m-auto">{item.data.professorName}</p>
+                      <td className="border-2 border-collapse border-black p-8 text-center w-1/3 max-sm:p-2">
+                        <p className="break-words m-auto max-sm:text-sm">{item.data.professorName}</p>
                       </td>
                     </tr>
                   );

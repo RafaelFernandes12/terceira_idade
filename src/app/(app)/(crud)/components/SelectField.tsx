@@ -1,5 +1,3 @@
-"use client";
-
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -16,7 +14,7 @@ interface selectFieldProps {
 export default function SelectField({inputLabel,label,value,onChange,itens} : selectFieldProps){
 
   return(
-    <FormControl sx={{ minWidth: 120}} size="medium">
+    <FormControl sx={{ minWidth: 120}} className="w-full">
       <InputLabel>{inputLabel}</InputLabel>
       <Select
         value={value}

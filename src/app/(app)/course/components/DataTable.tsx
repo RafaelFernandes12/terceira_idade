@@ -6,6 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { Person } from "@mui/icons-material";
 
 export default function DataTable({ professorImg, professorName, local }: courseProps) {
 
@@ -14,7 +15,10 @@ export default function DataTable({ professorImg, professorName, local }: course
       <p className="font-medium p-2 text-lg">Professor</p>
       <div className="flex items-center gap-4 border-y-1 border-gray-400 p-4">
         <picture>
-          <img src={professorImg} className="w-60 h-60 rounded-full max-md:w-36 max-md:h-36" alt='' />
+          <img src={professorImg} alt='' className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
+                ${professorImg?.includes(".generic") ? "" : "hidden" }`}/>
+          <Person className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 text-black
+                ${professorImg?.includes(".generic") ? "hidden" : "" }`}/>
         </picture>
         <p>{professorName}</p>
       </div>

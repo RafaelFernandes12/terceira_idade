@@ -1,6 +1,6 @@
 import { db, storage } from "@/config/firestore";
 import { studentProps } from "@/types/studentProps";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
 

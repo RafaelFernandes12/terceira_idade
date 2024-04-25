@@ -8,8 +8,9 @@ export async function createCourse({
   courseId,name,courseImg,type,professorName,professorImg,local,studentId
 }: courseProps){
 
-  const courseImgs = ref(storage,`courseImgs/${uniqid()}`);
-  const professorImgs = ref(storage,`professorImgs/${uniqid()}`);
+  const courseImgs = ref(storage,`${courseImg === "generic"? `coursesImgs/${uniqid()}.generic`: `coursesImgs/${uniqid()}`}`);
+  const professorImgs = ref(storage,`${professorImg === "generic"? `professorImgs/${uniqid()}.generic`: `professorImgs/${uniqid()}`}`);
+
   const valRef = collection(db,"courses");
   
   const courseSnapshot = await uploadBytes(courseImgs, courseImg);

@@ -14,9 +14,9 @@ import { SubmitButton } from "../components/SubmitButton";
 export default function CreateCourse() {
     
   const [name, setName] = useState("");
-  const [courseImg, setCourseImg] = useState<any>();
+  const [courseImg, setCourseImg] = useState<any>("generic");
   const [professorName, setProfessorName] = useState("");
-  const [professorImg, setProfessorImg] = useState<any>();
+  const [professorImg, setProfessorImg] = useState<any>("generic");
   const [error, setError] = useState("");
   const [type, setType] = useState("Extensão");
   const [local, setLocal] = useState<Array<any>>([]);
@@ -64,17 +64,21 @@ export default function CreateCourse() {
     <div className='flex flex-col justify-center'>
       <h1 className='font-semibold text-2xl my-7'>Criar curso</h1>
       <div className='mb-4'>
-        <InputField 
-          label='Nome:' 
-          value={name} 
-          onChange={handleInputName} 
-        />
-        <label>Foto do curso: </label>
-        <input
-          type='file' 
-          onChange={e => setCourseImg(e.currentTarget.files![0])} 
-          className="mb-2 max-sm:text-xs"
-        />
+        <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
+          <InputField 
+            label='Nome:' 
+            value={name} 
+            onChange={handleInputName} 
+          />
+          <div className="flex flex-col">
+            <label>Foto do curso: </label>
+            <input
+              type='file' 
+              onChange={e => setCourseImg(e.currentTarget.files![0])} 
+              className="mb-2 max-sm:text-xs"
+            />
+          </div>
+        </div>
         <SelectField 
           inputLabel='Tipo' 
           value={type} 
@@ -82,17 +86,21 @@ export default function CreateCourse() {
           onChange={handleInputType} 
           itens={types} 
         />
-        <InputField 
-          label='Nome do Professor:' 
-          value={professorName}
-          onChange={handleInputProfessorName} 
-        />
-        <label>Foto do professor do curso: </label>
-        <input 
-          type='file' 
-          onChange={e => setProfessorImg(e.currentTarget.files![0])} 
-          className="mb-2 max-sm:text-xs"
-        />
+        <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0">
+          <InputField 
+            label='Nome do Professor:' 
+            value={professorName}
+            onChange={handleInputProfessorName} 
+          />
+          <div className="flex flex-col">
+            <label>Foto do professor do curso: </label>
+            <input 
+              type='file' 
+              onChange={e => setProfessorImg(e.currentTarget.files![0])} 
+              className="mb-2 max-sm:text-xs"
+            />
+          </div>
+        </div>
         <div className="flex gap-4 items-center my-4 max-md:flex-col">
           {local.map((item, index) => (
             <div key={index}>
@@ -126,12 +134,12 @@ export default function CreateCourse() {
               />
             </div>
           ))}
-          <button
-            className="bg-black rounded-md p-2 text-white" 
-            onClick={handleCreateNewLocal}>
-            Add Local
-          </button>
         </div>
+        <button
+          className="bg-black rounded-md p-2 text-white" 
+          onClick={handleCreateNewLocal}>
+            Adicionar Local
+        </button>
       </div>
       <SubmitButton text="Criar" onClick={addCourse} path="/"/>
       <ErrorText error={error} />
