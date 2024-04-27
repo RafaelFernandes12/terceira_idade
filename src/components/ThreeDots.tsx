@@ -10,10 +10,11 @@ import { useState } from "react";
 interface threeDotsProps{
     id: string,
     edit:string,
-    remove:(id: string) => void
+    paths:string[],
+    remove:(id: string,...paths:string[]) => void
 }
 
-export function ThreeDots({id,edit,remove}: threeDotsProps){
+export function ThreeDots({id,edit,remove,paths}: threeDotsProps){
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -51,7 +52,7 @@ export function ThreeDots({id,edit,remove}: threeDotsProps){
                 Editar
           </MenuItem>
         </Link>
-        <MenuItem onClick={() => remove(id)}>           
+        <MenuItem onClick={() => remove(id,...paths)}>           
               Excluir
         </MenuItem>
       </Menu>

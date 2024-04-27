@@ -42,8 +42,6 @@ export default function CreateStudent() {
   function handleInputTelefone_contato(value: string) { setTelefone_contato(value); }
   function handleInputTelefone_emergencia(value: string) { setTelefone_emergencia(value); }
 
-
-
   useEffect(() => {
     getCourses().then((response) => {
       setCourses(response);

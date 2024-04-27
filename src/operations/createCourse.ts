@@ -5,29 +5,26 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
 
 export async function createCourse({
-  courseId,name,courseImg,type,professorName,professorImg,local,studentId
-}: courseProps){
+  name, courseImg, type, professorName, professorImg, local
+}: courseProps) {
 
-  const courseImgs = ref(storage,`${courseImg === "generic"? `coursesImgs/${uniqid()}.generic`: `coursesImgs/${uniqid()}`}`);
-  const professorImgs = ref(storage,`${professorImg === "generic"? `professorImgs/${uniqid()}.generic`: `professorImgs/${uniqid()}`}`);
+  const uploadTasks = [
+    uploadBytes(ref(storage, `${courseImg === "generic" ? `courseImgs/${uniqid()}.generic` : `courseImgs/${uniqid()}`}`), courseImg),
+    uploadBytes(ref(storage, `${professorImg === "generic" ? `courseImgs/${uniqid()}.generic` : `courseImgs/${uniqid()}`}`), professorImg),
+  ];
 
-  const valRef = collection(db,"courses");
-  
-  const courseSnapshot = await uploadBytes(courseImgs, courseImg);
+  const [courseSnapshot, professorSnapshot] = await Promise.all(uploadTasks);
+
   const downloadCourseURL = await getDownloadURL(courseSnapshot.ref);
-
-  const professorSnapshot = await uploadBytes(professorImgs, professorImg);
   const downloadProfessorURL = await getDownloadURL(professorSnapshot.ref);
 
-  
-
-  await addDoc(valRef, { 
-    name: name, 
-    imgUrl: downloadCourseURL, 
+  // Add course document to Firestore
+  await addDoc(collection(db, "courses"), {
+    name: name,
+    courseImg: downloadCourseURL,
     type: type,
-    professorName:professorName,
-    professorImg:downloadProfessorURL,
-    local:local,
-  }
-  );
+    professorName: professorName,
+    professorImg: downloadProfessorURL,
+    local: local,
+  });
 }

@@ -16,9 +16,9 @@ export default function DataTable({ professorImg, professorName, local }: course
       <div className="flex items-center gap-4 border-y-1 border-gray-400 p-4">
         <picture>
           <img src={professorImg} alt='' className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
-                ${professorImg?.includes(".generic") ? "" : "hidden" }`}/>
+                ${professorImg?.includes("generic") ? "hidden" : "" }`}/>
           <Person className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 text-black
-                ${professorImg?.includes(".generic") ? "hidden" : "" }`}/>
+                ${professorImg?.includes("generic") ? "" : "hidden" }`}/>
         </picture>
         <p>{professorName}</p>
       </div>

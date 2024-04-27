@@ -45,8 +45,6 @@ export default function EditStudent({params}: idProps) {
   function handleInputTelefone_contato(value: string) { setTelefone_contato(value); }
   function handleInputTelefone_emergencia(value: string) { setTelefone_emergencia(value); }
 
-
-
   useEffect(() => {
     getCourses().then((response) => {
       setCourses(response);

@@ -43,7 +43,6 @@ export default async function Student({params}: IdProps) {
             </div>
             <hr className="border-black"/>
             <div className="p-4 flex flex-col gap-3">
-              <p>Idade : </p>
               <p>CPF : {student.cpf}</p>
               <p>Data de nascimento : {student.data_nascimento}</p>
               <p>Tel. Contato : {student.telefone_contato}</p>
@@ -64,13 +63,13 @@ export default async function Student({params}: IdProps) {
           <ContentBox title="Documentação">
             <table className="mb-10 m-auto w-11/12 mt-8">
               <tbody>
-                <TableRow title="FOTO 3X4" data="student.foto"/>
-                <TableRow title="CÓPIA DO RG (FRENTE)" data={student.rg_frente!}/>
-                <TableRow title="CÓPIA DO RG (VERSO)" data={student.rg_verso!}/>
-                <TableRow title="COMPROVANTE DE RESIDÊNCIA" data={student.residencia!}/>
-                <TableRow title="PASSAPORTE VACINAL" data={student.vacina!}/>
-                <TableRow title="ATESTADO CARDIOLOGISTA" data={student.cardiologista!}/>
-                <TableRow title="ATESTADO DERMATOLOGISTA" data={student.dermatologista!}/>
+                <TableRow id={id} name="foto" title="FOTO 3X4" data={student.foto}/>
+                <TableRow id={id} name="rg_frente" title="CÓPIA DO RG (FRENTE)" data={student.rg_frente}/>
+                <TableRow id={id} name="rg_verso" title="CÓPIA DO RG (VERSO)" data={student.rg_verso}/>
+                <TableRow id={id} name="residencia" title="COMPROVANTE DE RESIDÊNCIA" data={student.residencia}/>
+                <TableRow id={id} name="vacina" title="PASSAPORTE VACINAL" data={student.vacina}/>
+                <TableRow id={id} name="cardiologista" title="ATESTADO CARDIOLOGISTA" data={student.cardiologista}/>
+                <TableRow id={id} name="dermatologista" title="ATESTADO DERMATOLOGISTA" data={student.dermatologista}/>
               </tbody>
             </table>
           </ContentBox>

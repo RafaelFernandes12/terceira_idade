@@ -15,8 +15,8 @@ export default function StudentData({id,data} : idDataProps) {
               <Person className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
                 ${item.data.foto.includes("generic") ? "hidden" : "" }`}/>
               <div className="flex gap-2 flex-col ml-4">
-                <span className="truncate w-96">{item.data.name}</span>
-                <span>{item.data.cpf}</span>
+                <span className="break-words w-96 max-sm:w-36">{item.data.name}</span>
+                <span className="break-words w-96 max-sm:w-36">{item.data.cpf}</span>
               </div>
             </div>
           );

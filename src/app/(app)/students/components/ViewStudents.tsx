@@ -37,10 +37,10 @@ export function ViewStudents({data}: viewStudentsProps ){
               <Link
                 href={`/student/${response.id}`} 
                 className="">
-                <ErrorIcon className={`text-red-500 ${response.data.cardiologista === undefined || 
-                  response.data.residencia === undefined || response.data.dermatologista === undefined ||
-                  response.data.rg_frente === undefined || response.data.rg_verso === undefined 
-                  || response.data.vacina === undefined  ? "" : "hidden"}`} 
+                <ErrorIcon className={`text-red-500 ${response.data.cardiologista.includes("generic") || 
+                  response.data.residencia.includes("generic") || response.data.dermatologista.includes("generic") ||
+                  response.data.rg_frente.includes("generic") || response.data.rg_verso.includes("generic") 
+                  || response.data.vacina.includes("generic")  ? "" : "hidden"}`} 
                 />
                 <div className="flex gap-4 items-center">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -56,7 +56,20 @@ export function ViewStudents({data}: viewStudentsProps ){
                   </div>
                 </div>
               </Link>
-              <ThreeDots id={response.id} edit="editStudent" remove={deleteStudent}/>
+              <ThreeDots
+                id={response.id}
+                edit="editStudent"
+                paths={[
+                  response.data.foto,
+                  response.data.rg_frente,
+                  response.data.rg_verso,
+                  response.data.residencia,
+                  response.data.cardiologista,
+                  response.data.dermatologista,
+                  response.data.vacina,
+                ]}
+                remove={deleteStudent}
+              />
             </div>
           );
         }

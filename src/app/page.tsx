@@ -26,7 +26,6 @@ export default function Dashboard() {
     if(filterCourse === "Ensino") setCourseType("Ensino");
   }
   function handleInputChange(value:any){ setSearch(value);}
-  
   return (
     <div>
       <SearchBar onChange={handleInputChange} />
@@ -58,17 +57,17 @@ export default function Dashboard() {
                 <div key={response.id} className="w-52 h-52 flex items-center flex-col m-auto mb-14">
                   <Link href={`course/${response.id}`} className="bg-darkBlue/50 p-4 rounded-lg m-auto w-full h-full">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={response.data.imgUrl} alt='' className={`object-cover w-full h-full 
-                      ${response.data.imgUrl?.includes(".generic") ? "" : "hidden" }`}/>
+                    <img src={response.data.courseImg} alt='' className={`object-cover w-full h-full 
+                      ${response.data.courseImg.includes("generic") ? "hidden" : "" }`}/>
                     <div className={`flex items-center justify-center h-full w-full
-                      ${response.data.imgUrl?.includes(".generic") ? "hidden" : "" }`}>
+                      ${response.data.courseImg.includes("generic") ? "" : "hidden" }`}>
                       <span className={`text-center rotate-[315deg] w-full  
                       `}>Adicionar Foto do curso</span>
                     </div>
                   </Link>
                   <div className="flex  items-center justify-between w-full">
                     <span className="w-full truncate">{response.data.name}</span>
-                    <ThreeDots id={response.id} edit="editCourse" remove={deleteCourse}/>
+                    <ThreeDots id={response.id} edit="editCourse" paths={[response.data.courseImg, response.data.professorImg]} remove={deleteCourse}/>
                   </div>
                 </div>
               );

@@ -1,17 +1,28 @@
-import { db } from "@/config/firestore";
-import { deleteDoc, doc, getDocs, query, where, updateDoc, collection } from "firebase/firestore";
+import { db, storage } from "@/config/firestore";
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { deleteObject, listAll, ref } from "firebase/storage";
 
-export async function deleteCourse(id: string) {
-  // Delete course document
+export async function deleteCourse(id: string, ...paths: string[]) {
+
   await deleteDoc(doc(db, "courses", id));
 
-  // Find all students referencing the course
-  const studentsRef = collection(db,"students");
-
+  const studentsRef = collection(db, "students");
   const studentsQuery = query(studentsRef, where("courseId", "array-contains", id));
   const studentsSnapshot = await getDocs(studentsQuery);
 
-  // Update each student to remove the course ID from courseId array
+  const courseImgRef = ref(storage, "courseImgs");
+
+  const items = await listAll(courseImgRef);
+
+  const deletePromises = items.items.map(async (item) => {
+    const desertRef = ref(storage, `courseImgs/${item.name}`);
+    if (paths.some((path) => path.includes(item.name))) {
+      return deleteObject(desertRef);
+    }
+  });
+
+  await Promise.all(deletePromises);
+
   studentsSnapshot.forEach(async (studentDoc) => {
     const studentId = studentDoc.id;
     const studentRef = doc(db, "students", studentId);

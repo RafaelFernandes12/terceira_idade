@@ -27,6 +27,7 @@ export async function getStudent(id: string): Promise<studentProps | null> {
     residencia: data.residencia,
     cardiologista: data.cardiologista,
     dermatologista: data.dermatologista,
+    vacina: data.vacina,
     courseId: data.courseId,
   };
 

@@ -11,65 +11,65 @@ export async function createStudent({
 
   const valRef = collection(db, "students");
 
-  // Upload student photo to storage
-  const studentImgs = ref(storage, `${foto === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`);
-  const studentSnapshot = await uploadBytes(studentImgs, foto);
-  const downloadstudentURL = await getDownloadURL(studentSnapshot.ref);
+  // Upload all files concurrently
+  const uploadTasks = [
+    uploadBytes(ref(storage, `${foto === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), foto),
+    uploadBytes(ref(storage, `${rg_frente === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), rg_frente),
+    uploadBytes(ref(storage, `${rg_verso === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), rg_verso),
+    uploadBytes(ref(storage, `${residencia === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), residencia),
+    uploadBytes(ref(storage, `${cardiologista === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), cardiologista),
+    uploadBytes(ref(storage, `${dermatologista === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), dermatologista),
+    uploadBytes(ref(storage, `${vacina === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), vacina)
+  ];
 
-  const rg_frenteImgs = ref(storage, `${rg_frente === "generic" ? `rg_frenteImgs/${uniqid()}.generic` : `rg_frenteImgs/${uniqid()}`}`);
-  const rg_frenteSnapshot = await uploadBytes(rg_frenteImgs, rg_frente);
-  const downloadrg_frenteURL = await getDownloadURL(rg_frenteSnapshot.ref);
+  const [fotoSnapshot, rg_frenteSnapshot, rg_versoSnapshot, residenciaSnapshot, cardiologistaSnapshot, 
+    dermatologistaSnapshot, vacinaSnapshot] = await Promise.all(uploadTasks);
 
-  const rg_versoImgs = ref(storage, `${rg_verso === "generic" ? `rg_versoImgs/${uniqid()}.generic` : `rg_versoImgs/${uniqid()}`}`);
-  const rg_versoSnapshot = await uploadBytes(rg_versoImgs, rg_verso);
-  const downloadRg_versoURL = await getDownloadURL(rg_versoSnapshot.ref);
+  const [downloadstudentURL, downloadrg_frenteURL, downloadRg_versoURL, downloadResidenciaURL, 
+    downloadCardiologistaURL, downloadDermatologistaURL, downloadVacinaURL] = await Promise.all([
+    getDownloadURL(fotoSnapshot.ref),
+    getDownloadURL(rg_frenteSnapshot.ref),
+    getDownloadURL(rg_versoSnapshot.ref),
+    getDownloadURL(residenciaSnapshot.ref),
+    getDownloadURL(cardiologistaSnapshot.ref),
+    getDownloadURL(dermatologistaSnapshot.ref),
+    getDownloadURL(vacinaSnapshot.ref)
+  ]);
 
-  const residenciaImgs = ref(storage, `${residencia === "generic" ? `residenciaImgs/${uniqid()}.generic` : `residenciaImgs/${uniqid()}`}`);
-  const residenciaSnapshot = await uploadBytes(residenciaImgs, residencia);
-  const downloadResidenciaURL = await getDownloadURL(residenciaSnapshot.ref);
+  
+  try{
+    const docRef = await addDoc(valRef, {
+      name: name,
+      cpf: cpf,
+      data_nascimento: data_nascimento,
+      responsavel_nome: responsavel_nome,
+      responsavel_vinculo: responsavel_vinculo,
+      telefone_contato: telefone_contato,
+      telefone_emergencia: telefone_emergencia,
+      foto: downloadstudentURL,
+      rg_frente: downloadrg_frenteURL,
+      rg_verso: downloadRg_versoURL,
+      residencia: downloadResidenciaURL,
+      cardiologista: downloadCardiologistaURL,
+      dermatologista: downloadDermatologistaURL,
+      vacina: downloadVacinaURL,
+      courseId: courseId
+    });
+    const studentIds = await Promise.all(courseId!.map(async (course) => {
+      const courseRef = doc(db, "courses", course);
+      const courseDoc = await getDoc(courseRef);
+      const existingStudentIds = courseDoc?.data()?.studentId;
+      return { courseId: course, existingStudentIds: existingStudentIds };
+    }));
+  
+    await Promise.all(studentIds.map(async (studentIdObj) => {
+      const { courseId, existingStudentIds } = await studentIdObj;
+      const updatedStudentIds = [...existingStudentIds, docRef.id];
+      const courseRef = doc(db, "courses", courseId);
+      await updateDoc(courseRef, { studentId: updatedStudentIds });
+    }));
+  }catch(e){
+    console.log(e);
+  }
 
-  const cardiologistaImgs = ref(storage, `${cardiologista === "generic" ? `cardiologistaImgs/${uniqid()}.generic` : `cardiologistaImgs/${uniqid()}`}`);
-  const cardiologistaSnapshot = await uploadBytes(cardiologistaImgs, cardiologista);
-  const downloadCardiologistaURL = await getDownloadURL(cardiologistaSnapshot.ref);
-
-  const dermatologistaImgs = ref(storage, `${dermatologista === "generic" ? `dermatologistaImgs/${uniqid()}.generic` : `dermatologistaImgs/${uniqid()}`}`);
-  const dermatologistaSnapshot = await uploadBytes(dermatologistaImgs, dermatologista);
-  const downloadDermatologistaURL = await getDownloadURL(dermatologistaSnapshot.ref);
-
-  const vacinaImgs = ref(storage, `${vacina === "generic" ? `vacinaImgs/${uniqid()}.generic` : `vacinaImgs/${uniqid()}`}`);
-  const vacinaSnapshot = await uploadBytes(vacinaImgs, vacina);
-  const downloadVacinaURL = await getDownloadURL(vacinaSnapshot.ref);
-
-  // Add new student to students collection
-  const docRef = await addDoc(valRef, {
-    name: name,
-    cpf: cpf,
-    data_nascimento: data_nascimento,
-    responsavel_nome: responsavel_nome,
-    responsavel_vinculo: responsavel_vinculo,
-    telefone_contato: telefone_contato,
-    telefone_emergencia: telefone_emergencia,
-    foto: downloadstudentURL,
-    rg_frente: downloadrg_frenteURL,
-    rg_verso: downloadRg_versoURL,
-    residencia: downloadResidenciaURL,
-    cardiologista: downloadCardiologistaURL,
-    dermatologista: downloadDermatologistaURL,
-    vacina: downloadVacinaURL,
-    courseId: courseId
-  });
-
-  const studentIds = courseId!.map(async (course) => {
-    const courseRef = doc(db, "courses", course);
-    const courseDoc = await getDoc(courseRef);
-    const existingStudentIds = courseDoc?.data()?.studentId;
-    return { courseId: course, existingStudentIds: existingStudentIds };
-  });
-
-  studentIds.forEach(async (studentIdObj) => {
-    const { courseId, existingStudentIds } = await studentIdObj;
-    const updatedStudentIds = [...existingStudentIds, docRef.id];
-    const courseRef = doc(db, "courses", courseId);
-    await updateDoc(courseRef, { studentId: updatedStudentIds });
-  });
 }
