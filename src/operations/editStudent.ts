@@ -17,9 +17,7 @@ export async function editStudent({
   if (!querySnapshot.empty) {
     throw new Error("Estudante com o mesmo nome já existe");
   }
-  if (name = "") {
-    throw new Error("Estudante tem que possuir um nome");
-  }
+
   const uploadTasks = [
     uploadBytes(ref(storage, `${foto === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), foto),
     uploadBytes(ref(storage, `${rg_frente === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), rg_frente),

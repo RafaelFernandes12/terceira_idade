@@ -43,19 +43,6 @@ export function ResponsiveMenu(){
                 <GroupsIcon className={`mr-2 ${pathname.includes("student") ? "text-darkBlue": "" }`}/> 
                 <span className={`${pathname.includes("student") ? "text-darkBlue": "" }`}>Alunos</span>
               </ListItem> 
-
-              <hr className="my-2"/>
-
-              <li className="my-4 py-1 px-2">
-                <ToggleOnRoundedIcon className="mr-2"/> 
-            Alterar tema
-              </li>
-
-              <ListItem path="/sobre" name="/sobre">
-                <SmsFailedRoundedIcon className={`mr-2 ${pathname.includes("sobre") ? "text-darkBlue": "" }`}/> 
-                <span className={`${pathname.includes("sobre") ? "text-darkBlue": "" }`}>Sobre</span>
-              </ListItem>
-
             </ul>
           </List>
         </div>

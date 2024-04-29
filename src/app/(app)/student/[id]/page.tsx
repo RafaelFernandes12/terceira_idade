@@ -21,7 +21,9 @@ export default async function Student({params}: IdProps) {
   return (
     <div>
       <div className={`m-auto rounded-2xl w-full p-2 pb-6 bg-red-500/20 mb-10
-      ${student!.foto || student!.cardiologista || student!.dermatologista || student!.vacina  ? "": "hidden"}`}
+      ${student!.foto.includes("generic") || student!.cardiologista.includes("generic") || 
+      student!.dermatologista.includes("generic") || student!.vacina.includes("generic") || student!.residencia.includes("generic")
+      || student!.rg_frente.includes("generic") || student!.rg_verso.includes("generic") ? "": "hidden"}`}
       >
         <div className="flex items-center gap-2">
           <ErrorIcon className="text-red-500 rounded-full w-7 h-7"/>

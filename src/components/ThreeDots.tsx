@@ -1,9 +1,8 @@
 "use client";
-
 import { getCourses } from "@/operations/getCourses";
 import { getStudents } from "@/operations/getStudents";
-import { updatedCoursesStudentId } from "@/operations/updateCoursesStudentId";
-import { updatedStudentsCourseId } from "@/operations/updateStudentsCourseId";
+import { updateIdDashboard } from "@/operations/updateIdDashboard";
+import { updateIdStudents } from "@/operations/updateIdStudents";
 import { idDataProps } from "@/types/idDataProps";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Button from "@mui/material/Button";
@@ -22,21 +21,21 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-interface threeDotsProps{
+interface threeDotsProps {
     id: string,
-    edit:string,
-    isStudent:boolean,
-    paths:string[],
-    remove:(id: string,...paths:string[]) => void
+    edit: string,
+    isStudent: boolean,
+    paths: string[],
+    remove: (id: string, ...paths: string[]) => void
 }
 
-export function ThreeDots({id,edit,remove,paths,isStudent}: threeDotsProps){
+export function ThreeDots({ id, edit, remove, paths, isStudent }: threeDotsProps) {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const open = Boolean(anchorEl);
-  const [courses,setCourses] = useState<idDataProps[]>([]);
-  const [students,setStudents] = useState<idDataProps[]>([]);
+  const [courses, setCourses] = useState<idDataProps[]>([]);
+  const [students, setStudents] = useState<idDataProps[]>([]);
   const [studentId, setStudentId] = useState<string[]>([]);
   const [courseId, setCourseId] = useState<string[]>([]);
 
@@ -47,43 +46,52 @@ export function ThreeDots({id,edit,remove,paths,isStudent}: threeDotsProps){
     getStudents().then(response => {
       setStudents(response);
     });
-  },[]);
+  }, []);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  function updatedCoursesStudentIdF(){
-    updatedCoursesStudentId({studentId:id, courseIds:courseId});
-    toast.success("Criado com sucesso", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
+  const updateIdStudentsF = () => {
+    updateIdStudents({ studentId: id, courseIds: courseId }).then(() => {
+      toast.success("Criado com sucesso", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     });
     setOpenDialog(!openDialog);
-  }
-  function updatedStudentsCourseIdF(){
-    updatedStudentsCourseId({courseId:id, studentIds:studentId});
-    toast.success("Criado com sucesso", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    setOpenDialog(!openDialog);
-  }
+  };
 
+  const updateIdDashboardF = (item: idDataProps[]) => {
+    item.map(value => {
+      if(value.id.includes(studentId)){
+        updateIdDashboard({ courseId: id, studentId: value.id }).then(() => {
+          toast.success("Criado com sucesso", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        });
+      }
+    });
+    
+    setOpenDialog(!openDialog);
+  };
 
   return (
     <div>
@@ -109,18 +117,18 @@ export function ThreeDots({id,edit,remove,paths,isStudent}: threeDotsProps){
       >
         <Link href={`${edit}/${id}`}>
           <MenuItem>
-                Editar
+                        Editar
           </MenuItem>
         </Link>
-        <MenuItem onClick={() => remove(id,...paths)}>           
-              Excluir
+        <MenuItem onClick={() => remove(id, ...paths)}>
+                    Excluir
         </MenuItem>
-        <MenuItem className={`${isStudent ? "hidden": ""}`}>
+        <MenuItem className={`${isStudent ? "hidden" : ""}`}>
           <button onClick={() => setOpenDialog(!openDialog)}>Adicionar Estudante</button>
-          <Dialog open={openDialog} className={`${isStudent ? "hidden": ""}`}>
+          <Dialog open={openDialog} className={`${isStudent ? "hidden" : ""}`}>
             <DialogTitle>Escolha os estudantes</DialogTitle>
             <DialogContent>
-              <FormControl sx={{ minWidth: 120}} className="w-full">
+              <FormControl sx={{ minWidth: 120 }} className="w-full">
                 <InputLabel>Estudantes</InputLabel>
                 <Select
                   multiple
@@ -129,6 +137,7 @@ export function ThreeDots({id,edit,remove,paths,isStudent}: threeDotsProps){
                   onChange={(e: any) => setStudentId(e.target.value as string[])}
                 >
                   {students.map(item => {
+
                     return (
                       <MenuItem key={item.id} value={item.id}>{item.data.name}</MenuItem>
                     );
@@ -138,17 +147,17 @@ export function ThreeDots({id,edit,remove,paths,isStudent}: threeDotsProps){
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
-              <Button onClick={updatedStudentsCourseIdF}>Ok</Button>
+              <Button onClick={() => updateIdDashboardF(students)}>Ok</Button>
             </DialogActions>
           </Dialog>
         </MenuItem>
 
-        <MenuItem className={`${isStudent ? "": "hidden"}`}>
+        <MenuItem className={`${isStudent ? "" : "hidden"}`}>
           <button onClick={() => setOpenDialog(!openDialog)}>Adicionar cursos</button>
-          <Dialog open={openDialog} className={`${isStudent ? "": "hidden"}`}>
+          <Dialog open={openDialog} className={`${isStudent ? "" : "hidden"}`}>
             <DialogTitle>Escolha os cursos</DialogTitle>
             <DialogContent>
-              <FormControl sx={{ minWidth: 120}} className="w-full">
+              <FormControl sx={{ minWidth: 120 }} className="w-full">
                 <InputLabel>Curso</InputLabel>
                 <Select
                   multiple
@@ -166,7 +175,7 @@ export function ThreeDots({id,edit,remove,paths,isStudent}: threeDotsProps){
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
-              <Button onClick={updatedCoursesStudentIdF}>Ok</Button>
+              <Button onClick={updateIdStudentsF}>Ok</Button>
             </DialogActions>
           </Dialog>
         </MenuItem>

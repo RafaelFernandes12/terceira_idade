@@ -13,11 +13,11 @@ export async function createStudent({
   const studentsRef = collection(db, "students");
   const querySnapshot = await getDocs(query(studentsRef, where("name", "==", name)));
   
+  if (!name) {
+    throw new Error("Estudante tem que possuir um nome");
+  }
   if (!querySnapshot.empty) {
     throw new Error("Estudante com o mesmo nome já existe");
-  }
-  if (name = "") {
-    throw new Error("Estudante tem que possuir um nome");
   }
 
   const uploadTasks = [

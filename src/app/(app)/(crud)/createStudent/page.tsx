@@ -50,13 +50,6 @@ export default function CreateStudent() {
 
   async function addStudent() {
     setError("");
-    setName("");
-    setCpf("");
-    setData_nascimento("");
-    setResponsavel_nome("");
-    setResponsavel_vinculo("");
-    setTelefone_contato("");
-    setCourseId([]);
     createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, 
       telefone_contato, telefone_emergencia,foto,courseId, rg_frente, rg_verso, residencia, cardiologista, 
       dermatologista,vacina}).then(() => {
@@ -81,7 +74,7 @@ export default function CreateStudent() {
         <div className="flex items-center gap-6 max-sm:flex-col">
           <InputField
             type="text"
-            length={30}
+            length={75}
             label='Nome:'
             value={name}
             onChange={handleInputName}
@@ -124,7 +117,7 @@ export default function CreateStudent() {
         />
         <InputField
           type="text"
-          length={30}
+          length={75}
           label='Nome do responsável:'
           value={responsavel_nome}
           onChange={handleInputResponsavel_nome}
@@ -132,7 +125,7 @@ export default function CreateStudent() {
 
         <InputField
           type="text"
-          length={30}
+          length={75}
           label='Vínculo do responsável:'
           value={responsavel_vinculo}
           onChange={handleInputResponsavel_vinculo}

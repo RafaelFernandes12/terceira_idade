@@ -1,4 +1,3 @@
-// exclua quando implementar a api de estudantes
 import example from "@/assets/example.png";
 
 export const data = [{

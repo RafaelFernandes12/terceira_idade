@@ -1,4 +1,5 @@
 import { courseProps } from "@/types/courseProps";
+import { Person } from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -6,7 +7,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Person } from "@mui/icons-material";
+import { daysOfWeek } from "@/data";
 
 export default function DataTable({ professorImg, professorName, local }: courseProps) {
 
@@ -33,7 +34,11 @@ export default function DataTable({ professorImg, professorName, local }: course
             </TableRow>
           </TableHead>
           <TableBody>
-            {local?.map((item,index) => {
+            {local?.sort((a,b) => {
+              const indexA = daysOfWeek.indexOf(a.date);
+              const indexB = daysOfWeek.indexOf(b.date);
+              return indexA - indexB;
+            }).map((item,index) => {
               return (
                 <TableRow key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 }

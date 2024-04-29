@@ -68,7 +68,7 @@ export default function CreateCourse({params}: idProps) {
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
           <InputField 
             type="text"
-            length={30} 
+            length={75} 
             label='Nome:' 
             value={name} 
             onChange={handleInputName} 
@@ -92,7 +92,7 @@ export default function CreateCourse({params}: idProps) {
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0">
           <InputField 
             type="text"
-            length={30} 
+            length={75} 
             label='Nome do Professor:' 
             value={professorName}
             onChange={handleInputProfessorName} 
@@ -134,7 +134,7 @@ export default function CreateCourse({params}: idProps) {
               </div>
               <InputField
                 type="text"
-                length={10} 
+                length={20} 
                 label='Lugar do curso:'
                 value={item.place}
                 onChange={(e: string) => handleInputChange(index, "place", e)}

@@ -76,7 +76,7 @@ export default function EditStudent({params}: idProps) {
       <div className='mb-4'>
         <div className="flex items-center gap-6 max-sm:flex-col">
           <InputField
-            length={30}
+            length={75}
             type="text"
             label='Nome:'
             value={name}
@@ -112,7 +112,7 @@ export default function EditStudent({params}: idProps) {
         />
 
         <InputField
-          length={8}
+          length={6}
           type="date"
           label=''
           value={data_nascimento}
@@ -120,7 +120,7 @@ export default function EditStudent({params}: idProps) {
         />
 
         <InputField
-          length={30}
+          length={75}
           type="text"
           label='Nome do responsável:'
           value={responsavel_nome}
@@ -128,7 +128,7 @@ export default function EditStudent({params}: idProps) {
         />
 
         <InputField
-          length={30}
+          length={75}
           type="text"
           label='Vínculo do responsável:'
           value={responsavel_vinculo}

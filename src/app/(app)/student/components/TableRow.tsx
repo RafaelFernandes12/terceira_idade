@@ -50,7 +50,7 @@ export function TableRow({id,name, title,data,idHtml}: tableRowProps){
 
   return(
     <>
-      <tr className="border-2 border-black">
+      <tr className="border-2 border-black max-sm:text-sm">
         <td className="border-2 border-black w-[5%] p-4 text-center">
           <button onClick={() => setOpen(!open)}>
             <DoneIcon className={`text-green-500 rounded-full border-2 border-green-500 ${data.includes("generic") ? "hidden": ""}`}/>
@@ -61,7 +61,7 @@ export function TableRow({id,name, title,data,idHtml}: tableRowProps){
         <td className="pr-4 h-full w-full">
           <div className="flex gap-3 items-center justify-center">
             <label htmlFor={idHtml}>
-              <DownloadIcon className="sm:hidden"/>
+              <DownloadIcon className="sm:hidden cursor-pointer"/>
             </label>
             <input onChange={e => setImg(e.currentTarget.files![0])} id={idHtml} type="file" className="max-sm:hidden"/>
             <button onClick={editStudentImg}>

@@ -50,7 +50,7 @@ export function ViewStudents({data}: viewStudentsProps ){
                     ${response.data.foto.includes("generic") ? "" : "hidden" }`}/>
                   <div className="flex gap-2 flex-col ml-4 max-sm:text-xs">
                     <p className="w-96 max-sm:w-36 break-words">{response.data.name}</p>
-                    <p>{response.data.cpf}</p>
+                    <p>CPF: {response.data.cpf}</p>
                   </div>
                 </div>
               </Link>

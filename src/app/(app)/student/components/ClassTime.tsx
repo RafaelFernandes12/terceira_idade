@@ -1,4 +1,5 @@
 "use client";
+import { daysOfWeek } from "@/data";
 import { idDataProps } from "@/types/idDataProps";
 import { useState } from "react";
 
@@ -43,7 +44,11 @@ export function ClassTime({id,data} : idDataProps) {
                       </td>
                       <td className="border-2 border-black p-8 text-center text-base max-sm:p-2 max-sm:">
                         <div className="grid grid-cols-2 max-xl:grid-cols-1 max-sm:text-[10px] max-sm:leading-4 gap-1 max-sm:gap-2">
-                          {item.data.local.map((value:any, index:number) => {
+                          {item.data.local.sort((a:any,b:any) => {
+                            const indexA = daysOfWeek.indexOf(a.date);
+                            const indexB = daysOfWeek.indexOf(b.date);
+                            return indexA - indexB;
+                          }).map((value:any, index:number) => {
                             return(
                               <div key={index} className="">
                                 <p className=" text-center">{value.date}</p>
