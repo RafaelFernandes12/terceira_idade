@@ -23,7 +23,6 @@ export default function CreateCourse({params}: idProps) {
   const [local, setLocal] = useState<Array<any>>([]);
   const id = params.id;
 
-
   async function addCourse() {
     editCourse({courseId:id, name, courseImg, type, professorName, professorImg, local }).then(() => {
       toast.success("Editado com sucesso", {
@@ -64,7 +63,7 @@ export default function CreateCourse({params}: idProps) {
 
   return (
     <div className='flex flex-col justify-center'>
-      <h1 className='font-semibold text-2xl my-7'>Criar curso</h1>
+      <h1 className='font-semibold text-2xl my-7'>Editar curso</h1>
       <div className='mb-4'>
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
           <InputField 

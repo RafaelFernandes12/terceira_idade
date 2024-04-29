@@ -49,6 +49,14 @@ export default function CreateStudent() {
   },[]);
 
   async function addStudent() {
+    setError("");
+    setName("");
+    setCpf("");
+    setData_nascimento("");
+    setResponsavel_nome("");
+    setResponsavel_vinculo("");
+    setTelefone_contato("");
+    setCourseId([]);
     createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, 
       telefone_contato, telefone_emergencia,foto,courseId, rg_frente, rg_verso, residencia, cardiologista, 
       dermatologista,vacina}).then(() => {

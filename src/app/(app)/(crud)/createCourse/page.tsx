@@ -23,6 +23,10 @@ export default function CreateCourse() {
 
   async function addCourse() {
     setError("");
+    setName("");
+    setProfessorName("");
+    setLocal([]);
+
     createCourse({ name, courseImg, type, professorName, professorImg, local }).then(() => {
       toast.success("Criado com sucesso", {
         position: "top-center",

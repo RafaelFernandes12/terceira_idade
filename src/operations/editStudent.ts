@@ -1,7 +1,8 @@
 import { db, storage } from "@/config/firestore";
 import { studentProps } from "@/types/studentProps";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
 import uniqid from "uniqid";
 
 export async function editStudent({
@@ -10,7 +11,15 @@ export async function editStudent({
 }: studentProps) {
 
   const valRef = doc(db, "students",studentId!);
-
+  const studentsRef = collection(db, "students");
+  const querySnapshot = await getDocs(query(studentsRef, where("name", "==", name)));
+  
+  if (!querySnapshot.empty) {
+    throw new Error("Estudante com o mesmo nome já existe");
+  }
+  if (name = "") {
+    throw new Error("Estudante tem que possuir um nome");
+  }
   const uploadTasks = [
     uploadBytes(ref(storage, `${foto === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), foto),
     uploadBytes(ref(storage, `${rg_frente === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), rg_frente),

@@ -25,7 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 interface threeDotsProps{
     id: string,
     edit:string,
-    isStudent:boolean
+    isStudent:boolean,
     paths:string[],
     remove:(id: string,...paths:string[]) => void
 }
@@ -117,15 +117,15 @@ export function ThreeDots({id,edit,remove,paths,isStudent}: threeDotsProps){
         </MenuItem>
         <MenuItem className={`${isStudent ? "hidden": ""}`}>
           <button onClick={() => setOpenDialog(!openDialog)}>Adicionar Estudante</button>
-          <Dialog open={openDialog}>
+          <Dialog open={openDialog} className={`${isStudent ? "hidden": ""}`}>
             <DialogTitle>Escolha os estudantes</DialogTitle>
             <DialogContent>
               <FormControl sx={{ minWidth: 120}} className="w-full">
-                <InputLabel>Curso</InputLabel>
+                <InputLabel>Estudantes</InputLabel>
                 <Select
                   multiple
                   value={studentId}
-                  label="Curso"
+                  label="Estudante"
                   onChange={(e: any) => setStudentId(e.target.value as string[])}
                 >
                   {students.map(item => {
@@ -145,7 +145,7 @@ export function ThreeDots({id,edit,remove,paths,isStudent}: threeDotsProps){
 
         <MenuItem className={`${isStudent ? "": "hidden"}`}>
           <button onClick={() => setOpenDialog(!openDialog)}>Adicionar cursos</button>
-          <Dialog open={openDialog}>
+          <Dialog open={openDialog} className={`${isStudent ? "": "hidden"}`}>
             <DialogTitle>Escolha os cursos</DialogTitle>
             <DialogContent>
               <FormControl sx={{ minWidth: 120}} className="w-full">

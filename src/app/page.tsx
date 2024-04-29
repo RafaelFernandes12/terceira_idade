@@ -4,13 +4,8 @@ import { SearchBar } from "@/components/SearchBar";
 import { ThreeDots } from "@/components/ThreeDots";
 import { deleteCourse } from "@/operations/deleteCourse";
 import { getCourses } from "@/operations/getCourses";
-import { getStudents } from "@/operations/getStudents";
 import { idDataProps } from "@/types/idDataProps";
 import AddIcon from "@mui/icons-material/Add";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,17 +13,12 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Dashboard() {
 
   const [courses,setCourses] = useState<idDataProps[]>([]);
-  const [students,setStudents] = useState<idDataProps[]>([]);
   const [courseType,setCourseType] = useState("Extensão");
   const [search, setSearch] = useState("");
-  const [studentId, setStudentId] = useState<string[]>([]);
 
   useEffect(() => {
     getCourses().then(response => {
       setCourses(response);
-    });
-    getStudents().then(response => {
-      setStudents(response);
     });
   },[]);
 
