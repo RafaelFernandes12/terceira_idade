@@ -49,10 +49,9 @@ export default function CreateStudent() {
   },[]);
 
   async function addStudent() {
-    if (name) {
-      createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, 
-        telefone_contato, telefone_emergencia,foto,courseId, rg_frente, rg_verso, residencia, cardiologista, 
-        dermatologista,vacina});
+    createStudent({ name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, 
+      telefone_contato, telefone_emergencia,foto,courseId, rg_frente, rg_verso, residencia, cardiologista, 
+      dermatologista,vacina}).then(() => {
       toast.success("Criado com sucesso", {
         position: "top-center",
         autoClose: 5000,
@@ -63,10 +62,9 @@ export default function CreateStudent() {
         progress: undefined,
         theme: "colored",
       });
-
-    } else {
-      setError("Todos os campos devem estar preenchidos");
-    }
+    }).catch(e => {
+      setError(e.toString());
+    });
   }
   return (
     <div className='flex flex-col justify-center'>
@@ -74,6 +72,8 @@ export default function CreateStudent() {
       <div className='mb-4'>
         <div className="flex items-center gap-6 max-sm:flex-col">
           <InputField
+            type="text"
+            length={30}
             label='Nome:'
             value={name}
             onChange={handleInputName}
@@ -100,36 +100,47 @@ export default function CreateStudent() {
           </Select>
         </FormControl>
         <InputField
+          type="text"
+          length={11}
           label='CPF:'
           value={cpf}
           onChange={handleInputCpf}
         />
 
         <InputField
-          label='Data de nascimento:'
+          type="date"
+          length={6}
+          label=''
           value={data_nascimento}
           onChange={handleInputData_nascimento}
         />
-
         <InputField
+          type="text"
+          length={30}
           label='Nome do responsável:'
           value={responsavel_nome}
           onChange={handleInputResponsavel_nome}
         />
 
         <InputField
+          type="text"
+          length={30}
           label='Vínculo do responsável:'
           value={responsavel_vinculo}
           onChange={handleInputResponsavel_vinculo}
         />
 
         <InputField
+          type="text"
+          length={11}
           label='Telefone de contato:'
           value={telefone_contato}
           onChange={handleInputTelefone_contato}
         />
 
         <InputField
+          type="text"
+          length={11}
           label='Telefone de emergência:'
           value={telefone_emergencia}
           onChange={handleInputTelefone_emergencia}

@@ -46,10 +46,8 @@ export function ViewStudents({data}: viewStudentsProps ){
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={response.data.foto} alt='' className={`w-32 h-32 rounded-full bg-contain max-sm:w-20 max-sm:h-20 
                     ${response.data.foto.includes("generic") ? "hidden" : "" }`}/>
-
                   <Person className={`w-32 h-32 rounded-full bg-contain max-sm:w-20 max-sm:h-20 
                     ${response.data.foto.includes("generic") ? "" : "hidden" }`}/>
-
                   <div className="flex gap-2 flex-col ml-4 max-sm:text-xs">
                     <p className="w-96 max-sm:w-36 break-words">{response.data.name}</p>
                     <p>{response.data.cpf}</p>
@@ -69,6 +67,7 @@ export function ViewStudents({data}: viewStudentsProps ){
                   response.data.vacina,
                 ]}
                 remove={deleteStudent}
+                isStudent={true}
               />
             </div>
           );

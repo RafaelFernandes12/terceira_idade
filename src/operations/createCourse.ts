@@ -1,12 +1,26 @@
 import { db, storage } from "@/config/firestore";
 import { courseProps } from "@/types/courseProps";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
 
 export async function createCourse({
-  name, courseImg, type, professorName, professorImg, local
+  name,
+  courseImg,
+  type,
+  professorName,
+  professorImg,
+  local
 }: courseProps) {
+
+  const coursesRef = collection(db, "courses");
+  const querySnapshot = await getDocs(query(coursesRef, where("name", "==", name)));
+  if (!querySnapshot.empty) {
+    throw new Error("Curso com o mesmo nome já existe");
+  }
+  if(name === ""){
+    throw new Error("Curso precisa de um nome");
+  }
 
   const uploadTasks = [
     uploadBytes(ref(storage, `${courseImg === "generic" ? `courseImgs/${uniqid()}.generic` : `courseImgs/${uniqid()}`}`), courseImg),
@@ -26,5 +40,6 @@ export async function createCourse({
     professorName: professorName,
     professorImg: downloadProfessorURL,
     local: local,
+    studentId: []
   });
 }

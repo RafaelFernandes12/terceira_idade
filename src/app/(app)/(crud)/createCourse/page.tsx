@@ -22,8 +22,8 @@ export default function CreateCourse() {
   const [local, setLocal] = useState<Array<any>>([]);
 
   async function addCourse() {
-    if (name) {
-      createCourse({ name, courseImg, type, professorName, professorImg, local });
+    setError("");
+    createCourse({ name, courseImg, type, professorName, professorImg, local }).then(() => {
       toast.success("Criado com sucesso", {
         position: "top-center",
         autoClose: 5000,
@@ -34,9 +34,10 @@ export default function CreateCourse() {
         progress: undefined,
         theme: "colored",
       });
-    } else {
-      setError("Todos os campos devem estar preenchidos");
-    }
+    }).catch(e => {
+      setError(e.toString());
+      console.log(e);
+    });
   }
 
   function handleInputName(value: string) { setName(value); }
@@ -65,7 +66,9 @@ export default function CreateCourse() {
       <h1 className='font-semibold text-2xl my-7'>Criar curso</h1>
       <div className='mb-4'>
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
-          <InputField 
+          <InputField
+            type="text"
+            length={30} 
             label='Nome:' 
             value={name} 
             onChange={handleInputName} 
@@ -87,7 +90,9 @@ export default function CreateCourse() {
           itens={types} 
         />
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0">
-          <InputField 
+          <InputField
+            type="text"
+            length={30} 
             label='Nome do Professor:' 
             value={professorName}
             onChange={handleInputProfessorName} 
@@ -128,6 +133,8 @@ export default function CreateCourse() {
                 />
               </div>
               <InputField
+                type="text"
+                length={10}
                 label='Lugar do curso:'
                 value={item.place}
                 onChange={(e: string) => handleInputChange(index, "place", e)}

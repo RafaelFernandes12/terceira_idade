@@ -1,6 +1,6 @@
 import { db, storage } from "@/config/firestore";
 import { studentProps } from "@/types/studentProps";
-import { addDoc, collection, doc, updateDoc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uniqid from "uniqid";
 
@@ -10,8 +10,16 @@ export async function createStudent({
 }: studentProps) {
 
   const valRef = collection(db, "students");
+  const studentsRef = collection(db, "students");
+  const querySnapshot = await getDocs(query(studentsRef, where("name", "==", name)));
+  
+  if (!querySnapshot.empty) {
+    throw new Error("Estudante com o mesmo nome já existe");
+  }
+  if (name = "") {
+    throw new Error("Estudante tem que possuir um nome");
+  }
 
-  // Upload all files concurrently
   const uploadTasks = [
     uploadBytes(ref(storage, `${foto === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), foto),
     uploadBytes(ref(storage, `${rg_frente === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), rg_frente),
@@ -55,6 +63,7 @@ export async function createStudent({
       vacina: downloadVacinaURL,
       courseId: courseId
     });
+
     const studentIds = await Promise.all(courseId!.map(async (course) => {
       const courseRef = doc(db, "courses", course);
       const courseDoc = await getDoc(courseRef);
@@ -63,7 +72,7 @@ export async function createStudent({
     }));
   
     await Promise.all(studentIds.map(async (studentIdObj) => {
-      const { courseId, existingStudentIds } = await studentIdObj;
+      const { courseId, existingStudentIds } = studentIdObj;
       const updatedStudentIds = [...existingStudentIds, docRef.id];
       const courseRef = doc(db, "courses", courseId);
       await updateDoc(courseRef, { studentId: updatedStudentIds });

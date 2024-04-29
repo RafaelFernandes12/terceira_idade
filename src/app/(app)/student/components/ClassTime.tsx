@@ -22,11 +22,11 @@ export function ClassTime({id,data} : idDataProps) {
         </button>
       </ul>
       <table className="mb-10 m-auto w-11/12">
-        <thead className="border-2 border-black border-collapse">
+        <thead className="border-2 border-black">
           <tr className="w-full">
-            <th className="border-2 border-collapse border-black p-8 max-sm:p-2 max-sm:text-sm w-1/3">ATIVIDADE</th>
-            <th className="border-2 border-collapse border-black p-8 max-sm:p-2 max-sm:text-sm w-1/3">TURMA</th>
-            <th className="border-2 border-collapse border-black p-8 max-sm:p-2 max-sm:text-sm w-1/3">PROFESSOR</th>
+            <th className="border-2 border-black p-8 max-sm:p-2 max-sm:text-sm">ATIVIDADE</th>
+            <th className="border-2 border-black p-8 max-sm:p-2 max-sm:text-sm">TURMA</th>
+            <th className="border-2 border-black p-8 max-sm:p-2 max-sm:text-sm">PROFESSOR</th>
           </tr>
         </thead>
         <tbody>
@@ -38,25 +38,25 @@ export function ClassTime({id,data} : idDataProps) {
 
                   return( 
                     <tr key={item.id} className="text-xl uppercase w-full">
-                      <td className="border-2 border-collapse border-black p-8 text-center w-1/3 max-sm:p-2">
+                      <td className="border-2 border-black p-8 text-center max-sm:p-2 max-sm:">
                         <p className="break-words m-auto max-sm:text-xs ">{item.data.name}</p>
                       </td>
-                      <td className="border-2 border-collapse border-black p-8 text-center text-base w-1/3 max-sm:p-2">
+                      <td className="border-2 border-black p-8 text-center text-base max-sm:p-2 max-sm:">
                         <div className="grid grid-cols-2 max-xl:grid-cols-1 max-sm:text-[10px] max-sm:leading-4 gap-1 max-sm:gap-2">
                           {item.data.local.map((value:any, index:number) => {
                             return(
-                              <div key={index}>
-                                <p>{value.date}</p>
-                                <p>
+                              <div key={index} className="">
+                                <p className=" text-center">{value.date}</p>
+                                <p className=" text-center">
                                   <span>{value.startHour}</span> - <span>{value.endHour}</span>
                                 </p>
-                                <p>{value.place}</p>
+                                <p className=" text-center">{value.place}</p>
                               </div>
                             );
                           })}
                         </div>
                       </td>
-                      <td className="border-2 border-collapse border-black p-8 text-center w-1/3 max-sm:p-2">
+                      <td className="border-2 border-black p-8 text-center max-sm:p-2 max-sm:">
                         <p className="break-words m-auto max-sm:text-xs">{item.data.professorName}</p>
                       </td>
                     </tr>

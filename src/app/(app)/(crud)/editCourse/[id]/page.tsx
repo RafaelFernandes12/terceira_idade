@@ -2,6 +2,8 @@
 
 import { ErrorText } from "@/components/ErrorText";
 import { daysOfWeek, types } from "@/data";
+import { editCourse } from "@/operations/editCourse";
+import { idProps } from "@/types/idProps";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,8 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 import InputField from "../../components/InputField";
 import SelectField from "../../components/SelectField";
 import { SubmitButton } from "../../components/SubmitButton";
-import { idProps } from "@/types/idProps";
-import { editCourse } from "@/operations/editCourse";
 
 export default function CreateCourse({params}: idProps) {
     
@@ -25,9 +25,8 @@ export default function CreateCourse({params}: idProps) {
 
 
   async function addCourse() {
-    if (name) {
-      editCourse({courseId:id, name, courseImg, type, professorName, professorImg, local });
-      toast.success("Criado com sucesso", {
+    editCourse({courseId:id, name, courseImg, type, professorName, professorImg, local }).then(() => {
+      toast.success("Editado com sucesso", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -37,9 +36,9 @@ export default function CreateCourse({params}: idProps) {
         progress: undefined,
         theme: "colored",
       });
-    } else {
-      setError("Todos os campos devem estar preenchidos");
-    }
+    }).catch(e => {
+      setError(e.toString());
+    });
   }
 
   function handleInputName(value: string) { setName(value); }
@@ -69,6 +68,8 @@ export default function CreateCourse({params}: idProps) {
       <div className='mb-4'>
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
           <InputField 
+            type="text"
+            length={30} 
             label='Nome:' 
             value={name} 
             onChange={handleInputName} 
@@ -91,6 +92,8 @@ export default function CreateCourse({params}: idProps) {
         />
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0">
           <InputField 
+            type="text"
+            length={30} 
             label='Nome do Professor:' 
             value={professorName}
             onChange={handleInputProfessorName} 
@@ -131,6 +134,8 @@ export default function CreateCourse({params}: idProps) {
                 />
               </div>
               <InputField
+                type="text"
+                length={10} 
                 label='Lugar do curso:'
                 value={item.place}
                 onChange={(e: string) => handleInputChange(index, "place", e)}

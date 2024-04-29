@@ -14,7 +14,9 @@ export async function editStudentImage({ id, name, img }: studentImageProps) {
 
   const imgSnapshot = await uploadBytes(ref(storage, `${img === "generic" ? `studentImgs/${uniqid()}.generic` : `studentImgs/${uniqid()}`}`), img);
   const imgDownloadUrl = await getDownloadURL(imgSnapshot.ref);
-
+  if(img === "generic") {
+    throw new Error("Nenhuma imagem foi selecionada");
+  }
   try {
     const updateData: any = {};
     updateData[name] = imgDownloadUrl;

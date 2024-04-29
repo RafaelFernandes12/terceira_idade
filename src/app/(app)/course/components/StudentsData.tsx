@@ -11,9 +11,9 @@ export default function StudentData({id,data} : idDataProps) {
             <div key={index} className="border-1 border-gray-500 rounded-3xl flex items-center p-4 my-6 max-md:text-xs">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={item.data.foto} alt='' className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
-                ${item.data.foto.includes("generic") ? "" : "hidden" }`}/>
+                ${item.data.foto.includes(".generic") ? "hidden" : "" }`}/>
               <Person className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
-                ${item.data.foto.includes("generic") ? "hidden" : "" }`}/>
+                ${item.data.foto.includes(".generic") ? "" : "hidden" }`}/>
               <div className="flex gap-2 flex-col ml-4">
                 <span className="break-words w-96 max-sm:w-36">{item.data.name}</span>
                 <span className="break-words w-96 max-sm:w-36">{item.data.cpf}</span>
@@ -23,6 +23,5 @@ export default function StudentData({id,data} : idDataProps) {
         }
       })}
     </>
-
   );
 }

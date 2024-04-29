@@ -1,9 +1,10 @@
 "use client";
 
 import { ErrorText } from "@/components/ErrorText";
-import { createStudent } from "@/operations/createStudent";
+import { editStudent } from "@/operations/editStudent";
 import { getCourses } from "@/operations/getCourses";
 import { idDataProps } from "@/types/idDataProps";
+import { idProps } from "@/types/idProps";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -13,8 +14,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InputField from "../../components/InputField";
 import { SubmitButton } from "../../components/SubmitButton";
-import { editStudent } from "@/operations/editStudent";
-import { idProps } from "@/types/idProps";
 
 export default function EditStudent({params}: idProps) {
 
@@ -54,10 +53,10 @@ export default function EditStudent({params}: idProps) {
 
 
   async function addStudent() {
-    if (name) {
-      editStudent({ studentId: id, name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, 
-        telefone_contato, telefone_emergencia,foto,courseId, rg_frente, rg_verso, residencia, cardiologista, dermatologista,vacina});
-      toast.success("Criado com sucesso", {
+    editStudent({ studentId: id, name, cpf, data_nascimento, responsavel_nome, responsavel_vinculo, 
+      telefone_contato, telefone_emergencia,foto,courseId, rg_frente, rg_verso, 
+      residencia, cardiologista, dermatologista,vacina}).then(() => {
+      toast.success("Editado com sucesso", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -67,10 +66,9 @@ export default function EditStudent({params}: idProps) {
         progress: undefined,
         theme: "colored",
       });
-
-    } else {
-      setError("Todos os campos devem estar preenchidos");
-    }
+    }).catch(e => {
+      setError(e.toString());
+    });
   }
   return (
     <div className='flex flex-col justify-center'>
@@ -78,6 +76,8 @@ export default function EditStudent({params}: idProps) {
       <div className='mb-4'>
         <div className="flex items-center gap-6 max-sm:flex-col">
           <InputField
+            length={30}
+            type="text"
             label='Nome:'
             value={name}
             onChange={handleInputName}
@@ -104,36 +104,48 @@ export default function EditStudent({params}: idProps) {
           </Select>
         </FormControl>
         <InputField
+          length={11}
+          type="text"
           label='CPF:'
           value={cpf}
           onChange={handleInputCpf}
         />
 
         <InputField
-          label='Data de nascimento:'
+          length={8}
+          type="date"
+          label=''
           value={data_nascimento}
           onChange={handleInputData_nascimento}
         />
 
         <InputField
+          length={30}
+          type="text"
           label='Nome do responsável:'
           value={responsavel_nome}
           onChange={handleInputResponsavel_nome}
         />
 
         <InputField
+          length={30}
+          type="text"
           label='Vínculo do responsável:'
           value={responsavel_vinculo}
           onChange={handleInputResponsavel_vinculo}
         />
 
         <InputField
+          length={11}
+          type="text"
           label='Telefone de contato:'
           value={telefone_contato}
           onChange={handleInputTelefone_contato}
         />
 
         <InputField
+          length={11}
+          type="text"
           label='Telefone de emergência:'
           value={telefone_emergencia}
           onChange={handleInputTelefone_emergencia}

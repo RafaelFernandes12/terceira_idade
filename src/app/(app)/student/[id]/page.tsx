@@ -63,13 +63,13 @@ export default async function Student({params}: IdProps) {
           <ContentBox title="Documentação">
             <table className="mb-10 m-auto w-11/12 mt-8">
               <tbody>
-                <TableRow id={id} name="foto" title="FOTO 3X4" data={student.foto}/>
-                <TableRow id={id} name="rg_frente" title="CÓPIA DO RG (FRENTE)" data={student.rg_frente}/>
-                <TableRow id={id} name="rg_verso" title="CÓPIA DO RG (VERSO)" data={student.rg_verso}/>
-                <TableRow id={id} name="residencia" title="COMPROVANTE DE RESIDÊNCIA" data={student.residencia}/>
-                <TableRow id={id} name="vacina" title="PASSAPORTE VACINAL" data={student.vacina}/>
-                <TableRow id={id} name="cardiologista" title="ATESTADO CARDIOLOGISTA" data={student.cardiologista}/>
-                <TableRow id={id} name="dermatologista" title="ATESTADO DERMATOLOGISTA" data={student.dermatologista}/>
+                <TableRow idHtml="file1" id={id} name="foto" title="FOTO 3X4" data={student.foto}/>
+                <TableRow idHtml="file2" id={id} name="rg_frente" title="CÓPIA DO RG (FRENTE)" data={student.rg_frente}/>
+                <TableRow idHtml="file3" id={id} name="rg_verso" title="CÓPIA DO RG (VERSO)" data={student.rg_verso}/>
+                <TableRow idHtml="file4" id={id} name="residencia" title="COMPROVANTE DE RESIDÊNCIA" data={student.residencia}/>
+                <TableRow idHtml="file5" id={id} name="vacina" title="PASSAPORTE VACINAL" data={student.vacina}/>
+                <TableRow idHtml="file6" id={id} name="cardiologista" title="ATESTADO CARDIOLOGISTA" data={student.cardiologista}/>
+                <TableRow idHtml="file7" id={id} name="dermatologista" title="ATESTADO DERMATOLOGISTA" data={student.dermatologista}/>
               </tbody>
             </table>
           </ContentBox>
