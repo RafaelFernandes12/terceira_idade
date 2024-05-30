@@ -1,35 +1,30 @@
-import { db } from "@/config/firestore";
-import { studentProps } from "@/types/studentProps";
-import { doc, getDoc } from "firebase/firestore";
+import { db } from '@/config/firestore'
+import { getStudentProps } from '@/types/getStudentProps'
+import { doc, getDoc } from 'firebase/firestore'
 
-export async function getStudent(id: string): Promise<studentProps | null> {
+export async function getStudent(id: string): Promise<getStudentProps> {
+  const docRef = doc(db, 'students', id)
+  const docSnap = await getDoc(docRef)
 
-  const docRef = doc(db, "students", id);
-  const docSnap = await getDoc(docRef);
+  const data = docSnap.data() as getStudentProps
 
-  if (!docSnap.exists()) {
-    return null;
-  }
-
-  const data = docSnap.data() as { [key: string]: any }; 
-
-  const student: studentProps = {
+  const student: getStudentProps = {
     name: data.name,
     cpf: data.cpf,
-    data_nascimento: data.data_nascimento,
-    responsavel_nome: data.responsavel_nome,
-    responsavel_vinculo: data.responsavel_vinculo,
-    telefone_contato: data.telefone_contato,
-    telefone_emergencia: data.telefone_emergencia,
+    dataNascimento: data.dataNascimento,
+    responsavelNome: data.responsavelNome,
+    responsavelVinculo: data.responsavelVinculo,
+    telefoneContato: data.telefoneContato,
+    telefoneEmergencia: data.telefoneEmergencia,
     foto: data.foto,
-    rg_frente: data.rg_frente,
-    rg_verso: data.rg_verso,
+    rgFrente: data.rgFrente,
+    rgVerso: data.rgVerso,
     residencia: data.residencia,
     cardiologista: data.cardiologista,
     dermatologista: data.dermatologista,
     vacina: data.vacina,
     courseId: data.courseId,
-  };
+  }
 
-  return student;
+  return student
 }

@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyBmRV1UtOodq3h2wU6qYCKgdmugspO-VkU",
@@ -13,15 +13,15 @@ import { getStorage } from "firebase/storage";
 // };
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDeNJHmuyljk0oHcghLF1ilzMRvqa30X4Y",
-  authDomain: "teste-87048.firebaseapp.com",
-  projectId: "teste-87048",
-  storageBucket: "teste-87048.appspot.com",
-  messagingSenderId: "928766414770",
-  appId: "1:928766414770:web:f42c553bd8a662b8fc5eab",
-  measurementId: "G-ENZ0KGWQEV"
-};
+  apiKey: 'AIzaSyDeNJHmuyljk0oHcghLF1ilzMRvqa30X4Y',
+  authDomain: 'teste-87048.firebaseapp.com',
+  projectId: 'teste-87048',
+  storageBucket: 'teste-87048.appspot.com',
+  messagingSenderId: '928766414770',
+  appId: '1:928766414770:web:f42c553bd8a662b8fc5eab',
+  measurementId: 'G-ENZ0KGWQEV',
+}
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const storage = getStorage();
+const app = initializeApp(firebaseConfig)
+export const db = getFirestore(app)
+export const storage = getStorage()

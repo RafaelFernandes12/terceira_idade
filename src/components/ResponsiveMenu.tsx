@@ -1,29 +1,26 @@
-"use client";
+'use client'
 
-import menu_icon from "@/assets/menu_icon.svg";
-import ClassIcon from "@mui/icons-material/Class";
-import GroupsIcon from "@mui/icons-material/Groups";
-import SmsFailedRoundedIcon from "@mui/icons-material/SmsFailedRounded";
-import ToggleOnRoundedIcon from "@mui/icons-material/ToggleOnRounded";
-import { Drawer, List } from "@mui/material";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useCallback, useState } from "react";
-import { ListItem } from "./ListItem";
+import menuIcon from '@/assets/menuIcon.svg'
+import ClassIcon from '@mui/icons-material/Class'
+import GroupsIcon from '@mui/icons-material/Groups'
+import { Drawer, List } from '@mui/material'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { useCallback, useState } from 'react'
+import { ListItem } from './ListItem'
 
-export function ResponsiveMenu(){
-
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const pathname = usePathname();
+export function ResponsiveMenu() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const pathname = usePathname()
 
   const toggleDrawerOpen = useCallback(() => {
-    setIsDrawerOpen((oldDrawerOpen) => !oldDrawerOpen);
-  }, []);
+    setIsDrawerOpen((oldDrawerOpen) => !oldDrawerOpen)
+  }, [])
 
-  return(
+  return (
     <>
       <button onClick={toggleDrawerOpen}>
-        <Image src={menu_icon} alt=''/>
+        <Image src={menuIcon} alt="" />
       </button>
       <Drawer
         anchor="right"
@@ -35,18 +32,28 @@ export function ResponsiveMenu(){
           <List component="nav">
             <ul>
               <ListItem path="/" name="Course">
-                <ClassIcon className={`mr-2 ${pathname === "/" ? "text-darkBlue": "" }`}/> 
-                <span className={`${pathname === "/" ? "text-darkBlue": "" }`}>Cursos</span>
+                <ClassIcon
+                  className={`mr-2 ${pathname === '/' ? 'text-darkBlue' : ''}`}
+                />
+                <span className={`${pathname === '/' ? 'text-darkBlue' : ''}`}>
+                  Cursos
+                </span>
               </ListItem>
 
               <ListItem path="/students" name="/student">
-                <GroupsIcon className={`mr-2 ${pathname.includes("student") ? "text-darkBlue": "" }`}/> 
-                <span className={`${pathname.includes("student") ? "text-darkBlue": "" }`}>Alunos</span>
-              </ListItem> 
+                <GroupsIcon
+                  className={`mr-2 ${pathname.includes('student') ? 'text-darkBlue' : ''}`}
+                />
+                <span
+                  className={`${pathname.includes('student') ? 'text-darkBlue' : ''}`}
+                >
+                  Alunos
+                </span>
+              </ListItem>
             </ul>
           </List>
         </div>
       </Drawer>
     </>
-  );
+  )
 }

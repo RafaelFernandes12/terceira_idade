@@ -1,105 +1,111 @@
-"use client";
-import { getCourses } from "@/operations/getCourses";
-import { getStudents } from "@/operations/getStudents";
-import { updateIdDashboard } from "@/operations/updateIdDashboard";
-import { updateIdStudents } from "@/operations/updateIdStudents";
-import { idDataProps } from "@/types/idDataProps";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import FormControl from "@mui/material/FormControl";
-import IconButton from "@mui/material/IconButton";
-import InputLabel from "@mui/material/InputLabel";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+'use client'
+import { getCourses } from '@/operations/getCourses'
+import { getStudents } from '@/operations/getStudents'
+import { updateIdDashboard } from '@/operations/updateIdDashboard'
+import { updateIdStudents } from '@/operations/updateIdStudents'
+import { idDataProps } from '@/types/idDataProps'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import FormControl from '@mui/material/FormControl'
+import IconButton from '@mui/material/IconButton'
+import InputLabel from '@mui/material/InputLabel'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface threeDotsProps {
-    id: string,
-    edit: string,
-    isStudent: boolean,
-    paths: string[],
-    remove: (id: string, ...paths: string[]) => void
+  id: string
+  edit: string
+  isStudent: boolean
+  paths: string[]
+  remove: (id: string, ...paths: string[]) => void
 }
 
-export function ThreeDots({ id, edit, remove, paths, isStudent }: threeDotsProps) {
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [openDialog, setOpenDialog] = useState(false);
-  const open = Boolean(anchorEl);
-  const [courses, setCourses] = useState<idDataProps[]>([]);
-  const [students, setStudents] = useState<idDataProps[]>([]);
-  const [studentId, setStudentId] = useState<string[]>([]);
-  const [courseId, setCourseId] = useState<string[]>([]);
+export function ThreeDots({
+  id,
+  edit,
+  remove,
+  paths,
+  isStudent,
+}: threeDotsProps) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [openDialog, setOpenDialog] = useState(false)
+  const open = Boolean(anchorEl)
+  const [courses, setCourses] = useState<idDataProps[]>([])
+  const [students, setStudents] = useState<idDataProps[]>([])
+  const [studentId, setStudentId] = useState<string[]>([])
+  const [courseId, setCourseId] = useState<string[]>([])
 
   useEffect(() => {
-    getCourses().then(response => {
-      setCourses(response);
-    });
-    getStudents().then(response => {
-      setStudents(response);
-    });
-  }, []);
+    getCourses().then((response) => {
+      setCourses(response)
+    })
+    getStudents().then((response) => {
+      setStudents(response)
+    })
+  }, [])
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const updateIdStudentsF = () => {
     updateIdStudents({ studentId: id, courseIds: courseId }).then(() => {
-      toast.success("Criado com sucesso", {
-        position: "top-center",
+      toast.success('Criado com sucesso', {
+        position: 'top-center',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored",
-      });
-    });
-    setOpenDialog(!openDialog);
-  };
+        theme: 'colored',
+      })
+    })
+    setOpenDialog(!openDialog)
+  }
 
   const updateIdDashboardF = (item: idDataProps[]) => {
-    item.map(value => {
-      if(value.id.includes(studentId)){
+    // eslint-disable-next-line array-callback-return
+    item.map((value) => {
+      if (value.id.includes(studentId)) {
         updateIdDashboard({ courseId: id, studentId: value.id }).then(() => {
-          toast.success("Criado com sucesso", {
-            position: "top-center",
+          toast.success('Criado com sucesso', {
+            position: 'top-center',
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: "colored",
-          });
-        });
+            theme: 'colored',
+          })
+        })
       }
-    });
-    
-    setOpenDialog(!openDialog);
-  };
+    })
+
+    setOpenDialog(!openDialog)
+  }
 
   return (
     <div>
       <IconButton
         aria-label="more"
         id="long-button"
-        aria-controls={open ? "long-menu" : undefined}
-        aria-expanded={open ? "true" : undefined}
+        aria-controls={open ? 'long-menu' : undefined}
+        aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleClick}
       >
@@ -109,23 +115,21 @@ export function ThreeDots({ id, edit, remove, paths, isStudent }: threeDotsProps
       <Menu
         id="long-menu"
         MenuListProps={{
-          "aria-labelledby": "long-button",
+          'aria-labelledby': 'long-button',
         }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
       >
         <Link href={`${edit}/${id}`}>
-          <MenuItem>
-                        Editar
-          </MenuItem>
+          <MenuItem>Editar</MenuItem>
         </Link>
-        <MenuItem onClick={() => remove(id, ...paths)}>
-                    Excluir
-        </MenuItem>
-        <MenuItem className={`${isStudent ? "hidden" : ""}`}>
-          <button onClick={() => setOpenDialog(!openDialog)}>Adicionar Estudante</button>
-          <Dialog open={openDialog} className={`${isStudent ? "hidden" : ""}`}>
+        <MenuItem onClick={() => remove(id, ...paths)}>Excluir</MenuItem>
+        <MenuItem className={`${isStudent ? 'hidden' : ''}`}>
+          <button onClick={() => setOpenDialog(!openDialog)}>
+            Adicionar Estudante
+          </button>
+          <Dialog open={openDialog} className={`${isStudent ? 'hidden' : ''}`}>
             <DialogTitle>Escolha os estudantes</DialogTitle>
             <DialogContent>
               <FormControl sx={{ minWidth: 120 }} className="w-full">
@@ -134,13 +138,14 @@ export function ThreeDots({ id, edit, remove, paths, isStudent }: threeDotsProps
                   multiple
                   value={studentId}
                   label="Estudante"
-                  onChange={(e: any) => setStudentId(e.target.value as string[])}
+                  onChange={(e) => setStudentId(e.target.value as string[])}
                 >
-                  {students.map(item => {
-
+                  {students.map((item) => {
                     return (
-                      <MenuItem key={item.id} value={item.id}>{item.data.name}</MenuItem>
-                    );
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.data.name}
+                      </MenuItem>
+                    )
                   })}
                 </Select>
               </FormControl>
@@ -152,9 +157,11 @@ export function ThreeDots({ id, edit, remove, paths, isStudent }: threeDotsProps
           </Dialog>
         </MenuItem>
 
-        <MenuItem className={`${isStudent ? "" : "hidden"}`}>
-          <button onClick={() => setOpenDialog(!openDialog)}>Adicionar cursos</button>
-          <Dialog open={openDialog} className={`${isStudent ? "" : "hidden"}`}>
+        <MenuItem className={`${isStudent ? '' : 'hidden'}`}>
+          <button onClick={() => setOpenDialog(!openDialog)}>
+            Adicionar cursos
+          </button>
+          <Dialog open={openDialog} className={`${isStudent ? '' : 'hidden'}`}>
             <DialogTitle>Escolha os cursos</DialogTitle>
             <DialogContent>
               <FormControl sx={{ minWidth: 120 }} className="w-full">
@@ -163,12 +170,14 @@ export function ThreeDots({ id, edit, remove, paths, isStudent }: threeDotsProps
                   multiple
                   value={courseId}
                   label="Curso"
-                  onChange={(e: any) => setCourseId(e.target.value as string[])}
+                  onChange={(e) => setCourseId(e.target.value as string[])}
                 >
-                  {courses.map(item => {
+                  {courses.map((item) => {
                     return (
-                      <MenuItem key={item.id} value={item.id}>{item.data.name}</MenuItem>
-                    );
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.data.name}
+                      </MenuItem>
+                    )
                   })}
                 </Select>
               </FormControl>
@@ -193,5 +202,5 @@ export function ThreeDots({ id, edit, remove, paths, isStudent }: threeDotsProps
         theme="colored"
       />
     </div>
-  );
+  )
 }

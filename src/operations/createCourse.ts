@@ -1,45 +1,49 @@
-import { db, storage } from "@/config/firestore";
-import { courseProps } from "@/types/courseProps";
-import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import uniqid from "uniqid";
+import { db, storage } from '@/config/firestore'
+import { postCourseProps } from '@/types/postCourseProps'
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import uniqid from 'uniqid'
 
-export async function createCourse({
-  name,
-  courseImg,
-  type,
-  professorName,
-  professorImg,
-  local
-}: courseProps) {
-
-  const coursesRef = collection(db, "courses");
-  const querySnapshot = await getDocs(query(coursesRef, where("name", "==", name)));
+export async function createCourse(course: postCourseProps) {
+  const coursesRef = collection(db, 'courses')
+  const querySnapshot = await getDocs(
+    query(coursesRef, where('name', '==', course.name)),
+  )
   if (!querySnapshot.empty) {
-    throw new Error("Curso com o mesmo nome já existe");
+    throw new Error('Curso com o mesmo nome já existe')
   }
-  if(name === ""){
-    throw new Error("Curso precisa de um nome");
+  if (course.name === '') {
+    throw new Error('Curso precisa de um nome')
   }
 
   const uploadTasks = [
-    uploadBytes(ref(storage, `${courseImg === "generic" ? `courseImgs/${uniqid()}.generic` : `courseImgs/${uniqid()}`}`), courseImg),
-    uploadBytes(ref(storage, `${professorImg === "generic" ? `courseImgs/${uniqid()}.generic` : `courseImgs/${uniqid()}`}`), professorImg),
-  ];
+    course.courseImg
+      ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), course.courseImg)
+      : null,
+    course.professorImg
+      ? uploadBytes(
+          ref(storage, `studentImgs/${uniqid()}`),
+          course.professorImg,
+        )
+      : null,
+  ]
 
-  const [courseSnapshot, professorSnapshot] = await Promise.all(uploadTasks);
+  const [courseSnapshot, professorSnapshot] = await Promise.all(uploadTasks)
 
-  const downloadCourseURL = await getDownloadURL(courseSnapshot.ref);
-  const downloadProfessorURL = await getDownloadURL(professorSnapshot.ref);
+  const downloadCourseURL = courseSnapshot
+    ? await getDownloadURL(courseSnapshot.ref)
+    : null
+  const downloadProfessorURL = professorSnapshot
+    ? await getDownloadURL(professorSnapshot.ref)
+    : null
 
-  // Add course document to Firestore
-  await addDoc(collection(db, "courses"), {
-    name: name,
+  await addDoc(collection(db, 'courses'), {
+    name: course.name,
     courseImg: downloadCourseURL,
-    type: type,
-    professorName: professorName,
+    type: course.type,
+    professorName: course.professorName,
     professorImg: downloadProfessorURL,
-    local: local,
-    studentId: []
-  });
+    local: course.local,
+    studentId: [],
+  })
 }

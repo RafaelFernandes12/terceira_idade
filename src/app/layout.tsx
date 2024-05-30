@@ -1,11 +1,14 @@
-import { SideMenu } from "@/components/SideMenu";
-import "./globals.css";
-import { Header } from "@/components/Header";
+import { Header } from '@/components/Header'
+import { SideMenu } from '@/components/SideMenu'
+import './globals.css'
 
-export const revalidate = 1;
+export const revalidate = 1
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="pt-br">
       <body className="bg-background-light h-screen p-[40px] max-lg:p-0 max-lg:bg-white">
@@ -18,5 +21,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
       </body>
     </html>
-  );
+  )
 }

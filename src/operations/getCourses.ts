@@ -1,17 +1,17 @@
-import { db } from "@/config/firestore";
-import { collection, getDocs } from "firebase/firestore";
+import { db } from '@/config/firestore'
+import { collection, getDocs } from 'firebase/firestore'
 
-export async function getCourses(){
-  const querySnapshot = await getDocs(collection(db, "courses"));
+export async function getCourses() {
+  const querySnapshot = await getDocs(collection(db, 'courses'))
 
-  const data = querySnapshot.docs.map(response => {
-    const id = response.id;
-    const data = response.data();
+  const data = querySnapshot.docs.map((response) => {
+    const id = response.id
+    const data = response.data()
     return {
-      id,data
-    };
-  });
+      id,
+      data,
+    }
+  })
 
-  return data;
-
+  return data
 }
