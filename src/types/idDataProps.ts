@@ -1,6 +1,6 @@
 import { DocumentData } from 'firebase/firestore'
 
 export interface idDataProps {
-  id: any
+  id: string
   data: DocumentData
 }

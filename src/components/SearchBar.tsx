@@ -1,22 +1,32 @@
 'use client'
 
-import loupe from '@/assets/loupe.svg'
-import Image from 'next/image'
+import SearchIcon from '@mui/icons-material/Search'
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
-interface searchBarProps {
-  onChange: (e: string) => void
-}
+export function SearchBar() {
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { replace } = useRouter()
 
-export function SearchBar({ onChange }: searchBarProps) {
+  function handleSearch(searchTerm: string) {
+    const params = new URLSearchParams(searchParams)
+    if (searchTerm) {
+      params.set('query', searchTerm)
+    } else {
+      params.delete('query')
+    }
+    replace(`${pathname}?${params.toString()}`)
+  }
+
   return (
     <div className="flex items-center w-full my-5">
-      <button className="absolute ml-2">
-        <Image src={loupe} alt="" />
+      <button type="button" className="absolute ml-2">
+        <SearchIcon />
       </button>
       <input
         placeholder="Procurar por nome"
         className="w-full border-2 border-black rounded-xl p-2 pl-10"
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => handleSearch(e.target.value)}
       />
     </div>
   )

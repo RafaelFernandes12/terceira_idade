@@ -38,11 +38,11 @@ export function ThreeDots({
 }: threeDotsProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openDialog, setOpenDialog] = useState(false)
-  const open = Boolean(anchorEl)
   const [courses, setCourses] = useState<idDataProps[]>([])
   const [students, setStudents] = useState<idDataProps[]>([])
   const [studentId, setStudentId] = useState<string[]>([])
   const [courseId, setCourseId] = useState<string[]>([])
+  const open = Boolean(anchorEl)
 
   useEffect(() => {
     getCourses().then((response) => {

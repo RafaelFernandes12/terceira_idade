@@ -3,8 +3,14 @@ import { daysOfWeek } from '@/data'
 import { idDataProps } from '@/types/idDataProps'
 import { useState } from 'react'
 import { localProps } from '@/types/localProps'
+import { DocumentData } from 'firebase/firestore'
 
-export function ClassTime({ id, data }: idDataProps) {
+interface classTimeProps {
+  id: string[]
+  data: DocumentData
+}
+
+export function ClassTime({ id, data }: classTimeProps) {
   const [courseType, setCourseType] = useState('Extensão')
 
   function handleCourseType(filterCourse: string) {

@@ -18,7 +18,7 @@ export default async function Dashboard({
   const filteredCourses = courses.filter((course) => {
     return (
       course.data.name.toLowerCase().includes(query.toLowerCase()) &&
-      course.data.type === 'Extensão'
+      course.data.type === 'Ensino'
     )
   })
 
@@ -29,12 +29,12 @@ export default async function Dashboard({
         <div className="flex justify-between mx-6 mb-10 mt-4">
           <ul className="inline-flex gap-3">
             <Link href="/">
-              <li className="font-regular text-lg max-sm:text-sm border-b-[3px] border-darkBlue">
-                Extensão
-              </li>
+              <li className="font-regular text-lg max-sm:text-sm ">Extensão</li>
             </Link>
             <Link href="/ensino">
-              <li className="font-regular text-lg max-sm:text-sm">Ensino</li>
+              <li className="font-regular text-lg max-sm:text-sm border-b-[3px] border-darkBlue">
+                Ensino
+              </li>
             </Link>
           </ul>
 
@@ -55,7 +55,7 @@ export default async function Dashboard({
                 className="w-52 h-52 flex items-center flex-col m-auto mb-14"
               >
                 <Link
-                  href={`course/${response.id}/dadosGerais`}
+                  href={`course/${response.id}/dadosGerais  `}
                   className="bg-darkBlue/50 p-4 rounded-lg m-auto w-full h-full"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
