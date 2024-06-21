@@ -1,5 +1,5 @@
 import { db, storage } from '@/config/firestore'
-import { postStudentProps } from '@/types/postStudentProps'
+import { postStudentProps } from '@/types/studentProps'
 import {
   addDoc,
   collection,
@@ -7,101 +7,109 @@ import {
   getDoc,
   getDocs,
   query,
-  updateDoc,
+  setDoc,
   where,
 } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import uniqid from 'uniqid'
 
-export async function createStudent({
-  name,
-  cpf,
-  dataNascimento,
-  responsavelNome,
-  responsavelVinculo,
-  telefoneContato,
-  telefoneEmergencia,
-  foto,
-  courseId,
-  rgFrente,
-  rgVerso,
-  residencia,
-  cardiologista,
-  dermatologista,
-  vacina,
-}: postStudentProps) {
-  const valRef = collection(db, 'students')
-  const studentsRef = collection(db, 'students')
-  const querySnapshot = await getDocs(
-    query(studentsRef, where('name', '==', name)),
-  )
-
-  if (!name) {
-    throw new Error('Estudante tem que possuir um nome')
-  }
-  if (!querySnapshot.empty) {
-    throw new Error('Estudante com o mesmo nome já existe')
-  }
-
-  const uploadTasks = [
-    foto ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), foto) : null,
-    rgFrente
-      ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), rgFrente)
-      : null,
-    rgVerso
-      ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), rgVerso)
-      : null,
-    residencia
-      ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), residencia)
-      : null,
-    cardiologista
-      ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), cardiologista)
-      : null,
-    dermatologista
-      ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), dermatologista)
-      : null,
-    vacina
-      ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), vacina)
-      : null,
-  ]
-
-  const [
-    fotoSnapshot,
-    rgFrenteSnapshot,
-    rgVersoSnapshot,
-    residenciaSnapshot,
-    cardiologistaSnapshot,
-    dermatologistaSnapshot,
-    vacinaSnapshot,
-  ] = await Promise.all(uploadTasks)
-
-  const [
-    downloadstudentURL,
-    downloadrgFrenteURL,
-    downloadrgVersoURL,
-    downloadResidenciaURL,
-    downloadCardiologistaURL,
-    downloadDermatologistaURL,
-    downloadVacinaURL,
-  ] = await Promise.all([
-    fotoSnapshot ? getDownloadURL(fotoSnapshot.ref) : null,
-    rgFrenteSnapshot ? getDownloadURL(rgFrenteSnapshot.ref) : null,
-    rgVersoSnapshot ? getDownloadURL(rgVersoSnapshot.ref) : null,
-    residenciaSnapshot ? getDownloadURL(residenciaSnapshot.ref) : null,
-    cardiologistaSnapshot ? getDownloadURL(cardiologistaSnapshot.ref) : null,
-    dermatologistaSnapshot ? getDownloadURL(dermatologistaSnapshot.ref) : null,
-    vacinaSnapshot ? getDownloadURL(vacinaSnapshot.ref) : null,
-  ])
-
+export async function createStudent(props: postStudentProps) {
   try {
+    const valRef = collection(db, 'students')
+    const querySnapshot = await getDocs(
+      query(valRef, where('name', '==', props.name)),
+    )
+
+    if (!props.name) {
+      throw new Error('Estudante tem que possuir um nome')
+    }
+    if (!querySnapshot.empty) {
+      throw new Error('Estudante com o mesmo nome já existe')
+    }
+
+    const uploadTasks = [
+      props.foto
+        ? uploadBytes(
+            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
+            props.foto,
+          )
+        : null,
+      props.rgFrente
+        ? uploadBytes(
+            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
+            props.rgFrente,
+          )
+        : null,
+      props.rgVerso
+        ? uploadBytes(
+            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
+            props.rgVerso,
+          )
+        : null,
+      props.residencia
+        ? uploadBytes(
+            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
+            props.residencia,
+          )
+        : null,
+      props.cardiologista
+        ? uploadBytes(
+            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
+            props.cardiologista,
+          )
+        : null,
+      props.dermatologista
+        ? uploadBytes(
+            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
+            props.dermatologista,
+          )
+        : null,
+      props.vacina
+        ? uploadBytes(
+            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
+            props.vacina,
+          )
+        : null,
+    ]
+
+    const [
+      fotoSnapshot,
+      rgFrenteSnapshot,
+      rgVersoSnapshot,
+      residenciaSnapshot,
+      cardiologistaSnapshot,
+      dermatologistaSnapshot,
+      vacinaSnapshot,
+    ] = await Promise.all(uploadTasks)
+
+    const [
+      downloadstudentURL,
+      downloadrgFrenteURL,
+      downloadrgVersoURL,
+      downloadResidenciaURL,
+      downloadCardiologistaURL,
+      downloadDermatologistaURL,
+      downloadVacinaURL,
+    ] = await Promise.all([
+      fotoSnapshot ? getDownloadURL(fotoSnapshot.ref) : null,
+      rgFrenteSnapshot ? getDownloadURL(rgFrenteSnapshot.ref) : null,
+      rgVersoSnapshot ? getDownloadURL(rgVersoSnapshot.ref) : null,
+      residenciaSnapshot ? getDownloadURL(residenciaSnapshot.ref) : null,
+      cardiologistaSnapshot ? getDownloadURL(cardiologistaSnapshot.ref) : null,
+      dermatologistaSnapshot
+        ? getDownloadURL(dermatologistaSnapshot.ref)
+        : null,
+      vacinaSnapshot ? getDownloadURL(vacinaSnapshot.ref) : null,
+    ])
+
     const docRef = await addDoc(valRef, {
-      name,
-      cpf,
-      dataNascimento,
-      responsavelNome,
-      responsavelVinculo,
-      telefoneContato,
-      telefoneEmergencia,
+      name: props.name,
+      cpf: props.cpf,
+      dataNascimento: props.dataNascimento,
+      responsavelNome: props.responsavelNome,
+      responsavelVinculo: props.responsavelVinculo,
+      telefoneContato: props.telefoneContato,
+      telefoneEmergencia: props.telefoneEmergencia,
       foto: downloadstudentURL,
       rgFrente: downloadrgFrenteURL,
       rgVerso: downloadrgVersoURL,
@@ -109,24 +117,39 @@ export async function createStudent({
       cardiologista: downloadCardiologistaURL,
       dermatologista: downloadDermatologistaURL,
       vacina: downloadVacinaURL,
-      courseId,
     })
-
-    const studentIds = await Promise.all(
-      courseId!.map(async (course) => {
-        const courseRef = doc(db, 'courses', course)
-        const courseDoc = await getDoc(courseRef)
-        const existingStudentIds = courseDoc?.data()?.studentId
-        return { courseId: course, existingStudentIds }
-      }),
-    )
-
     await Promise.all(
-      studentIds.map(async (studentIdObj) => {
-        const { courseId, existingStudentIds } = studentIdObj
-        const updatedStudentIds = [...existingStudentIds, docRef.id]
-        const courseRef = doc(db, 'courses', courseId)
-        await updateDoc(courseRef, { studentId: updatedStudentIds })
+      props.courseId!.map(async (course) => {
+        const studentRef = doc(db, 'students', docRef.id)
+        const subCollectionOfStudentsFromCourse = doc(
+          db,
+          'courses',
+          course,
+          'students',
+          docRef.id,
+        )
+        await getDoc(studentRef).then(async (doc) => {
+          const docData = doc.data()
+          await setDoc(subCollectionOfStudentsFromCourse, {
+            students: docData,
+          })
+        })
+
+        const subCollectionOfCourseFromStudents = doc(
+          db,
+          'students',
+          docRef.id,
+          'courses',
+          course,
+        )
+
+        const courseRef = doc(db, 'courses', course)
+        await getDoc(courseRef).then(async (doc) => {
+          const docData = doc.data()
+          await setDoc(subCollectionOfCourseFromStudents, {
+            courses: docData,
+          })
+        })
       }),
     )
   } catch (e) {

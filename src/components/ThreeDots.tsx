@@ -1,8 +1,9 @@
 'use client'
+
 import { getCourses } from '@/operations/getCourses'
 import { getStudents } from '@/operations/getStudents'
-import { updateIdDashboard } from '@/operations/updateIdDashboard'
-import { updateIdStudents } from '@/operations/updateIdStudents'
+import { updateCourseSubcollection } from '@/operations/updateCourseSubcollection'
+import { updateStudentSubcollection } from '@/operations/updateStudentSubcollection'
 import { idDataProps } from '@/types/idDataProps'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Button from '@mui/material/Button'
@@ -25,15 +26,15 @@ interface threeDotsProps {
   id: string
   edit: string
   isStudent: boolean
-  paths: string[]
-  remove: (id: string, ...paths: string[]) => void
+  name: string
+  remove: (id: string, name: string) => void
 }
 
 export function ThreeDots({
   id,
   edit,
   remove,
-  paths,
+  name,
   isStudent,
 }: threeDotsProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -61,8 +62,26 @@ export function ThreeDots({
     setAnchorEl(null)
   }
 
-  const updateIdStudentsF = () => {
-    updateIdStudents({ studentId: id, courseIds: courseId }).then(() => {
+  const updateCourseSubcollectionF = () => {
+    updateCourseSubcollection({ studentId: id, courseIds: courseId }).then(
+      () => {
+        toast.success('Criado com sucesso', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        })
+      },
+    )
+    setOpenDialog(!openDialog)
+  }
+
+  const updateStudentSubcollectionF = () => {
+    updateStudentSubcollection({ courseId: id, studentId }).then(() => {
       toast.success('Criado com sucesso', {
         position: 'top-center',
         autoClose: 5000,
@@ -74,28 +93,6 @@ export function ThreeDots({
         theme: 'colored',
       })
     })
-    setOpenDialog(!openDialog)
-  }
-
-  const updateIdDashboardF = (item: idDataProps[]) => {
-    // eslint-disable-next-line array-callback-return
-    item.map((value) => {
-      if (value.id.includes(studentId)) {
-        updateIdDashboard({ courseId: id, studentId: value.id }).then(() => {
-          toast.success('Criado com sucesso', {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'colored',
-          })
-        })
-      }
-    })
-
     setOpenDialog(!openDialog)
   }
 
@@ -124,7 +121,7 @@ export function ThreeDots({
         <Link href={`${edit}/${id}`}>
           <MenuItem>Editar</MenuItem>
         </Link>
-        <MenuItem onClick={() => remove(id, ...paths)}>Excluir</MenuItem>
+        <MenuItem onClick={() => remove(id, name)}>Excluir</MenuItem>
         <MenuItem className={`${isStudent ? 'hidden' : ''}`}>
           <button onClick={() => setOpenDialog(!openDialog)}>
             Adicionar Estudante
@@ -152,7 +149,7 @@ export function ThreeDots({
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
-              <Button onClick={() => updateIdDashboardF(students)}>Ok</Button>
+              <Button onClick={() => updateStudentSubcollectionF()}>Ok</Button>
             </DialogActions>
           </Dialog>
         </MenuItem>
@@ -184,7 +181,7 @@ export function ThreeDots({
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
-              <Button onClick={updateIdStudentsF}>Ok</Button>
+              <Button onClick={updateCourseSubcollectionF}>Ok</Button>
             </DialogActions>
           </Dialog>
         </MenuItem>

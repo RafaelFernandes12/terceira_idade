@@ -1,18 +1,17 @@
 'use client'
 
 import { ErrorText } from '@/components/ErrorText'
-import { daysOfWeek, types } from '@/data'
+import { daysOfWeek, hoursOfClass, types } from '@/data'
 import { createCourse } from '@/operations/createCourse'
+// import { createCourseSeed } from '@/operations/seed'
 import { imgType } from '@/types/imgType'
-import { TextField } from '@mui/material'
+import { localProps } from '@/types/localProps'
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import InputField from '../components/InputField'
 import SelectField from '../components/SelectField'
 import { SubmitButton } from '../components/SubmitButton'
-import { localProps } from '@/types/localProps'
-
 export default function CreateCourse() {
   const [name, setName] = useState('')
   const [courseImg, setCourseImg] = useState<imgType>()
@@ -24,8 +23,14 @@ export default function CreateCourse() {
 
   async function addCourse() {
     setError('')
-
-    createCourse({ name, courseImg, type, professorName, professorImg, local })
+    createCourse({
+      name,
+      courseImg,
+      type,
+      professorName,
+      professorImg,
+      local,
+    })
       .then(() => {
         toast.success('Criado com sucesso', {
           position: 'top-center',
@@ -43,17 +48,6 @@ export default function CreateCourse() {
         console.log(e)
       })
   }
-
-  function handleInputName(value: string) {
-    setName(value)
-  }
-  function handleInputProfessorName(value: string) {
-    setProfessorName(value)
-  }
-  function handleInputType(value: string) {
-    setType(value)
-  }
-
   function handleInputChange(
     index: number,
     propertyName: string,
@@ -69,23 +63,21 @@ export default function CreateCourse() {
     })
   }
   function handleCreateNewLocal() {
-    setLocal((prevLocal) => [
-      ...prevLocal,
-      { date: '', startHour: '', endHour: '', place: '' },
-    ])
+    setLocal((prevLocal) => [...prevLocal, { date: '', hour: '', place: '' }])
   }
 
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex flex-col justify-center gap-4">
+      {/* <button onClick={createCourseSeed}>hello</button> */}
       <h1 className="font-semibold text-2xl my-7">Criar curso</h1>
-      <div className="mb-4">
+      <div className="flex flex-col gap-4 mb-4">
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
           <InputField
             type="text"
             length={75}
             label="Nome:"
             value={name}
-            onChange={handleInputName}
+            onChange={(e) => setName(e)}
           />
           <div className="flex flex-col">
             <label>Foto do curso: </label>
@@ -100,7 +92,7 @@ export default function CreateCourse() {
           inputLabel="Tipo"
           value={type}
           label="Extensão"
-          onChange={handleInputType}
+          onChange={(e) => setType(e)}
           itens={types}
         />
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0">
@@ -109,7 +101,7 @@ export default function CreateCourse() {
             length={75}
             label="Nome do Professor:"
             value={professorName}
-            onChange={handleInputProfessorName}
+            onChange={(e) => setProfessorName(e)}
           />
           <div className="flex flex-col">
             <label>Foto do professor do curso: </label>
@@ -122,7 +114,7 @@ export default function CreateCourse() {
         </div>
         <div className="flex gap-4 items-center my-4 max-md:flex-col">
           {local.map((item, index) => (
-            <div key={index}>
+            <div key={index} className="flex flex-col gap-4">
               <SelectField
                 inputLabel="Dia"
                 value={item.date}
@@ -130,26 +122,13 @@ export default function CreateCourse() {
                 onChange={(e) => handleInputChange(index, 'date', e)}
                 itens={daysOfWeek}
               />
-              <div className="flex flex-col">
-                <label>Hora de começo curso:</label>
-                <TextField
-                  type="time"
-                  value={item.startHour}
-                  onChange={(e) =>
-                    handleInputChange(index, 'startHour', e.target.value)
-                  }
-                />
-              </div>
-              <div className="flex flex-col">
-                <label>Hora de fim curso:</label>
-                <TextField
-                  type="time"
-                  value={item.endHour}
-                  onChange={(e) =>
-                    handleInputChange(index, 'endHour', e.target.value)
-                  }
-                />
-              </div>
+              <SelectField
+                inputLabel="Hora"
+                value={item.hour}
+                label="Hora"
+                onChange={(e) => handleInputChange(index, 'hour', e)}
+                itens={hoursOfClass}
+              />
               <InputField
                 type="text"
                 length={20}
@@ -161,7 +140,7 @@ export default function CreateCourse() {
           ))}
         </div>
         <button
-          className="bg-black rounded-md p-2 text-white"
+          className="bg-darkBlue w-36 rounded-md text-white p-2 mr-4"
           onClick={handleCreateNewLocal}
         >
           Adicionar Local

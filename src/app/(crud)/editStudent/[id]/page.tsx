@@ -35,27 +35,6 @@ export default function EditStudent({ params }: idProps) {
   const [courses, setCourses] = useState<idDataProps[]>([])
   const [courseId, setCourseId] = useState<string[]>([])
   const id = params.id
-  function handleInputName(value: string) {
-    setName(value)
-  }
-  function handleInputCpf(value: string) {
-    setCpf(value)
-  }
-  function handleIno(value: string) {
-    setDataNascimento(value)
-  }
-  function handleInputResponsavelNome(value: string) {
-    setResponsavelNome(value)
-  }
-  function handleInputResponsavelVinculo(value: string) {
-    setResponsavelVinculo(value)
-  }
-  function handleInputTelefoneContato(value: string) {
-    setTelefoneContato(value)
-  }
-  function handleInputTelefoneEmergencia(value: string) {
-    setTelefoneEmergencia(value)
-  }
 
   useEffect(() => {
     getCourses().then((response) => {
@@ -109,7 +88,7 @@ export default function EditStudent({ params }: idProps) {
             length={75}
             label="Nome:"
             value={name}
-            onChange={handleInputName}
+            onChange={(e) => setName(e)}
           />
           <div className="w-full flex flex-col">
             <label>Foto do estudante: </label>
@@ -143,7 +122,7 @@ export default function EditStudent({ params }: idProps) {
           length={11}
           label="CPF:"
           value={cpf}
-          onChange={handleInputCpf}
+          onChange={(e) => setCpf(e)}
         />
 
         <InputField
@@ -151,14 +130,14 @@ export default function EditStudent({ params }: idProps) {
           length={6}
           label=""
           value={dataNascimento}
-          onChange={handleIno}
+          onChange={(e) => setDataNascimento(e)}
         />
         <InputField
           type="text"
           length={75}
           label="Nome do responsável:"
           value={responsavelNome}
-          onChange={handleInputResponsavelNome}
+          onChange={(e) => setResponsavelNome(e)}
         />
 
         <InputField
@@ -166,7 +145,7 @@ export default function EditStudent({ params }: idProps) {
           length={75}
           label="Vínculo do responsável:"
           value={responsavelVinculo}
-          onChange={handleInputResponsavelVinculo}
+          onChange={(e) => setResponsavelVinculo(e)}
         />
 
         <InputField
@@ -174,7 +153,7 @@ export default function EditStudent({ params }: idProps) {
           length={11}
           label="Telefone de contato:"
           value={telefoneContato}
-          onChange={handleInputTelefoneContato}
+          onChange={(e) => setTelefoneContato(e)}
         />
 
         <InputField
@@ -182,7 +161,7 @@ export default function EditStudent({ params }: idProps) {
           length={11}
           label="Telefone de emergência:"
           value={telefoneEmergencia}
-          onChange={handleInputTelefoneEmergencia}
+          onChange={(e) => setTelefoneEmergencia(e)}
         />
         <div className="flex flex-col gap-2">
           <label>Foto do rg(verso): </label>

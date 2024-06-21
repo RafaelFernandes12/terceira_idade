@@ -1,5 +1,5 @@
 import { db, storage } from '@/config/firestore'
-import { postCourseProps } from '@/types/postCourseProps'
+import { postCourseProps } from '@/types/courseProps'
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import uniqid from 'uniqid'
@@ -18,11 +18,14 @@ export async function createCourse(course: postCourseProps) {
 
   const uploadTasks = [
     course.courseImg
-      ? uploadBytes(ref(storage, `studentImgs/${uniqid()}`), course.courseImg)
+      ? uploadBytes(
+          ref(storage, `courseImgs/${course.name}/${uniqid()}`),
+          course.courseImg,
+        )
       : null,
     course.professorImg
       ? uploadBytes(
-          ref(storage, `studentImgs/${uniqid()}`),
+          ref(storage, `courseImgs/${course.name}/${uniqid()}`),
           course.professorImg,
         )
       : null,
@@ -44,6 +47,5 @@ export async function createCourse(course: postCourseProps) {
     professorName: course.professorName,
     professorImg: downloadProfessorURL,
     local: course.local,
-    studentId: [],
   })
 }

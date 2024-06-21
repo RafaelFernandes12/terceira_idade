@@ -1,50 +1,52 @@
 'use server'
 import { db, storage } from '@/config/firestore'
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
 import { deleteObject, listAll, ref } from 'firebase/storage'
 
-export async function deleteStudent(id: string, ...paths: string[]) {
+export async function deleteStudent(id: string, name: string) {
   try {
-    await deleteDoc(doc(db, 'students', id))
+    const studentRef = doc(db, 'students', id)
+    await deleteDoc(studentRef)
 
-    const coursesRef = collection(db, 'courses')
-    const studentImgRef = ref(storage, 'studentImgs')
-
-    const studentImgs = await listAll(studentImgRef)
-
-    const deletePromises = studentImgs.items.map(async (img) => {
-      const desertRef = ref(storage, `studentImgs/${img.name}`)
-      if (paths.some((path) => path.includes(img.name) && path !== null)) {
-        return deleteObject(desertRef)
-      }
+    const studentImgRef = ref(storage, `studentImgs/${name}`)
+    const studentImgs = (await listAll(studentImgRef)).items.map((img) => {
+      const studentImgNameRef = ref(storage, `studentImgs/${name}/${img.name}`)
+      return deleteObject(studentImgNameRef)
     })
 
-    await Promise.all(deletePromises)
+    const subCollectionOfCourseRef = collection(db, 'students', id, 'courses')
+    const getSubcollectionOfStudentId = (
+      await getDocs(subCollectionOfCourseRef)
+    ).docs.map((id) => id.id)
 
-    const coursesQuery = query(
-      coursesRef,
-      where('studentId', 'array-contains', id),
-    )
-    const coursesSnapshot = await getDocs(coursesQuery)
+    getSubcollectionOfStudentId.forEach(async (courseId) => {
+      const courseRef = doc(db, 'students', id, 'courses', courseId)
+      await deleteDoc(courseRef)
 
-    const updatePromises = coursesSnapshot.docs.map(async (courseDoc) => {
-      const courseId = courseDoc.id
-      const courseRef = doc(db, 'courses', courseId)
-      const courseData = courseDoc.data()
-      const updatedStudentIds = courseData.studentId.filter(
-        (studentId: string) => studentId !== id,
+      const subCollectionOfCourseRef = collection(
+        db,
+        'courses',
+        courseId,
+        'students',
       )
-      return updateDoc(courseRef, { studentId: updatedStudentIds })
+      const getSubcollectionOfCourseDocs = (
+        await getDocs(subCollectionOfCourseRef)
+      ).docs
+
+      getSubcollectionOfCourseDocs.forEach(async (docId) => {
+        if (docId.id === id) {
+          const subDocOfStudentRef = doc(
+            db,
+            'courses',
+            courseId,
+            'students',
+            docId.id,
+          )
+          await deleteDoc(subDocOfStudentRef)
+        }
+      })
     })
-    await Promise.all(updatePromises)
+    await Promise.all(studentImgs)
   } catch (e) {
     console.log(e)
   }

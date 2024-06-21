@@ -1,6 +1,5 @@
 export interface localProps {
   date: string
-  startHour: string
-  endHour: string
+  hour: string
   place: string
 }

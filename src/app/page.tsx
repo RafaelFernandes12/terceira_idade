@@ -4,6 +4,7 @@ import { deleteCourse } from '@/operations/deleteCourse'
 import { getCourses } from '@/operations/getCourses'
 import AddIcon from '@mui/icons-material/Add'
 import Link from 'next/link'
+import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default async function Dashboard({
@@ -21,6 +22,22 @@ export default async function Dashboard({
       course.data.type === 'Extensão'
     )
   })
+
+  async function removeCourse(id: string, name: string) {
+    'use server'
+    deleteCourse(id, name).then(() => {
+      toast.success('Criado com sucesso', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      })
+    })
+  }
 
   return (
     <div>
@@ -83,11 +100,20 @@ export default async function Dashboard({
                     id={response.id}
                     isStudent={false}
                     edit="editCourse"
-                    paths={[
-                      response.data.courseImg,
-                      response.data.professorImg,
-                    ]}
-                    remove={deleteCourse}
+                    name={response.data.name}
+                    remove={removeCourse}
+                  />
+                  <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
                   />
                 </div>
               </div>

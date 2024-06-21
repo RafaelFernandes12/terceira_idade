@@ -1,104 +1,82 @@
-'use client'
-import { daysOfWeek } from '@/data'
-import { idDataProps } from '@/types/idDataProps'
-import { useState } from 'react'
+import { daysOfWeek, hoursOfClass } from '@/data'
+import { getSubcollectionOfCourseFromStudents } from '@/operations/getSubcollectionOfCourseFromStudents'
 import { localProps } from '@/types/localProps'
 import { DocumentData } from 'firebase/firestore'
+import React from 'react'
 
 interface classTimeProps {
-  id: string[]
-  data: DocumentData
+  id: string
 }
 
-export function ClassTime({ id, data }: classTimeProps) {
-  const [courseType, setCourseType] = useState('Extensão')
+export async function ClassTime({ id }: classTimeProps) {
+  const subCourse = await getSubcollectionOfCourseFromStudents(id)
 
-  function handleCourseType(filterCourse: string) {
-    if (filterCourse === 'Extensão') setCourseType('Extensão')
-    if (filterCourse === 'Ensino') setCourseType('Ensino')
+  const getInfo = (day: string, hour: string) => {
+    const entries = subCourse.flatMap((response: DocumentData) =>
+      response.data.courses.local.flatMap((item: localProps) => {
+        if (item.date === day && item.hour === hour) {
+          return response.data.courses.name
+        }
+        return []
+      }),
+    )
+    return entries
   }
 
   return (
     <div>
-      <ul className="flex gap-3 mx-6 mb-10 mt-4">
-        <button onClick={() => handleCourseType('Extensão')}>
-          <li
-            className={`font-regular text-lg max-md:text-sm ${courseType === 'Extensão' ? 'border-b-[3px] border-darkBlue' : ''}`}
-          >
-            Extensão
-          </li>
-        </button>
-        <button onClick={() => handleCourseType('Ensino')}>
-          <li
-            className={`font-regular text-lg max-md:text-sm ${courseType === 'Ensino' ? 'border-b-[3px] border-darkBlue' : ''}`}
-          >
-            Ensino
-          </li>
-        </button>
-      </ul>
-      <table className="mb-10 m-auto w-11/12">
-        <thead className="border-2 border-black">
-          <tr className="w-full">
-            <th className="border-2 border-black p-8 max-sm:p-2 max-sm:text-sm">
-              ATIVIDADE
-            </th>
-            <th className="border-2 border-black p-8 max-sm:p-2 max-sm:text-sm">
-              TURMA
-            </th>
-            <th className="border-2 border-black p-8 max-sm:p-2 max-sm:text-sm">
-              PROFESSOR
-            </th>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <table className="border-2 border-black w-11/12 m-auto my-5 text-center">
+        <thead>
+          <tr className="border-2 border-black">
+            <th className="border-2 border-black"></th>
+            {daysOfWeek.map((day) => (
+              <th key={day} className="border-2 border-black">
+                {day}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {data ? (
-            // eslint-disable-next-line array-callback-return
-            data.map((item: idDataProps) => {
-              const matchType = item.data.type === courseType
-              if (id.includes(item.id) && matchType) {
-                return (
-                  <tr key={item.id} className="text-xl uppercase w-full">
-                    <td className="border-2 border-black p-8 text-center max-sm:p-2 max-sm:">
-                      <p className="break-words m-auto max-sm:text-xs ">
-                        {item.data.name}
-                      </p>
-                    </td>
-                    <td className="border-2 border-black p-8 text-center text-base max-sm:p-2 max-sm:">
-                      <div className="grid grid-cols-2 max-xl:grid-cols-1 max-sm:text-[10px] max-sm:leading-4 gap-1 max-sm:gap-2">
-                        {item.data.local
-                          .sort((a: localProps, b: localProps) => {
-                            const indexA = daysOfWeek.indexOf(a.date)
-                            const indexB = daysOfWeek.indexOf(b.date)
-                            return indexA - indexB
-                          })
-                          .map((value: localProps, index: number) => {
-                            return (
-                              <div key={index} className="">
-                                <p className=" text-center">{value.date}</p>
-                                <p className=" text-center">
-                                  <span>{value.startHour}</span> -{' '}
-                                  <span>{value.endHour}</span>
-                                </p>
-                                <p className=" text-center">{value.place}</p>
-                              </div>
-                            )
-                          })}
-                      </div>
-                    </td>
-                    <td className="border-2 border-black p-8 text-center max-sm:p-2 max-sm:">
-                      <p className="break-words m-auto max-sm:text-xs">
-                        {item.data.professorName}
-                      </p>
-                    </td>
-                  </tr>
-                )
-              }
-            })
-          ) : (
-            <tr>
-              <td>tem nada aqui</td>
-            </tr>
-          )}
+          {hoursOfClass.map((hour, index) => (
+            <React.Fragment key={hour}>
+              {index === 0 && (
+                <tr className="bg-slate-400">
+                  <td className="text-center">Matutino</td>
+                  <td
+                    colSpan={daysOfWeek.length + 1}
+                    className="bg-slate-400"
+                  ></td>
+                </tr>
+              )}
+              {index === hoursOfClass.indexOf('13:00 - 14:00') && (
+                <tr className="bg-slate-400">
+                  <td className="text-center">Vespertino</td>
+                  <td
+                    colSpan={daysOfWeek.length + 1}
+                    className="bg-slate-400"
+                  ></td>
+                </tr>
+              )}
+              {index === hoursOfClass.indexOf('18:00 - 19:00') && (
+                <tr className="bg-slate-400">
+                  <td className="text-center">Noturno</td>
+                  <td
+                    colSpan={daysOfWeek.length + 1}
+                    className="bg-slate-400"
+                  ></td>
+                </tr>
+              )}
+              <tr className="border-2 border-black">
+                <td className="border-2 border-black">{hour}</td>
+                {daysOfWeek.map((day) => (
+                  <td key={day} className="border-2 border-black">
+                    {getInfo(day, hour)}
+                  </td>
+                ))}
+              </tr>
+            </React.Fragment>
+          ))}
         </tbody>
       </table>
     </div>

@@ -1,5 +1,5 @@
 import { db } from '@/config/firestore'
-import getCourseProps from '@/types/getCourseProps'
+import { getCourseProps } from '@/types/courseProps'
 import { doc, getDoc } from 'firebase/firestore'
 
 export async function getCourse(id: string): Promise<getCourseProps> {
@@ -17,6 +17,7 @@ export async function getCourse(id: string): Promise<getCourseProps> {
     professorImg: data.professorImg,
     local: data.local,
     studentId: data.studentId,
+    students: data.students,
   }
 
   return course

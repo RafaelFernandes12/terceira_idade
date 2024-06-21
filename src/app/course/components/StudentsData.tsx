@@ -1,39 +1,40 @@
-import { idDataProps } from '@/types/idDataProps'
+/* eslint-disable @next/next/no-img-element */
 import { Person } from '@mui/icons-material'
+import { DocumentData } from 'firebase/firestore'
 
-export default function StudentData({ id, data }: idDataProps) {
+interface studentDataProps {
+  students: DocumentData
+}
+
+export default function StudentData({ students }: studentDataProps) {
   return (
     <>
-      {data.map((student: idDataProps, index: number) => {
-        if (student.data.courseId.includes(id)) {
-          return (
-            <div
-              key={index}
-              className="border-1 border-gray-500 rounded-3xl flex items-center p-4 my-6 max-md:text-xs"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={student.data.foto}
-                alt=""
-                className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
-                ${student.data.foto ? '' : 'hidden'}`}
-              />
-              <Person
-                className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
-                ${student.data.foto ? 'hidden' : ''}`}
-              />
-              <div className="flex gap-2 flex-col ml-4">
-                <span className="break-words w-96 max-sm:w-36">
-                  {student.data.name}
-                </span>
-                <span className="break-words w-96 max-sm:w-36">
-                  {student.data.cpf}
-                </span>
-              </div>
+      {students.map((course: DocumentData) => {
+        return (
+          <div
+            className="border-1 border-gray-500 rounded-3xl flex items-center p-4 my-6 max-md:text-xs"
+            key={course.id}
+          >
+            <img
+              src={course.data.students.foto}
+              alt=""
+              className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
+            ${course.data.students.foto ? '' : 'hidden'}`}
+            />
+            <Person
+              className={`w-32 h-32 rounded-full max-sm:w-20 max-sm:h-20 
+              ${course.data.students.foto ? 'hidden' : ''}`}
+            />
+            <div className="flex gap-2 flex-col ml-4">
+              <span className="break-words w-96 max-sm:w-36">
+                {course.data.students.name}
+              </span>
+              <span className="break-words w-96 max-sm:w-36">
+                {course.data.students.cpf}
+              </span>
             </div>
-          )
-        }
-        return ''
+          </div>
+        )
       })}
     </>
   )

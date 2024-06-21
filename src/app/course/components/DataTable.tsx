@@ -65,9 +65,7 @@ export default function DataTable({
                       {item.date}
                     </TableCell>
                     <TableCell>{item.place}</TableCell>
-                    <TableCell>
-                      {item.startHour} - {item.endHour}
-                    </TableCell>
+                    <TableCell>{item.hour}</TableCell>
                   </TableRow>
                 )
               })}

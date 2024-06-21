@@ -1,12 +1,11 @@
 'use client'
 
 import { ErrorText } from '@/components/ErrorText'
-import { daysOfWeek, types } from '@/data'
+import { daysOfWeek, hoursOfClass, types } from '@/data'
 import { editCourse } from '@/operations/editCourse'
 import { idProps } from '@/types/idProps'
 import { imgType } from '@/types/imgType'
 import { localProps } from '@/types/localProps'
-import { TextField } from '@mui/material'
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -51,16 +50,6 @@ export default function CreateCourse({ params }: idProps) {
       })
   }
 
-  function handleInputName(value: string) {
-    setName(value)
-  }
-  function handleInputProfessorName(value: string) {
-    setProfessorName(value)
-  }
-  function handleInputType(value: string) {
-    setType(value)
-  }
-
   function handleInputChange(
     index: number,
     propertyName: string,
@@ -76,23 +65,20 @@ export default function CreateCourse({ params }: idProps) {
     })
   }
   function handleCreateNewLocal() {
-    setLocal((prevLocal) => [
-      ...prevLocal,
-      { date: '', startHour: '', endHour: '', place: '' },
-    ])
+    setLocal((prevLocal) => [...prevLocal, { date: '', hour: '', place: '' }])
   }
 
   return (
-    <div className="flex flex-col justify-center">
-      <h1 className="font-semibold text-2xl my-7">Editar curso</h1>
-      <div className="mb-4">
+    <div className="flex flex-col justify-center gap-4">
+      <h1 className="font-semibold text-2xl my-7">Criar curso</h1>
+      <div className="flex flex-col gap-4 mb-4">
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
           <InputField
             type="text"
             length={75}
             label="Nome:"
             value={name}
-            onChange={handleInputName}
+            onChange={(e) => setName(e)}
           />
           <div className="flex flex-col">
             <label>Foto do curso: </label>
@@ -107,7 +93,7 @@ export default function CreateCourse({ params }: idProps) {
           inputLabel="Tipo"
           value={type}
           label="Extensão"
-          onChange={handleInputType}
+          onChange={(e) => setType(e)}
           itens={types}
         />
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0">
@@ -116,7 +102,7 @@ export default function CreateCourse({ params }: idProps) {
             length={75}
             label="Nome do Professor:"
             value={professorName}
-            onChange={handleInputProfessorName}
+            onChange={(e) => setProfessorName(e)}
           />
           <div className="flex flex-col">
             <label>Foto do professor do curso: </label>
@@ -129,7 +115,7 @@ export default function CreateCourse({ params }: idProps) {
         </div>
         <div className="flex gap-4 items-center my-4 max-md:flex-col">
           {local.map((item, index) => (
-            <div key={index}>
+            <div key={index} className="flex flex-col gap-4">
               <SelectField
                 inputLabel="Dia"
                 value={item.date}
@@ -137,26 +123,13 @@ export default function CreateCourse({ params }: idProps) {
                 onChange={(e) => handleInputChange(index, 'date', e)}
                 itens={daysOfWeek}
               />
-              <div className="flex flex-col">
-                <label>Hora de começo curso:</label>
-                <TextField
-                  type="time"
-                  value={item.startHour}
-                  onChange={(e) =>
-                    handleInputChange(index, 'startHour', e.target.value)
-                  }
-                />
-              </div>
-              <div className="flex flex-col">
-                <label>Hora de fim curso:</label>
-                <TextField
-                  type="time"
-                  value={item.endHour}
-                  onChange={(e) =>
-                    handleInputChange(index, 'endHour', e.target.value)
-                  }
-                />
-              </div>
+              <SelectField
+                inputLabel="Hora"
+                value={item.hour}
+                label="Hora"
+                onChange={(e) => handleInputChange(index, 'hour', e)}
+                itens={hoursOfClass}
+              />
               <InputField
                 type="text"
                 length={20}
@@ -168,13 +141,13 @@ export default function CreateCourse({ params }: idProps) {
           ))}
         </div>
         <button
-          className="bg-black rounded-md p-2 text-white"
+          className="bg-darkBlue w-36 rounded-md text-white p-2 mr-4"
           onClick={handleCreateNewLocal}
         >
           Adicionar Local
         </button>
       </div>
-      <SubmitButton text="Editar" onClick={addCourse} path="/" />
+      <SubmitButton text="Criar" onClick={addCourse} path="/" />
       <ErrorText error={error} />
       <ToastContainer
         position="top-center"

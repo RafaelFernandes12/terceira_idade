@@ -1,6 +1,5 @@
 import { db, storage } from '@/config/firestore'
-import editCourseProps from '@/types/editCourseProps'
-import { postCourseProps } from '@/types/postCourseProps'
+import { editCourseProps, postCourseProps } from '@/types/courseProps'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import uniqid from 'uniqid'
@@ -29,7 +28,7 @@ export async function editCourse({
       uploadTasks.push(courseSnapshot)
     }
     if (professorImg) {
-      const professorImgs = ref(storage, `professorImgs/${uniqid()}`)
+      const professorImgs = ref(storage, `courseImgs/${uniqid()}`)
       const professorSnapshot = uploadBytes(professorImgs, professorImg)
       uploadTasks.push(professorSnapshot)
     }

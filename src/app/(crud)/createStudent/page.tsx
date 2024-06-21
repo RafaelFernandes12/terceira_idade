@@ -34,28 +34,6 @@ export default function CreateStudent() {
   const [courses, setCourses] = useState<idDataProps[]>([])
   const [courseId, setCourseId] = useState<string[]>([])
 
-  function handleInputName(value: string) {
-    setName(value)
-  }
-  function handleInputCpf(value: string) {
-    setCpf(value)
-  }
-  function handleIno(value: string) {
-    setDataNascimento(value)
-  }
-  function handleInputResponsavelNome(value: string) {
-    setResponsavelNome(value)
-  }
-  function handleInputResponsavelVinculo(value: string) {
-    setResponsavelVinculo(value)
-  }
-  function handleInputTelefoneContato(value: string) {
-    setTelefoneContato(value)
-  }
-  function handleInputTelefoneEmergencia(value: string) {
-    setTelefoneEmergencia(value)
-  }
-
   useEffect(() => {
     getCourses().then((response) => {
       setCourses(response)
@@ -73,13 +51,13 @@ export default function CreateStudent() {
       telefoneContato,
       telefoneEmergencia,
       foto,
-      courseId,
       rgFrente,
       rgVerso,
       residencia,
       cardiologista,
       dermatologista,
       vacina,
+      courseId,
     })
       .then(() => {
         toast.success('Criado com sucesso', {
@@ -100,14 +78,14 @@ export default function CreateStudent() {
   return (
     <div className="flex flex-col justify-center">
       <h1 className="font-semibold text-2xl my-7">Adicionar Estudante</h1>
-      <div className="mb-4">
+      <div className="flex flex-col gap-4 mb-4">
         <div className="flex items-center gap-6 max-sm:flex-col">
           <InputField
             type="text"
             length={75}
             label="Nome:"
             value={name}
-            onChange={handleInputName}
+            onChange={(e) => setName(e)}
           />
           <div className="w-full flex flex-col">
             <label>Foto do estudante: </label>
@@ -141,7 +119,7 @@ export default function CreateStudent() {
           length={11}
           label="CPF:"
           value={cpf}
-          onChange={handleInputCpf}
+          onChange={(e) => setCpf(e)}
         />
 
         <InputField
@@ -149,14 +127,14 @@ export default function CreateStudent() {
           length={6}
           label=""
           value={dataNascimento}
-          onChange={handleIno}
+          onChange={(e) => setDataNascimento(e)}
         />
         <InputField
           type="text"
           length={75}
           label="Nome do responsável:"
           value={responsavelNome}
-          onChange={handleInputResponsavelNome}
+          onChange={(e) => setResponsavelNome(e)}
         />
 
         <InputField
@@ -164,7 +142,7 @@ export default function CreateStudent() {
           length={75}
           label="Vínculo do responsável:"
           value={responsavelVinculo}
-          onChange={handleInputResponsavelVinculo}
+          onChange={(e) => setResponsavelVinculo(e)}
         />
 
         <InputField
@@ -172,7 +150,7 @@ export default function CreateStudent() {
           length={11}
           label="Telefone de contato:"
           value={telefoneContato}
-          onChange={handleInputTelefoneContato}
+          onChange={(e) => setTelefoneContato(e)}
         />
 
         <InputField
@@ -180,7 +158,7 @@ export default function CreateStudent() {
           length={11}
           label="Telefone de emergência:"
           value={telefoneEmergencia}
-          onChange={handleInputTelefoneEmergencia}
+          onChange={(e) => setTelefoneEmergencia(e)}
         />
         <div className="flex flex-col gap-2">
           <label>Foto do rg(verso): </label>

@@ -83,10 +83,6 @@ export default async function Dashboard({
                     id={response.id}
                     isStudent={false}
                     edit="editCourse"
-                    paths={[
-                      response.data.courseImg,
-                      response.data.professorImg,
-                    ]}
                     remove={deleteCourse}
                   />
                 </div>

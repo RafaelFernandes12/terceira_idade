@@ -17,7 +17,7 @@ export default function InputField({
 }: TextFieldProps) {
   return (
     <TextField
-      className="w-full rounded-lg my-4"
+      className="w-full rounded-lg"
       label={label}
       type={type}
       inputProps={{ maxLength: length }}

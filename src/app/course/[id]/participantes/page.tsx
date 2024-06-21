@@ -1,5 +1,5 @@
 import { getCourse } from '@/operations/getCourse'
-import { getStudents } from '@/operations/getStudents'
+import { getSubcollectionOfStudentFromCourses } from '@/operations/getSubcollectionOfStudentFromCourses'
 import { idProps } from '@/types/idProps'
 import Link from 'next/link'
 import StudentData from '../../components/StudentsData'
@@ -7,8 +7,8 @@ import StudentData from '../../components/StudentsData'
 export default async function Participantes({ params }: idProps) {
   const id = params.id
   const course = await getCourse(id)
-  const students = await getStudents()
-
+  const studentsFromCourse = await getSubcollectionOfStudentFromCourses(id)
+  console.log(id)
   return (
     <div className="border-2 border-black rounded-lg p-4 ">
       <div className="border-b-2 border-black w-full font-medium my-4 text-4xl truncate max-md:text-2xl">
@@ -25,7 +25,7 @@ export default async function Participantes({ params }: idProps) {
             </li>
           </Link>
         </ul>
-        <StudentData id={params.id} data={students} />
+        <StudentData students={studentsFromCourse} />
       </div>
     </div>
   )

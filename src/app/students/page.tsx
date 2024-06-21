@@ -72,15 +72,7 @@ export default async function Students({
             <ThreeDots
               id={response.id}
               edit="editStudent"
-              paths={[
-                response.data.foto,
-                response.data.rg_frente,
-                response.data.rg_verso,
-                response.data.residencia,
-                response.data.cardiologista,
-                response.data.dermatologista,
-                response.data.vacina,
-              ]}
+              name={response.data.name}
               remove={deleteStudent}
               isStudent={true}
             />

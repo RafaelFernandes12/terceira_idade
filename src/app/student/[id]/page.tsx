@@ -1,4 +1,3 @@
-import { getCourses } from '@/operations/getCourses'
 import { getStudent } from '@/operations/getStudent'
 import { idProps } from '@/types/idProps'
 import { Person } from '@mui/icons-material'
@@ -10,8 +9,6 @@ import { TableRow } from '../components/TableRow'
 export default async function Student({ params }: idProps) {
   const id = params.id
   const student = await getStudent(id)
-  const courses = await getCourses()
-
   return (
     <div>
       <div
@@ -69,12 +66,8 @@ export default async function Student({ params }: idProps) {
           </ContentBox>
 
           <ContentBox title="Atividade">
-            <ClassTime
-              data={courses}
-              id={student.courseId?.map((item) => item)}
-            />
+            <ClassTime id={id} />
           </ContentBox>
-
           <ContentBox title="Documentação">
             <table className="mb-10 m-auto w-11/12 mt-8">
               <tbody>
