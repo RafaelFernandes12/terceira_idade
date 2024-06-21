@@ -82,6 +82,7 @@ export default async function Dashboard({
                   <ThreeDots
                     id={response.id}
                     isStudent={false}
+                    name={response.data.name}
                     edit="editCourse"
                     remove={deleteCourse}
                   />

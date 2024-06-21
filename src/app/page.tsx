@@ -22,23 +22,6 @@ export default async function Dashboard({
       course.data.type === 'Extensão'
     )
   })
-
-  async function removeCourse(id: string, name: string) {
-    'use server'
-    deleteCourse(id, name).then(() => {
-      toast.success('Criado com sucesso', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-      })
-    })
-  }
-
   return (
     <div>
       <SearchBar />
@@ -101,19 +84,7 @@ export default async function Dashboard({
                     isStudent={false}
                     edit="editCourse"
                     name={response.data.name}
-                    remove={removeCourse}
-                  />
-                  <ToastContainer
-                    position="top-center"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="colored"
+                    remove={deleteCourse}
                   />
                 </div>
               </div>
