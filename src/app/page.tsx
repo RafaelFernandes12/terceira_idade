@@ -4,8 +4,6 @@ import { deleteCourse } from '@/operations/deleteCourse'
 import { getCourses } from '@/operations/getCourses'
 import AddIcon from '@mui/icons-material/Add'
 import Link from 'next/link'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 
 export default async function Dashboard({
   searchParams,
@@ -22,6 +20,7 @@ export default async function Dashboard({
       course.data.type === 'Extensão'
     )
   })
+
   return (
     <div>
       <SearchBar />

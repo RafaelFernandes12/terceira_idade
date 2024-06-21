@@ -1,3 +1,4 @@
+'use server'
 import { db, storage } from '@/config/firestore'
 import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
 import { deleteObject, listAll, ref } from 'firebase/storage'
