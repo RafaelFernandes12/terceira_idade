@@ -7,7 +7,7 @@ import { createCourse } from '@/operations/createCourse'
 import { imgType } from '@/types/imgType'
 import { localProps } from '@/types/localProps'
 import { useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import InputField from '../components/InputField'
 import SelectField from '../components/SelectField'
@@ -34,11 +34,8 @@ export default function CreateCourse() {
       .then(() => {
         toast.success('Criado com sucesso', {
           position: 'top-center',
-          autoClose: 5000,
+          autoClose: 3000,
           hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
           progress: undefined,
           theme: 'colored',
         })
@@ -148,18 +145,6 @@ export default function CreateCourse() {
       </div>
       <SubmitButton text="Criar" onClick={addCourse} path="/" />
       <ErrorText error={error} />
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   )
 }

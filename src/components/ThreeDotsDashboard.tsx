@@ -1,8 +1,6 @@
 'use client'
 
-import { getCourses } from '@/operations/getCourses'
 import { getStudents } from '@/operations/getStudents'
-import { updateCourseSubcollection } from '@/operations/updateCourseSubcollection'
 import { updateStudentSubcollection } from '@/operations/updateStudentSubcollection'
 import { idDataProps } from '@/types/idDataProps'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
@@ -19,36 +17,29 @@ import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-interface threeDotsProps {
+interface threeDotsDashboardProps {
   id: string
   edit: string
-  isStudent: boolean
   name: string
-  remove: (id: string, name: string) => void
+  remove: (id: string, name: string) => Promise<void>
 }
 
-export function ThreeDots({
+export function ThreeDotsDashboard({
   id,
   edit,
   remove,
   name,
-  isStudent,
-}: threeDotsProps) {
+}: threeDotsDashboardProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openDialog, setOpenDialog] = useState(false)
-  const [courses, setCourses] = useState<idDataProps[]>([])
   const [students, setStudents] = useState<idDataProps[]>([])
   const [studentId, setStudentId] = useState<string[]>([])
-  const [courseId, setCourseId] = useState<string[]>([])
   const open = Boolean(anchorEl)
 
   useEffect(() => {
-    getCourses().then((response) => {
-      setCourses(response)
-    })
     getStudents().then((response) => {
       setStudents(response)
     })
@@ -62,40 +53,30 @@ export function ThreeDots({
     setAnchorEl(null)
   }
 
-  const updateCourseSubcollectionF = () => {
-    updateCourseSubcollection({ studentId: id, courseIds: courseId }).then(
-      () => {
-        toast.success('Criado com sucesso', {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-        })
-      },
-    )
-    setOpenDialog(!openDialog)
-  }
-
   const updateStudentSubcollectionF = () => {
     updateStudentSubcollection({ courseId: id, studentId }).then(() => {
       toast.success('Criado com sucesso', {
         position: 'top-center',
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
         progress: undefined,
         theme: 'colored',
       })
     })
     setOpenDialog(!openDialog)
   }
-
+  function removeStudent(id: string, name: string) {
+    remove(id, name).then(() => {
+      toast.success('Deletado com sucesso', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        progress: undefined,
+        theme: 'colored',
+      })
+    })
+    handleClose()
+  }
   return (
     <div>
       <IconButton
@@ -121,12 +102,12 @@ export function ThreeDots({
         <Link href={`${edit}/${id}`}>
           <MenuItem>Editar</MenuItem>
         </Link>
-        <MenuItem onClick={() => remove(id, name)}>Excluir</MenuItem>
-        <MenuItem className={`${isStudent ? 'hidden' : ''}`}>
+        <MenuItem onClick={() => removeStudent(id, name)}>Excluir</MenuItem>
+        <MenuItem>
           <button onClick={() => setOpenDialog(!openDialog)}>
             Adicionar Estudante
           </button>
-          <Dialog open={openDialog} className={`${isStudent ? 'hidden' : ''}`}>
+          <Dialog open={openDialog}>
             <DialogTitle>Escolha os estudantes</DialogTitle>
             <DialogContent>
               <FormControl sx={{ minWidth: 120 }} className="w-full">
@@ -153,51 +134,7 @@ export function ThreeDots({
             </DialogActions>
           </Dialog>
         </MenuItem>
-
-        <MenuItem className={`${isStudent ? '' : 'hidden'}`}>
-          <button onClick={() => setOpenDialog(!openDialog)}>
-            Adicionar cursos
-          </button>
-          <Dialog open={openDialog} className={`${isStudent ? '' : 'hidden'}`}>
-            <DialogTitle>Escolha os cursos</DialogTitle>
-            <DialogContent>
-              <FormControl sx={{ minWidth: 120 }} className="w-full">
-                <InputLabel>Curso</InputLabel>
-                <Select
-                  multiple
-                  value={courseId}
-                  label="Curso"
-                  onChange={(e) => setCourseId(e.target.value as string[])}
-                >
-                  {courses.map((item) => {
-                    return (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.data.name}
-                      </MenuItem>
-                    )
-                  })}
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
-              <Button onClick={updateCourseSubcollectionF}>Ok</Button>
-            </DialogActions>
-          </Dialog>
-        </MenuItem>
       </Menu>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   )
 }

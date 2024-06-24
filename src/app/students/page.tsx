@@ -1,5 +1,5 @@
 import { SearchBar } from '@/components/SearchBar'
-import { ThreeDots } from '@/components/ThreeDots'
+import { ThreeDotsStudents } from '@/components/ThreeDotsStudents'
 import { deleteStudent } from '@/operations/deleteStudent'
 import { getStudents } from '@/operations/getStudents'
 import { Person } from '@mui/icons-material'
@@ -39,12 +39,13 @@ export default async function Students({
             <Link href={`/student/${response.id}`} className="">
               <ErrorIcon
                 className={`text-red-500 ${
-                  response.data.cardiologista ||
-                  response.data.residencia ||
-                  response.data.dermatologista ||
-                  response.data.rg_frente ||
-                  response.data.rg_verso ||
-                  response.data.vacina
+                  response.data.foto &&
+                  response.data.cardiologista &&
+                  response.data.dermatologista &&
+                  response.data.vacina &&
+                  response.data.residencia &&
+                  response.data.rgFrente &&
+                  response.data.rgVerso
                     ? 'hidden'
                     : ''
                 }`}
@@ -69,12 +70,11 @@ export default async function Students({
                 </div>
               </div>
             </Link>
-            <ThreeDots
+            <ThreeDotsStudents
               id={response.id}
               edit="editStudent"
               name={response.data.name}
               remove={deleteStudent}
-              isStudent={true}
             />
           </div>
         )

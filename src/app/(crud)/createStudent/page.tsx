@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { useEffect, useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import InputField from '../components/InputField'
 import { SubmitButton } from '../components/SubmitButton'
@@ -62,11 +62,8 @@ export default function CreateStudent() {
       .then(() => {
         toast.success('Criado com sucesso', {
           position: 'top-center',
-          autoClose: 5000,
+          autoClose: 3000,
           hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
           progress: undefined,
           theme: 'colored',
         })
@@ -211,18 +208,6 @@ export default function CreateStudent() {
       </div>
       <SubmitButton text="Criar" onClick={addStudent} path="/students" />
       <ErrorText error={error} />
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   )
 }

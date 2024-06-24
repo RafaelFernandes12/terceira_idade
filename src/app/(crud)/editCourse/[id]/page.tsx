@@ -7,7 +7,7 @@ import { idProps } from '@/types/idProps'
 import { imgType } from '@/types/imgType'
 import { localProps } from '@/types/localProps'
 import { useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import InputField from '../../components/InputField'
 import SelectField from '../../components/SelectField'
@@ -34,13 +34,10 @@ export default function CreateCourse({ params }: idProps) {
       local,
     })
       .then(() => {
-        toast.success('Editado com sucesso', {
+        toast.success('Criado com sucesso', {
           position: 'top-center',
-          autoClose: 5000,
+          autoClose: 3000,
           hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
           progress: undefined,
           theme: 'colored',
         })
@@ -70,7 +67,7 @@ export default function CreateCourse({ params }: idProps) {
 
   return (
     <div className="flex flex-col justify-center gap-4">
-      <h1 className="font-semibold text-2xl my-7">Criar curso</h1>
+      <h1 className="font-semibold text-2xl my-7">Editar curso</h1>
       <div className="flex flex-col gap-4 mb-4">
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
           <InputField
@@ -147,20 +144,8 @@ export default function CreateCourse({ params }: idProps) {
           Adicionar Local
         </button>
       </div>
-      <SubmitButton text="Criar" onClick={addCourse} path="/" />
+      <SubmitButton text="Editar" onClick={addCourse} path="/" />
       <ErrorText error={error} />
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   )
 }

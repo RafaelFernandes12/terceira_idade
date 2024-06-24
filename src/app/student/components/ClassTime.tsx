@@ -1,5 +1,5 @@
 import { daysOfWeek, hoursOfClass } from '@/data'
-import { getSubcollectionOfCourseFromStudents } from '@/operations/getSubcollectionOfCourseFromStudents'
+import { getSubcollectionOfStudent } from '@/operations/getSubcollectionOfStudent'
 import { localProps } from '@/types/localProps'
 import { DocumentData } from 'firebase/firestore'
 import React from 'react'
@@ -9,13 +9,18 @@ interface classTimeProps {
 }
 
 export async function ClassTime({ id }: classTimeProps) {
-  const subCourse = await getSubcollectionOfCourseFromStudents(id)
+  const subCourse = await getSubcollectionOfStudent(id)
 
   const getInfo = (day: string, hour: string) => {
     const entries = subCourse.flatMap((response: DocumentData) =>
       response.data.courses.local.flatMap((item: localProps) => {
         if (item.date === day && item.hour === hour) {
-          return response.data.courses.name
+          return (
+            <>
+              <p>{response.data.courses.name}</p>
+              <p>{item.place}</p>
+            </>
+          )
         }
         return []
       }),
@@ -26,12 +31,12 @@ export async function ClassTime({ id }: classTimeProps) {
   return (
     <div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <table className="border-2 border-black w-11/12 m-auto my-5 text-center">
+      <table className="border-2 border-black w-11/12 m-auto my-5 text-center max-sm:text-xs">
         <thead>
           <tr className="border-2 border-black">
             <th className="border-2 border-black"></th>
             {daysOfWeek.map((day) => (
-              <th key={day} className="border-2 border-black">
+              <th key={day} className="border-2 border-black w-[130px]">
                 {day}
               </th>
             ))}

@@ -1,5 +1,5 @@
 import { SearchBar } from '@/components/SearchBar'
-import { ThreeDots } from '@/components/ThreeDots'
+import { ThreeDotsDashboard } from '@/components/ThreeDotsDashboard'
 import { deleteCourse } from '@/operations/deleteCourse'
 import { getCourses } from '@/operations/getCourses'
 import AddIcon from '@mui/icons-material/Add'
@@ -79,9 +79,8 @@ export default async function Dashboard({
                 </Link>
                 <div className="flex  items-center justify-between w-full">
                   <span className="w-full truncate">{response.data.name}</span>
-                  <ThreeDots
+                  <ThreeDotsDashboard
                     id={response.id}
-                    isStudent={false}
                     name={response.data.name}
                     edit="editCourse"
                     remove={deleteCourse}

@@ -1,7 +1,7 @@
 import { db } from '@/config/firestore'
 import { collection, getDocs } from 'firebase/firestore'
 
-export async function getSubcollectionOfStudentFromCourses(id: string) {
+export async function getSubcollectionOfCourse(id: string) {
   const docRef = collection(db, 'courses', id, 'students')
   const docsSnap = await getDocs(docRef)
   const studentsFromCourseData = docsSnap.docs.map((docs) => {

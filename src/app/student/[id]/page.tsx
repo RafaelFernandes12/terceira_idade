@@ -4,6 +4,7 @@ import { Person } from '@mui/icons-material'
 import ErrorIcon from '@mui/icons-material/Error'
 import { ClassTime } from '../components/ClassTime'
 import { ContentBox } from '../components/ContentBox'
+import { DialogButton } from '../components/DialogButton'
 import { TableRow } from '../components/TableRow'
 
 export default async function Student({ params }: idProps) {
@@ -14,13 +15,14 @@ export default async function Student({ params }: idProps) {
       <div
         className={`m-auto rounded-2xl w-full p-2 pb-6 bg-red-500/20 mb-10
       ${
-        student.foto ||
-        student.cardiologista ||
-        student.dermatologista ||
-        student.vacina ||
-        student.residencia ||
-        student.rgFrente ||
-        student.rgVerso
+        student.foto &&
+        student.cardiologista &&
+        student.dermatologista &&
+        student.vacina &&
+        student.residencia &&
+        student.rgFrente &&
+        student.rgVerso &&
+        student.foto
           ? 'hidden'
           : ''
       }`}
@@ -49,6 +51,9 @@ export default async function Student({ params }: idProps) {
                 ${student.foto ? 'hidden' : ''}`}
               />
               <p>{student.name}</p>
+              <DialogButton>
+                <ClassTime id={id} />
+              </DialogButton>
             </div>
             <hr className="border-black" />
             <div className="p-4 flex flex-col gap-3">

@@ -16,7 +16,9 @@ export function ContentBox({ title, children }: containerProps) {
   }, [])
 
   return (
-    <div className="border-2 border-black rounded-lg">
+    <div
+      className={`border-2 border-black rounded-lg ${title === 'Atividade' ? 'max-md:hidden' : ''}`}
+    >
       <div className="flex gap-2 font-semibold p-4">
         <button onClick={toggleDrawerOpen}>
           <KeyboardArrowUpIcon className={`${isDrawerOpen ? '' : 'hidden'}`} />

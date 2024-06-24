@@ -27,6 +27,7 @@ export async function updateStudentSubcollection({
         'students',
         studentId,
       )
+
       const studentRef = doc(db, 'students', studentId)
       await getDoc(studentRef).then(async (doc) => {
         const docData = doc.data()
