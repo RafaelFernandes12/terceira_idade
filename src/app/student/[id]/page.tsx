@@ -1,15 +1,17 @@
-import { getStudent } from '@/operations/getStudent'
-import { idProps } from '@/types/idProps'
-import { Person } from '@mui/icons-material'
-import ErrorIcon from '@mui/icons-material/Error'
-import { ClassTime } from '../components/ClassTime'
-import { ContentBox } from '../components/ContentBox'
-import { DialogButton } from '../components/DialogButton'
-import { TableRow } from '../components/TableRow'
+import { getStudent } from "@/operations/getStudent";
+import { idProps } from "@/types/idProps";
+import { Person } from "@mui/icons-material";
+import ErrorIcon from "@mui/icons-material/Error";
+import { ClassTime } from "../components/ClassTime";
+import { ContentBox } from "../components/ContentBox";
+import { DialogButton } from "../components/DialogButton";
+import { TableRow } from "../components/TableRow";
 
 export default async function Student({ params }: idProps) {
-  const id = params.id
-  const student = await getStudent(id)
+  const id = params.id;
+  const student = await getStudent(id);
+  console.log(student);
+  const courseIds = student.courseId?.map((course) => course.id) || [];
   return (
     <div>
       <div
@@ -23,8 +25,8 @@ export default async function Student({ params }: idProps) {
         student.rgFrente &&
         student.rgVerso &&
         student.foto
-          ? 'hidden'
-          : ''
+          ? "hidden"
+          : ""
       }`}
       >
         <div className="flex items-center gap-2">
@@ -44,15 +46,15 @@ export default async function Student({ params }: idProps) {
                 src={student.foto}
                 alt=""
                 className={`w-40 h-40 rounded-full max-sm:w-20 max-sm:h-20 
-                ${student.foto ? '' : 'hidden'}`}
+                ${student.foto ? "" : "hidden"}`}
               />
               <Person
                 className={`w-40 h-40 rounded-full max-sm:w-20 max-sm:h-20 
-                ${student.foto ? 'hidden' : ''}`}
+                ${student.foto ? "hidden" : ""}`}
               />
               <p>{student.name}</p>
               <DialogButton>
-                <ClassTime id={id} />
+                <ClassTime courseIds={courseIds || []} semesterId="2026" />
               </DialogButton>
             </div>
             <hr className="border-black" />
@@ -71,7 +73,7 @@ export default async function Student({ params }: idProps) {
           </ContentBox>
 
           <ContentBox title="Atividade">
-            <ClassTime id={id} />
+            <ClassTime courseIds={courseIds || []} semesterId="2026" />
           </ContentBox>
           <ContentBox title="Documentação">
             <table className="mb-10 m-auto w-11/12 mt-8">
@@ -133,5 +135,5 @@ export default async function Student({ params }: idProps) {
         <p>Aluno não encontrado</p>
       )}
     </div>
-  )
+  );
 }

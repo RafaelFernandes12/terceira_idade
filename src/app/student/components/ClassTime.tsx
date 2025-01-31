@@ -1,32 +1,33 @@
-import { daysOfWeek, hoursOfClass } from '@/data'
-import { getSubcollectionOfStudent } from '@/operations/getSubcollectionOfStudent'
-import { localProps } from '@/types/localProps'
-import { DocumentData } from 'firebase/firestore'
-import React from 'react'
+import { daysOfWeek, hoursOfClass } from "@/data";
+import { getSubcollectionOfStudent } from "@/operations/getSubcollectionOfStudent";
+import { getCourseProps } from "@/types/courseProps";
+import { localProps } from "@/types/localProps";
+import React from "react";
 
 interface classTimeProps {
-  id: string
+  courseIds: string[];
+  semesterId: string;
 }
 
-export async function ClassTime({ id }: classTimeProps) {
-  const subCourse = await getSubcollectionOfStudent(id)
+export async function ClassTime({ courseIds, semesterId }: classTimeProps) {
+  const subCourse = await getSubcollectionOfStudent(semesterId, courseIds);
 
   const getInfo = (day: string, hour: string) => {
-    const entries = subCourse.flatMap((response: DocumentData) =>
-      response.data.courses.local.flatMap((item: localProps) => {
+    const entries = subCourse.flatMap((response: getCourseProps) =>
+      response.local.flatMap((item: localProps) => {
         if (item.date === day && item.hour === hour) {
           return (
             <>
-              <p>{response.data.courses.name}</p>
+              <p>{response.name}</p>
               <p>{item.place}</p>
             </>
-          )
+          );
         }
-        return []
+        return [];
       }),
-    )
-    return entries
-  }
+    );
+    return entries;
+  };
 
   return (
     <div>
@@ -54,7 +55,7 @@ export async function ClassTime({ id }: classTimeProps) {
                   ></td>
                 </tr>
               )}
-              {index === hoursOfClass.indexOf('13:00 - 14:00') && (
+              {index === hoursOfClass.indexOf("13:00 - 14:00") && (
                 <tr className="bg-slate-400">
                   <td className="text-center">Vespertino</td>
                   <td
@@ -63,7 +64,7 @@ export async function ClassTime({ id }: classTimeProps) {
                   ></td>
                 </tr>
               )}
-              {index === hoursOfClass.indexOf('18:00 - 19:00') && (
+              {index === hoursOfClass.indexOf("18:00 - 19:00") && (
                 <tr className="bg-slate-400">
                   <td className="text-center">Noturno</td>
                   <td
@@ -85,5 +86,5 @@ export async function ClassTime({ id }: classTimeProps) {
         </tbody>
       </table>
     </div>
-  )
+  );
 }

@@ -1,1 +1,1 @@
-export type imgType = File | Blob | undefined | null
+export type imgType = File | undefined;

@@ -3,8 +3,6 @@
 import { ErrorText } from '@/components/ErrorText'
 import { editStudent } from '@/operations/editStudent'
 import { getCourses } from '@/operations/getCourses'
-import { idDataProps } from '@/types/idDataProps'
-import { idProps } from '@/types/idProps'
 import { imgType } from '@/types/imgType'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
@@ -15,8 +13,10 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import InputField from '../../components/InputField'
 import { SubmitButton } from '../../components/SubmitButton'
+import { useParams } from 'next/navigation'
+import { getCourseProps } from '@/types/courseProps'
 
-export default function EditStudent({ params }: idProps) {
+export default function EditStudent() {
   const [name, setName] = useState('')
   const [cpf, setCpf] = useState('')
   const [foto, setFoto] = useState<imgType>()
@@ -32,10 +32,10 @@ export default function EditStudent({ params }: idProps) {
   const [telefoneContato, setTelefoneContato] = useState('')
   const [telefoneEmergencia, setTelefoneEmergencia] = useState('')
   const [error, setError] = useState('')
-  const [courses, setCourses] = useState<idDataProps[]>([])
+  const [courses, setCourses] = useState<getCourseProps[]>([])
   const [courseId, setCourseId] = useState<string[]>([])
-  const id = params.id
 
+  const { id } = useParams<{ id: string }>()
   useEffect(() => {
     getCourses().then((response) => {
       setCourses(response)
@@ -54,7 +54,7 @@ export default function EditStudent({ params }: idProps) {
       telefoneContato,
       telefoneEmergencia,
       foto,
-      courseId,
+      // courseId,
       rgFrente,
       rgVerso,
       residencia,
@@ -107,8 +107,8 @@ export default function EditStudent({ params }: idProps) {
           >
             {courses.map((item) => {
               return (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.data.name}
+                <MenuItem key={item.courseId} value={item.courseId}>
+                  {item.name}
                 </MenuItem>
               )
             })}

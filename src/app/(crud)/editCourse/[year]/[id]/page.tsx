@@ -1,67 +1,94 @@
-'use client'
+"use client";
 
-import { ErrorText } from '@/components/ErrorText'
-import { daysOfWeek, hoursOfClass, types } from '@/data'
-import { editCourse } from '@/operations/editCourse'
-import { imgType } from '@/types/imgType'
-import { localProps } from '@/types/localProps'
-import { useState } from 'react'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import InputField from '../../components/InputField'
-import SelectField from '../../components/SelectField'
-import { SubmitButton } from '../../components/SubmitButton'
+import { daysOfWeek, hoursOfClass, types } from "@/data";
+import { imgType } from "@/types/imgType";
+import { localProps } from "@/types/localProps";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import InputField from "../../../components/InputField";
+import SelectField from "../../../components/SelectField";
+import { SubmitButton } from "../../../components/SubmitButton";
+import { getAllSemesters } from "@/operations/getAllSemesters";
+import { Modal } from "../../../components/Modal";
+import { semesterProps } from "@/types/semester";
+import { editCourse } from "@/operations/editCourse";
+import { useParams } from "next/navigation";
+import { getCourse } from "@/operations/getCourse";
 
-export default function CreateCourse({ params }: { params: { id: string } }) {
-  const [name, setName] = useState('')
-  const [courseImg, setCourseImg] = useState<imgType>()
-  const [professorName, setProfessorName] = useState('')
-  const [professorImg, setProfessorImg] = useState<imgType>()
-  const [error, setError] = useState('')
-  const [type, setType] = useState('Extensão')
-  const [local, setLocal] = useState<Array<localProps>>([])
-  const id = params.id
+export default function EditCourse() {
+  const [name, setName] = useState("");
+  const [courseImg, setCourseImg] = useState<imgType>();
+  const [professorName, setProfessorName] = useState("");
+  const [professorImg, setProfessorImg] = useState<imgType>();
+  const [type, setType] = useState("Extensão");
+  const [local, setLocal] = useState<Array<localProps>>([]);
+  const [semesters, setSemesters] = useState<semesterProps[]>([]);
+  const [semesterId, setSemesterId] = useState("");
 
+  const { id, year } = useParams<{ id: string; year: string }>();
+  useEffect(() => {
+    getAllSemesters().then((response) => {
+      setSemesters(response);
+    });
+    getCourse(year, id).then((res) => {
+      setName(res.name);
+      setProfessorName(res.professorName);
+      setType(res.type);
+      setLocal(res.local);
+      setSemesterId(res.year);
+    });
+  }, []);
   async function addCourse() {
-    editCourse({
-      courseId: id,
-      name,
-      courseImg,
-      type,
-      professorName,
-      professorImg,
-      local,
-    })
+    editCourse(
+      {
+        name,
+        courseImg,
+        type,
+        professorName,
+        professorImg,
+        local,
+      },
+      semesterId,
+      year,
+      id,
+    )
       .then(() => {
-        toast.success('Criado com sucesso', {
-          position: 'top-center',
+        toast.success("Criado com sucesso", {
+          position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
           progress: undefined,
-          theme: 'colored',
-        })
+          theme: "colored",
+        });
       })
       .catch((e) => {
-        setError(e.toString())
-      })
+        toast.error(e.toString(), {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          progress: undefined,
+          theme: "colored",
+        });
+        console.log(e);
+      });
   }
-
   function handleInputChange(
     index: number,
     propertyName: string,
     value: string,
   ) {
     setLocal((prevLocal) => {
-      const updatedLocal = [...prevLocal]
+      const updatedLocal = [...prevLocal];
       updatedLocal[index] = {
         ...updatedLocal[index],
         [propertyName]: value,
-      }
-      return updatedLocal
-    })
+      };
+      return updatedLocal;
+    });
   }
   function handleCreateNewLocal() {
-    setLocal((prevLocal) => [...prevLocal, { date: '', hour: '', place: '' }])
+    setLocal((prevLocal) => [...prevLocal, { date: "", hour: "", place: "" }]);
   }
 
   return (
@@ -109,6 +136,14 @@ export default function CreateCourse({ params }: { params: { id: string } }) {
             />
           </div>
         </div>
+        <SelectField
+          inputLabel="Semestre"
+          value={semesterId}
+          label="Semestre"
+          onChange={(e) => setSemesterId(e)}
+          itens={semesters.map((item) => item.year)}
+        />
+        <Modal />
         <div className="flex gap-4 items-center my-4 max-md:flex-col">
           {local.map((item, index) => (
             <div key={index} className="flex flex-col gap-4">
@@ -116,14 +151,14 @@ export default function CreateCourse({ params }: { params: { id: string } }) {
                 inputLabel="Dia"
                 value={item.date}
                 label="Dia"
-                onChange={(e) => handleInputChange(index, 'date', e)}
+                onChange={(e) => handleInputChange(index, "date", e)}
                 itens={daysOfWeek}
               />
               <SelectField
                 inputLabel="Hora"
                 value={item.hour}
                 label="Hora"
-                onChange={(e) => handleInputChange(index, 'hour', e)}
+                onChange={(e) => handleInputChange(index, "hour", e)}
                 itens={hoursOfClass}
               />
               <InputField
@@ -131,7 +166,7 @@ export default function CreateCourse({ params }: { params: { id: string } }) {
                 length={20}
                 label="Lugar do curso:"
                 value={item.place}
-                onChange={(e: string) => handleInputChange(index, 'place', e)}
+                onChange={(e: string) => handleInputChange(index, "place", e)}
               />
             </div>
           ))}
@@ -144,7 +179,6 @@ export default function CreateCourse({ params }: { params: { id: string } }) {
         </button>
       </div>
       <SubmitButton text="Editar" onClick={addCourse} path="/" />
-      <ErrorText error={error} />
     </div>
-  )
+  );
 }

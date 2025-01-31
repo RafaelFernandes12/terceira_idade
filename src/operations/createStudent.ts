@@ -1,136 +1,86 @@
-import { db, storage } from '@/config/firestore'
-import { postStudentProps } from '@/types/studentProps'
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import uniqid from 'uniqid'
+import { db, storage } from "@/config/firestore";
+import { postStudentProps } from "@/types/studentProps";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import uniqid from "uniqid";
+
+async function uploadFile(path: string, file?: File): Promise<string | null> {
+  if (!file) return null;
+  const fileRef = ref(storage, `${path}/${uniqid()}`);
+  const snapshot = await uploadBytes(fileRef, file);
+  return getDownloadURL(snapshot.ref);
+}
 
 export async function createStudent(props: postStudentProps) {
   try {
-    // Validate required fields
     if (!props.name) {
-      throw new Error('Estudante tem que possuir um nome')
+      throw new Error("Estudante tem que possuir um nome");
     }
 
-    // Upload all images to Firebase Storage
-    const uploadTasks = [
-      props.foto
-        ? uploadBytes(
-            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
-            props.foto,
-          )
-        : null,
-      props.rgFrente
-        ? uploadBytes(
-            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
-            props.rgFrente,
-          )
-        : null,
-      props.rgVerso
-        ? uploadBytes(
-            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
-            props.rgVerso,
-          )
-        : null,
-      props.residencia
-        ? uploadBytes(
-            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
-            props.residencia,
-          )
-        : null,
-      props.cardiologista
-        ? uploadBytes(
-            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
-            props.cardiologista,
-          )
-        : null,
-      props.dermatologista
-        ? uploadBytes(
-            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
-            props.dermatologista,
-          )
-        : null,
-      props.vacina
-        ? uploadBytes(
-            ref(storage, `studentImgs/${props.name}/${uniqid()}`),
-            props.vacina,
-          )
-        : null,
-    ]
+    const uploadPaths = [
+      "foto",
+      "rgFrente",
+      "rgVerso",
+      "residencia",
+      "cardiologista",
+      "dermatologista",
+      "vacina",
+    ] as const;
+
+    const uploadPromises = uploadPaths.map((key) =>
+      uploadFile(`studentImgs/${props.name}`, props[key]),
+    );
 
     const [
-      fotoSnapshot,
-      rgFrenteSnapshot,
-      rgVersoSnapshot,
-      residenciaSnapshot,
-      cardiologistaSnapshot,
-      dermatologistaSnapshot,
-      vacinaSnapshot,
-    ] = await Promise.all(uploadTasks)
+      foto,
+      rgFrente,
+      rgVerso,
+      residencia,
+      cardiologista,
+      dermatologista,
+      vacina,
+    ] = await Promise.all(uploadPromises);
 
-    // Get download URLs for the uploaded images
-    const [
-      downloadFotoURL,
-      downloadRgFrenteURL,
-      downloadRgVersoURL,
-      downloadResidenciaURL,
-      downloadCardiologistaURL,
-      downloadDermatologistaURL,
-      downloadVacinaURL,
-    ] = await Promise.all([
-      fotoSnapshot ? getDownloadURL(fotoSnapshot.ref) : null,
-      rgFrenteSnapshot ? getDownloadURL(rgFrenteSnapshot.ref) : null,
-      rgVersoSnapshot ? getDownloadURL(rgVersoSnapshot.ref) : null,
-      residenciaSnapshot ? getDownloadURL(residenciaSnapshot.ref) : null,
-      cardiologistaSnapshot ? getDownloadURL(cardiologistaSnapshot.ref) : null,
-      dermatologistaSnapshot
-        ? getDownloadURL(dermatologistaSnapshot.ref)
-        : null,
-      vacinaSnapshot ? getDownloadURL(vacinaSnapshot.ref) : null,
-    ])
-
-    // Create the student data object
     const studentData = {
       ...props,
-      foto: downloadFotoURL,
-      rgFrente: downloadRgFrenteURL,
-      rgVerso: downloadRgVersoURL,
-      residencia: downloadResidenciaURL,
-      cardiologista: downloadCardiologistaURL,
-      dermatologista: downloadDermatologistaURL,
-      vacina: downloadVacinaURL,
-    }
-
-    // Loop through the courseId array and add the student to each course's students subcollection
+      foto,
+      rgFrente,
+      rgVerso,
+      residencia,
+      cardiologista,
+      dermatologista,
+      vacina,
+    };
+    const studentDocRef = collection(db, "students");
+    await addDoc(studentDocRef, studentData);
     if (props.courseId) {
       for (const course of props.courseId) {
         const courseRef = doc(
           db,
-          'semesters',
+          "semesters",
           course.year,
-          'courses',
+          "courses",
           course.id,
-        )
+        );
 
-        // Check if the course exists
-        const courseDoc = await getDoc(courseRef)
+        const courseDoc = await getDoc(courseRef);
         if (!courseDoc.exists()) {
-          throw new Error(`Course ${course.id} does not exist`)
+          throw new Error(`Course ${course.id} does not exist`);
         }
 
-        // Add the student to the course's students subcollection
         const studentsRef = collection(
           db,
-          'semesters',
+          "semesters",
           course.year,
-          'courses',
+          "courses",
           course.id,
-          'students',
-        )
-        await addDoc(studentsRef, studentData)
+          "students",
+        );
+        await addDoc(studentsRef, studentData);
       }
     }
   } catch (e) {
-    console.error('Error creating student:', e)
-    throw e // Re-throw the error for handling in the calling function
+    console.error("Error creating student:", e);
+    throw e;
   }
 }

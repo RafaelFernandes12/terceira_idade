@@ -1,16 +1,16 @@
-import { getCourse } from '@/operations/getCourse'
-import { getSubcollectionOfCourse } from '@/operations/getSubcollectionOfCourse'
-import Link from 'next/link'
-import StudentData from '../../../components/StudentsData'
+import { getCourse } from "@/operations/getCourse";
+import { getSubcollectionOfCourse } from "@/operations/getSubcollectionOfCourse";
+import Link from "next/link";
+import StudentData from "../../../components/StudentsData";
 
 export default async function Participantes({
   params,
 }: {
-  params: { id: string; year: string }
+  params: Promise<{ id: string; year: string }>;
 }) {
-  const id = params.id
-  const course = await getCourse(params.year, params.id)
-  const studentsFromCourse = await getSubcollectionOfCourse(id)
+  const { year, id } = await params;
+  const course = await getCourse(year, id);
+  const studentsFromCourse = await getSubcollectionOfCourse(year, id);
 
   return (
     <div className="border-2 border-black rounded-lg p-4 ">
@@ -31,5 +31,5 @@ export default async function Participantes({
         <StudentData students={studentsFromCourse} />
       </div>
     </div>
-  )
+  );
 }

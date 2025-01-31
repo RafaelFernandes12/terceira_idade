@@ -1,58 +1,86 @@
-import { db, storage } from '@/config/firestore'
-import { editCourseProps, postCourseProps } from '@/types/courseProps'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import uniqid from 'uniqid'
+import { db, storage } from "@/config/firestore";
+import { postCourseProps } from "@/types/courseProps";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  query,
+  where,
+  getDocs,
+  collection,
+  deleteDoc,
+  setDoc,
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import uniqid from "uniqid";
 
-export async function editCourse({
-  courseId,
-  name,
-  courseImg,
-  type,
-  professorName,
-  professorImg,
-  local,
-}: postCourseProps) {
-  try {
-    const courseRef = doc(db, 'courses', courseId!)
-    const courseDoc = await getDoc(courseRef)
+export async function editCourse(
+  course: postCourseProps,
+  semesterId: string,
+  year: string,
+  courseId: string,
+) {
+  const currentCourseRef = doc(db, "semesters", year, "courses", courseId);
 
-    if (!courseDoc.exists()) {
-      throw new Error('Course document does not exist.')
-    }
+  const courseDoc = await getDoc(currentCourseRef);
+  if (!courseDoc.exists()) {
+    throw new Error("Curso não encontrado");
+  }
 
-    const uploadTasks = []
-    if (courseImg) {
-      const courseImgs = ref(storage, `courseImgs/${uniqid()}`)
-      const courseSnapshot = uploadBytes(courseImgs, courseImg)
-      uploadTasks.push(courseSnapshot)
-    }
-    if (professorImg) {
-      const professorImgs = ref(storage, `courseImgs/${uniqid()}`)
-      const professorSnapshot = uploadBytes(professorImgs, professorImg)
-      uploadTasks.push(professorSnapshot)
-    }
-    const [courseSnapshot, professorSnapshot] = await Promise.all(uploadTasks)
-    const downloadCourseURL = courseImg
-      ? await getDownloadURL(courseSnapshot.ref)
-      : undefined
-    const downloadProfessorURL = professorImg
-      ? await getDownloadURL(professorSnapshot.ref)
-      : undefined
+  const querySnapshot = await getDocs(
+    query(
+      collection(db, "semesters", year, "courses"),
+      where("name", "==", course.name),
+    ),
+  );
 
-    const updateFields: Partial<editCourseProps> = {}
-    if (name) updateFields.name = name
-    if (downloadCourseURL) updateFields.courseImg = downloadCourseURL
-    if (type) updateFields.type = type
-    if (professorName) updateFields.professorName = professorName
-    if (downloadProfessorURL) updateFields.professorImg = downloadProfessorURL
-    if (local!.length > 0) updateFields.local = local
+  const isDuplicateName = querySnapshot.docs.some(
+    (doc) => doc.id !== courseId && doc.data().name === course.name,
+  );
 
-    await updateDoc(courseRef, updateFields)
+  if (isDuplicateName) {
+    throw new Error("Curso com o mesmo nome já existe");
+  }
 
-    console.log('Course updated successfully.')
-  } catch (error) {
-    console.error('Error updating course:', error)
-    throw error
+  if (!course.name) {
+    throw new Error("Todos os campos devem ser preenchidos");
+  }
+
+  let downloadCourseURL = courseDoc.data().courseImg;
+  if (course.courseImg) {
+    const courseSnapshot = await uploadBytes(
+      ref(storage, `courseImgs/${course.name}/${uniqid()}`),
+      course.courseImg,
+    );
+    downloadCourseURL = await getDownloadURL(courseSnapshot.ref);
+  }
+
+  let downloadProfessorURL = courseDoc.data().professorImg;
+  if (course.professorImg) {
+    const professorSnapshot = await uploadBytes(
+      ref(storage, `courseImgs/${course.name}/${uniqid()}`),
+      course.professorImg,
+    );
+    downloadProfessorURL = await getDownloadURL(professorSnapshot.ref);
+  }
+
+  const updatedCourseData = {
+    name: course.name,
+    courseImg: downloadCourseURL,
+    type: course.type,
+    professorName: course.professorName,
+    professorImg: downloadProfessorURL,
+    local: course.local,
+    year: semesterId,
+  };
+
+  if (semesterId !== year) {
+    const newCourseRef = doc(db, "semesters", semesterId, "courses", courseId);
+
+    await setDoc(newCourseRef, updatedCourseData);
+
+    await deleteDoc(currentCourseRef);
+  } else {
+    await updateDoc(currentCourseRef, updatedCourseData);
   }
 }

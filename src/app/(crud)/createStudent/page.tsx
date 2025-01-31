@@ -1,47 +1,47 @@
-'use client'
+"use client";
 
-import { ErrorText } from '@/components/ErrorText'
-import { createStudent } from '@/operations/createStudent'
-import { getCourses } from '@/operations/getCourses'
-import { imgType } from '@/types/imgType'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import InputField from '../components/InputField'
-import { SubmitButton } from '../components/SubmitButton'
-import { getCourseProps } from '@/types/courseProps'
+import { ErrorText } from "@/components/ErrorText";
+import { createStudent } from "@/operations/createStudent";
+import { getCourses } from "@/operations/getCourses";
+import { imgType } from "@/types/imgType";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import InputField from "../components/InputField";
+import { SubmitButton } from "../components/SubmitButton";
+import { getCourseProps } from "@/types/courseProps";
 
 export default function CreateStudent() {
-  const [name, setName] = useState('')
-  const [cpf, setCpf] = useState('')
-  const [foto, setFoto] = useState<imgType>()
-  const [rgFrente, setRgFrente] = useState<imgType>()
-  const [rgVerso, setRgVerso] = useState<imgType>()
-  const [residencia, setResidencia] = useState<imgType>()
-  const [cardiologista, setCardiologista] = useState<imgType>()
-  const [dermatologista, setDermatologista] = useState<imgType>()
-  const [vacina, setVacina] = useState<imgType>()
-  const [dataNascimento, setDataNascimento] = useState('')
-  const [responsavelNome, setResponsavelNome] = useState('')
-  const [responsavelVinculo, setResponsavelVinculo] = useState('')
-  const [telefoneContato, setTelefoneContato] = useState('')
-  const [telefoneEmergencia, setTelefoneEmergencia] = useState('')
-  const [error, setError] = useState('')
-  const [courses, setCourses] = useState<getCourseProps[]>([])
-  const [courseId, setCourseId] = useState<{ id: string; year: string }[]>([])
+  const [name, setName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [foto, setFoto] = useState<imgType>();
+  const [rgFrente, setRgFrente] = useState<imgType>();
+  const [rgVerso, setRgVerso] = useState<imgType>();
+  const [residencia, setResidencia] = useState<imgType>();
+  const [cardiologista, setCardiologista] = useState<imgType>();
+  const [dermatologista, setDermatologista] = useState<imgType>();
+  const [vacina, setVacina] = useState<imgType>();
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [responsavelNome, setResponsavelNome] = useState("");
+  const [responsavelVinculo, setResponsavelVinculo] = useState("");
+  const [telefoneContato, setTelefoneContato] = useState("");
+  const [telefoneEmergencia, setTelefoneEmergencia] = useState("");
+  const [error, setError] = useState("");
+  const [courses, setCourses] = useState<getCourseProps[]>([]);
+  const [courseId, setCourseId] = useState<{ id: string; year: string }[]>([]);
 
   useEffect(() => {
     getCourses().then((response) => {
-      setCourses(response)
-    })
-  }, [])
+      setCourses(response);
+    });
+  }, []);
 
   async function addStudent() {
-    setError('')
+    setError("");
     createStudent({
       name,
       cpf,
@@ -59,20 +59,19 @@ export default function CreateStudent() {
       vacina,
       courseId,
     })
-      .then((res) => {
-        console.log(res)
-        toast.success('Criado com sucesso', {
-          position: 'top-center',
+      .then(() => {
+        toast.success("Criado com sucesso", {
+          position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
           progress: undefined,
-          theme: 'colored',
-        })
+          theme: "colored",
+        });
       })
       .catch((e) => {
-        console.log(e)
-        setError(e.toString())
-      })
+        console.log(e);
+        setError(e.toString());
+      });
   }
   return (
     <div className="flex flex-col justify-center">
@@ -101,14 +100,14 @@ export default function CreateStudent() {
             value={courseId.map((item) => item.id).flat()} // Flatten the array of ids
             label="Curso"
             onChange={(e: SelectChangeEvent<string[]>) => {
-              const selected = e.target.value
+              const selected = e.target.value;
 
               // Create the new array with id and year mapping
               const selectedCourses = courses
                 .filter((item) => selected.includes(item.courseId)) // Filter courses based on selected IDs
-                .map((item) => ({ id: item.courseId, year: item.year })) // Create the { id, year } structure
+                .map((item) => ({ id: item.courseId, year: item.year })); // Create the { id, year } structure
 
-              setCourseId(selectedCourses) // Set the state with the new structure
+              setCourseId(selectedCourses); // Set the state with the new structure
             }}
           >
             {courses.map((item) => (
@@ -216,5 +215,5 @@ export default function CreateStudent() {
       <SubmitButton text="Criar" onClick={addStudent} path="/students" />
       <ErrorText error={error} />
     </div>
-  )
+  );
 }

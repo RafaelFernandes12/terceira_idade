@@ -1,42 +1,51 @@
 /* eslint-disable @next/next/no-img-element */
-'use client'
-import { SearchBar } from '@/components/SearchBar'
-import { SelectSemester } from '@/components/SelectSemester'
-import { ThreeDotsDashboard } from '@/components/ThreeDotsDashboard'
-import { deleteCourse } from '@/operations/deleteCourse'
-import { getCourses } from '@/operations/getCourses'
-import { getCourseProps } from '@/types/courseProps'
-import AddIcon from '@mui/icons-material/Add'
-import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+"use client";
+import { SearchBar } from "@/components/SearchBar";
+import { SelectSemester } from "@/components/SelectSemester";
+import { ThreeDotsDashboard } from "@/components/ThreeDotsDashboard";
+import { deleteCourse } from "@/operations/deleteCourse";
+import { getCourses } from "@/operations/getCourses";
+import { getCourseProps } from "@/types/courseProps";
+import AddIcon from "@mui/icons-material/Add";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
-  const searchParams = useSearchParams()
-  const query = searchParams.get('query') ?? ''
-  const year = searchParams.get('year') ?? ''
-  const [courses, setCourses] = useState<getCourseProps[]>([])
-  const [loading, setLoading] = useState(true)
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query") ?? "";
+  const year = searchParams.get("year") ?? "";
+  const [courses, setCourses] = useState<getCourseProps[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchCourses = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const data = await getCourses(year)
-        setCourses(data)
+        const data = await getCourses(year);
+        setCourses(data);
       } catch (error) {
-        console.error('Failed to fetch students:', error)
+        console.error("Failed to fetch students:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchCourses()
-  }, [year])
+    fetchCourses();
+  }, [year]);
 
   const filteredCourses = courses.filter(
-    (course) => course.name.includes(query) && course.type === 'Extensão',
-  )
-  console.log(filteredCourses)
+    (course) => course.name.includes(query) && course.type === "Extensão",
+  );
+  function handleDeleteCourse(id: string, name: string, year: string) {
+    deleteCourse(id, year, name)
+      .then(() => {
+        toast.success("Deletado com sucesso");
+      })
+      .catch((e) => {
+        toast.error(e.toString());
+      });
+  }
   return (
     <div>
       <SearchBar />
@@ -79,12 +88,10 @@ export default function Dashboard() {
                   <img
                     src={course.courseImg}
                     alt=""
-                    className={`object-cover w-full h-full 
-${course.courseImg ? '' : 'hidden'}`}
+                    className={`object-cover w-full h-full  ${course.courseImg ? "" : "hidden"}`}
                   />
                   <div
-                    className={`flex items-center justify-center h-full w-full
-${course.courseImg ? 'hidden' : ''}`}
+                    className={`flex items-center justify-center h-full w-full ${course.courseImg ? "hidden" : ""}`}
                   >
                     <span className="text-center rotate-[315deg] w-full">
                       Adicionar Foto do curso
@@ -94,10 +101,10 @@ ${course.courseImg ? 'hidden' : ''}`}
                 <div className="flex items-center justify-between w-full">
                   <span className="w-full truncate">{course.name}</span>
                   <ThreeDotsDashboard
+                    year={course.year}
+                    courseName={course.name}
                     id={course.courseId}
-                    edit="editCourse"
-                    name={course.name}
-                    remove={deleteCourse}
+                    remove={handleDeleteCourse}
                   />
                 </div>
               </div>
@@ -106,5 +113,5 @@ ${course.courseImg ? 'hidden' : ''}`}
         )}
       </div>
     </div>
-  )
+  );
 }
