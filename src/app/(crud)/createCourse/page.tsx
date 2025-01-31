@@ -1,38 +1,38 @@
-"use client";
+'use client'
 
-import { ErrorText } from "@/components/ErrorText";
-import { daysOfWeek, hoursOfClass, types } from "@/data";
-import { createCourse } from "@/operations/createCourse";
-import { imgType } from "@/types/imgType";
-import { localProps } from "@/types/localProps";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import InputField from "../components/InputField";
-import SelectField from "../components/SelectField";
-import { SubmitButton } from "../components/SubmitButton";
-import { getAllSemesters } from "@/operations/getAllSemesters";
-import { Modal } from "./components/Modal";
-import { semesterProps } from "@/types/semester";
+import { ErrorText } from '@/components/ErrorText'
+import { daysOfWeek, hoursOfClass, types } from '@/data'
+import { createCourse } from '@/operations/createCourse'
+import { imgType } from '@/types/imgType'
+import { localProps } from '@/types/localProps'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import InputField from '../components/InputField'
+import SelectField from '../components/SelectField'
+import { SubmitButton } from '../components/SubmitButton'
+import { getAllSemesters } from '@/operations/getAllSemesters'
+import { Modal } from './components/Modal'
+import { semesterProps } from '@/types/semester'
 
 export default function CreateCourse() {
-  const [name, setName] = useState("");
-  const [courseImg, setCourseImg] = useState<imgType>();
-  const [professorName, setProfessorName] = useState("");
-  const [professorImg, setProfessorImg] = useState<imgType>();
-  const [error, setError] = useState("");
-  const [type, setType] = useState("Extensão");
-  const [local, setLocal] = useState<Array<localProps>>([]);
-  const [semesters, setSemesters] = useState<semesterProps[]>([]);
-  const [semesterId, setSemesterId] = useState("");
+  const [name, setName] = useState('')
+  const [courseImg, setCourseImg] = useState<imgType>()
+  const [professorName, setProfessorName] = useState('')
+  const [professorImg, setProfessorImg] = useState<imgType>()
+  const [error, setError] = useState('')
+  const [type, setType] = useState('Extensão')
+  const [local, setLocal] = useState<Array<localProps>>([])
+  const [semesters, setSemesters] = useState<semesterProps[]>([])
+  const [semesterId, setSemesterId] = useState('')
 
   useEffect(() => {
     getAllSemesters().then((response) => {
-      setSemesters(response);
-    });
-  }, []);
+      setSemesters(response)
+    })
+  }, [])
   async function addCourse() {
-    setError("");
+    setError('')
     createCourse(
       {
         name,
@@ -45,18 +45,18 @@ export default function CreateCourse() {
       semesterId,
     )
       .then(() => {
-        toast.success("Criado com sucesso", {
-          position: "top-center",
+        toast.success('Criado com sucesso', {
+          position: 'top-center',
           autoClose: 3000,
           hideProgressBar: false,
           progress: undefined,
-          theme: "colored",
-        });
+          theme: 'colored',
+        })
       })
       .catch((e) => {
-        setError(e.toString());
-        console.log(e);
-      });
+        setError(e.toString())
+        console.log(e)
+      })
   }
   function handleInputChange(
     index: number,
@@ -64,16 +64,16 @@ export default function CreateCourse() {
     value: string,
   ) {
     setLocal((prevLocal) => {
-      const updatedLocal = [...prevLocal];
+      const updatedLocal = [...prevLocal]
       updatedLocal[index] = {
         ...updatedLocal[index],
         [propertyName]: value,
-      };
-      return updatedLocal;
-    });
+      }
+      return updatedLocal
+    })
   }
   function handleCreateNewLocal() {
-    setLocal((prevLocal) => [...prevLocal, { date: "", hour: "", place: "" }]);
+    setLocal((prevLocal) => [...prevLocal, { date: '', hour: '', place: '' }])
   }
 
   return (
@@ -136,14 +136,14 @@ export default function CreateCourse() {
                 inputLabel="Dia"
                 value={item.date}
                 label="Dia"
-                onChange={(e) => handleInputChange(index, "date", e)}
+                onChange={(e) => handleInputChange(index, 'date', e)}
                 itens={daysOfWeek}
               />
               <SelectField
                 inputLabel="Hora"
                 value={item.hour}
                 label="Hora"
-                onChange={(e) => handleInputChange(index, "hour", e)}
+                onChange={(e) => handleInputChange(index, 'hour', e)}
                 itens={hoursOfClass}
               />
               <InputField
@@ -151,7 +151,7 @@ export default function CreateCourse() {
                 length={20}
                 label="Lugar do curso:"
                 value={item.place}
-                onChange={(e: string) => handleInputChange(index, "place", e)}
+                onChange={(e: string) => handleInputChange(index, 'place', e)}
               />
             </div>
           ))}
@@ -166,5 +166,5 @@ export default function CreateCourse() {
       <SubmitButton text="Criar" onClick={addCourse} path="/" />
       <ErrorText error={error} />
     </div>
-  );
+  )
 }

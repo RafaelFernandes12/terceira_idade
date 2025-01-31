@@ -1,14 +1,14 @@
-import { db, storage } from "@/config/firestore";
-import { postStudentProps } from "@/types/studentProps";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import uniqid from "uniqid";
+import { db, storage } from '@/config/firestore'
+import { postStudentProps } from '@/types/studentProps'
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import uniqid from 'uniqid'
 
 export async function createStudent(props: postStudentProps) {
   try {
     // Validate required fields
     if (!props.name) {
-      throw new Error("Estudante tem que possuir um nome");
+      throw new Error('Estudante tem que possuir um nome')
     }
 
     // Upload all images to Firebase Storage
@@ -55,7 +55,7 @@ export async function createStudent(props: postStudentProps) {
             props.vacina,
           )
         : null,
-    ];
+    ]
 
     const [
       fotoSnapshot,
@@ -65,7 +65,7 @@ export async function createStudent(props: postStudentProps) {
       cardiologistaSnapshot,
       dermatologistaSnapshot,
       vacinaSnapshot,
-    ] = await Promise.all(uploadTasks);
+    ] = await Promise.all(uploadTasks)
 
     // Get download URLs for the uploaded images
     const [
@@ -86,7 +86,7 @@ export async function createStudent(props: postStudentProps) {
         ? getDownloadURL(dermatologistaSnapshot.ref)
         : null,
       vacinaSnapshot ? getDownloadURL(vacinaSnapshot.ref) : null,
-    ]);
+    ])
 
     // Create the student data object
     const studentData = {
@@ -98,39 +98,39 @@ export async function createStudent(props: postStudentProps) {
       cardiologista: downloadCardiologistaURL,
       dermatologista: downloadDermatologistaURL,
       vacina: downloadVacinaURL,
-    };
+    }
 
     // Loop through the courseId array and add the student to each course's students subcollection
     if (props.courseId) {
       for (const course of props.courseId) {
         const courseRef = doc(
           db,
-          "semesters",
+          'semesters',
           course.year,
-          "courses",
+          'courses',
           course.id,
-        );
+        )
 
         // Check if the course exists
-        const courseDoc = await getDoc(courseRef);
+        const courseDoc = await getDoc(courseRef)
         if (!courseDoc.exists()) {
-          throw new Error(`Course ${course.id} does not exist`);
+          throw new Error(`Course ${course.id} does not exist`)
         }
 
         // Add the student to the course's students subcollection
         const studentsRef = collection(
           db,
-          "semesters",
+          'semesters',
           course.year,
-          "courses",
+          'courses',
           course.id,
-          "students",
-        );
-        await addDoc(studentsRef, studentData);
+          'students',
+        )
+        await addDoc(studentsRef, studentData)
       }
     }
   } catch (e) {
-    console.error("Error creating student:", e);
-    throw e; // Re-throw the error for handling in the calling function
+    console.error('Error creating student:', e)
+    throw e // Re-throw the error for handling in the calling function
   }
 }

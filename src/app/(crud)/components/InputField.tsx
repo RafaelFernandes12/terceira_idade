@@ -1,11 +1,11 @@
-import TextField from "@mui/material/TextField";
+import TextField from '@mui/material/TextField'
 
 interface TextFieldProps {
-  label: string;
-  value: string;
-  length: number;
-  type: string;
-  onChange: (newValue: string) => void;
+  label: string
+  value: string
+  length: number
+  type: string
+  onChange: (newValue: string) => void
 }
 
 export default function InputField({
@@ -24,5 +24,5 @@ export default function InputField({
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />
-  );
+  )
 }

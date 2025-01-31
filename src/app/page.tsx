@@ -1,26 +1,42 @@
-import { SearchBar } from "@/components/SearchBar";
-import { SelectSemester } from "@/components/SelectSemester";
-import { ThreeDotsDashboard } from "@/components/ThreeDotsDashboard";
-import { deleteCourse } from "@/operations/deleteCourse";
-import { getCourses } from "@/operations/getCourses";
-import { getCourseProps } from "@/types/courseProps";
-import AddIcon from "@mui/icons-material/Add";
-import Link from "next/link";
+/* eslint-disable @next/next/no-img-element */
+'use client'
+import { SearchBar } from '@/components/SearchBar'
+import { SelectSemester } from '@/components/SelectSemester'
+import { ThreeDotsDashboard } from '@/components/ThreeDotsDashboard'
+import { deleteCourse } from '@/operations/deleteCourse'
+import { getCourses } from '@/operations/getCourses'
+import { getCourseProps } from '@/types/courseProps'
+import AddIcon from '@mui/icons-material/Add'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
-export default async function Dashboard({
-  searchParams,
-}: {
-  searchParams?: { query?: string; year?: string };
-}) {
-  const query = searchParams?.query || "";
-  const year = searchParams?.year || "";
+export default function Dashboard() {
+  const searchParams = useSearchParams()
+  const query = searchParams.get('query') ?? ''
+  const year = searchParams.get('year') ?? ''
+  const [courses, setCourses] = useState<getCourseProps[]>([])
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const fetchCourses = async () => {
+      setLoading(true)
+      try {
+        const data = await getCourses(year)
+        setCourses(data)
+      } catch (error) {
+        console.error('Failed to fetch students:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  const courses = (await getCourses(year)) as getCourseProps[];
+    fetchCourses()
+  }, [year])
 
   const filteredCourses = courses.filter(
-    (course) => course.name.includes(query) && course.type === "Extensão",
-  );
-  console.log(filteredCourses);
+    (course) => course.name.includes(query) && course.type === 'Extensão',
+  )
+  console.log(filteredCourses)
   return (
     <div>
       <SearchBar />
@@ -47,44 +63,48 @@ export default async function Dashboard({
           </Link>
         </div>
 
-        <div className="grid 2xl:grid-cols-4 m-0 lg:grid-cols-3 md:grid-cols-2">
-          {filteredCourses.map((course) => (
-            <div
-              key={course.courseId}
-              className="w-52 h-52 flex items-center flex-col m-auto mb-14"
-            >
-              <Link
-                href={`course/${course.year}/${course.courseId}/dadosGerais`}
-                className="bg-darkBlue/50 p-4 rounded-lg m-auto w-full h-full"
+        {loading ? (
+          <p>Carregando cursos</p>
+        ) : (
+          <div className="grid 2xl:grid-cols-4 m-0 lg:grid-cols-3 md:grid-cols-2">
+            {filteredCourses.map((course) => (
+              <div
+                key={course.courseId}
+                className="w-52 h-52 flex items-center flex-col m-auto mb-14"
               >
-                <img
-                  src={course.courseImg}
-                  alt=""
-                  className={`object-cover w-full h-full 
-                      ${course.courseImg ? "" : "hidden"}`}
-                />
-                <div
-                  className={`flex items-center justify-center h-full w-full
-                      ${course.courseImg ? "hidden" : ""}`}
+                <Link
+                  href={`course/${course.year}/${course.courseId}/dadosGerais`}
+                  className="bg-darkBlue/50 p-4 rounded-lg m-auto w-full h-full"
                 >
-                  <span className="text-center rotate-[315deg] w-full">
-                    Adicionar Foto do curso
-                  </span>
+                  <img
+                    src={course.courseImg}
+                    alt=""
+                    className={`object-cover w-full h-full 
+${course.courseImg ? '' : 'hidden'}`}
+                  />
+                  <div
+                    className={`flex items-center justify-center h-full w-full
+${course.courseImg ? 'hidden' : ''}`}
+                  >
+                    <span className="text-center rotate-[315deg] w-full">
+                      Adicionar Foto do curso
+                    </span>
+                  </div>
+                </Link>
+                <div className="flex items-center justify-between w-full">
+                  <span className="w-full truncate">{course.name}</span>
+                  <ThreeDotsDashboard
+                    id={course.courseId}
+                    edit="editCourse"
+                    name={course.name}
+                    remove={deleteCourse}
+                  />
                 </div>
-              </Link>
-              <div className="flex items-center justify-between w-full">
-                <span className="w-full truncate">{course.name}</span>
-                <ThreeDotsDashboard
-                  id={course.courseId}
-                  edit="editCourse"
-                  name={course.name}
-                  remove={deleteCourse}
-                />
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
-  );
+  )
 }

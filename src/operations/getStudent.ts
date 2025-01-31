@@ -1,6 +1,6 @@
-import { db } from "@/config/firestore";
-import { getStudentProps } from "@/types/studentProps";
-import { doc, getDoc } from "firebase/firestore";
+import { db } from '@/config/firestore'
+import { getStudentProps } from '@/types/studentProps'
+import { doc, getDoc } from 'firebase/firestore'
 
 export async function getStudent(
   id: string,
@@ -9,24 +9,24 @@ export async function getStudent(
   // Reference to the student document
   const docRef = doc(
     db,
-    "semesters",
+    'semesters',
     course.semesterId,
-    "courses",
+    'courses',
     course.courseId,
-    "students",
+    'students',
     id,
-  );
+  )
 
   // Fetch the student document
-  const docSnap = await getDoc(docRef);
+  const docSnap = await getDoc(docRef)
 
   // Check if the document exists
   if (!docSnap.exists()) {
-    throw new Error("Student not found");
+    throw new Error('Student not found')
   }
 
   // Extract the student data
-  const data = docSnap.data() as getStudentProps;
+  const data = docSnap.data() as getStudentProps
 
   // Return the student object
   return {
@@ -48,5 +48,5 @@ export async function getStudent(
     courseId: data.courseId,
     courses: data.courses,
     year: data.year,
-  };
+  }
 }

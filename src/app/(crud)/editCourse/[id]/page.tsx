@@ -3,7 +3,6 @@
 import { ErrorText } from '@/components/ErrorText'
 import { daysOfWeek, hoursOfClass, types } from '@/data'
 import { editCourse } from '@/operations/editCourse'
-import { idProps } from '@/types/idProps'
 import { imgType } from '@/types/imgType'
 import { localProps } from '@/types/localProps'
 import { useState } from 'react'
@@ -13,7 +12,7 @@ import InputField from '../../components/InputField'
 import SelectField from '../../components/SelectField'
 import { SubmitButton } from '../../components/SubmitButton'
 
-export default function CreateCourse({ params }: idProps) {
+export default function CreateCourse({ params }: { params: { id: string } }) {
   const [name, setName] = useState('')
   const [courseImg, setCourseImg] = useState<imgType>()
   const [professorName, setProfessorName] = useState('')

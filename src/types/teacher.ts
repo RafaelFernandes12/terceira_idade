@@ -1,4 +1,4 @@
-import { courses } from "./courses"
+import { courses } from './courses'
 
 export type teacher = {
   id: number
