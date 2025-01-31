@@ -1,47 +1,47 @@
-'use client'
+"use client";
 
-import { ErrorText } from '@/components/ErrorText'
-import { createStudent } from '@/operations/createStudent'
-import { getCourses } from '@/operations/getCourses'
-import { idDataProps } from '@/types/idDataProps'
-import { imgType } from '@/types/imgType'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import InputField from '../components/InputField'
-import { SubmitButton } from '../components/SubmitButton'
+import { ErrorText } from "@/components/ErrorText";
+import { createStudent } from "@/operations/createStudent";
+import { getCourses } from "@/operations/getCourses";
+import { imgType } from "@/types/imgType";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import InputField from "../components/InputField";
+import { SubmitButton } from "../components/SubmitButton";
+import { getCourseProps } from "@/types/courseProps";
 
 export default function CreateStudent() {
-  const [name, setName] = useState('')
-  const [cpf, setCpf] = useState('')
-  const [foto, setFoto] = useState<imgType>()
-  const [rgFrente, setRgFrente] = useState<imgType>()
-  const [rgVerso, setRgVerso] = useState<imgType>()
-  const [residencia, setResidencia] = useState<imgType>()
-  const [cardiologista, setCardiologista] = useState<imgType>()
-  const [dermatologista, setDermatologista] = useState<imgType>()
-  const [vacina, setVacina] = useState<imgType>()
-  const [dataNascimento, setDataNascimento] = useState('')
-  const [responsavelNome, setResponsavelNome] = useState('')
-  const [responsavelVinculo, setResponsavelVinculo] = useState('')
-  const [telefoneContato, setTelefoneContato] = useState('')
-  const [telefoneEmergencia, setTelefoneEmergencia] = useState('')
-  const [error, setError] = useState('')
-  const [courses, setCourses] = useState<idDataProps[]>([])
-  const [courseId, setCourseId] = useState<string[]>([])
+  const [name, setName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [foto, setFoto] = useState<imgType>();
+  const [rgFrente, setRgFrente] = useState<imgType>();
+  const [rgVerso, setRgVerso] = useState<imgType>();
+  const [residencia, setResidencia] = useState<imgType>();
+  const [cardiologista, setCardiologista] = useState<imgType>();
+  const [dermatologista, setDermatologista] = useState<imgType>();
+  const [vacina, setVacina] = useState<imgType>();
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [responsavelNome, setResponsavelNome] = useState("");
+  const [responsavelVinculo, setResponsavelVinculo] = useState("");
+  const [telefoneContato, setTelefoneContato] = useState("");
+  const [telefoneEmergencia, setTelefoneEmergencia] = useState("");
+  const [error, setError] = useState("");
+  const [courses, setCourses] = useState<getCourseProps[]>([]);
+  const [courseId, setCourseId] = useState<{ id: string; year: string }[]>([]);
 
   useEffect(() => {
     getCourses().then((response) => {
-      setCourses(response)
-    })
-  }, [])
+      setCourses(response);
+    });
+  }, []);
 
   async function addStudent() {
-    setError('')
+    setError("");
     createStudent({
       name,
       cpf,
@@ -59,18 +59,20 @@ export default function CreateStudent() {
       vacina,
       courseId,
     })
-      .then(() => {
-        toast.success('Criado com sucesso', {
-          position: 'top-center',
+      .then((res) => {
+        console.log(res)
+        toast.success("Criado com sucesso", {
+          position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
           progress: undefined,
-          theme: 'colored',
-        })
+          theme: "colored",
+        });
       })
       .catch((e) => {
-        setError(e.toString())
-      })
+        console.log(e)
+        setError(e.toString());
+      });
   }
   return (
     <div className="flex flex-col justify-center">
@@ -96,24 +98,29 @@ export default function CreateStudent() {
           <InputLabel>Curso</InputLabel>
           <Select
             multiple
-            value={courseId}
+            value={courseId.map((item) => item.id).flat()} // Flatten the array of ids
             label="Curso"
-            onChange={(e: SelectChangeEvent<string[]>) =>
-              setCourseId(e.target.value as string[])
-            }
+            onChange={(e: SelectChangeEvent<string[]>) => {
+              const selected = e.target.value;
+
+              // Create the new array with id and year mapping
+              const selectedCourses = courses
+                .filter((item) => selected.includes(item.courseId)) // Filter courses based on selected IDs
+                .map((item) => ({ id: item.courseId, year: item.year })); // Create the { id, year } structure
+
+              setCourseId(selectedCourses); // Set the state with the new structure
+            }}
           >
-            {courses.map((item) => {
-              return (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.data.name}
-                </MenuItem>
-              )
-            })}
+            {courses.map((item) => (
+              <MenuItem key={item.courseId} value={item.courseId}>
+                {item.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <InputField
           type="text"
-          length={11}
+          length={75}
           label="CPF:"
           value={cpf}
           onChange={(e) => setCpf(e)}
@@ -121,7 +128,7 @@ export default function CreateStudent() {
 
         <InputField
           type="date"
-          length={6}
+          length={75}
           label=""
           value={dataNascimento}
           onChange={(e) => setDataNascimento(e)}
@@ -135,8 +142,8 @@ export default function CreateStudent() {
         />
 
         <InputField
-          type="text"
           length={75}
+          type="text"
           label="Vínculo do responsável:"
           value={responsavelVinculo}
           onChange={(e) => setResponsavelVinculo(e)}
@@ -209,5 +216,5 @@ export default function CreateStudent() {
       <SubmitButton text="Criar" onClick={addStudent} path="/students" />
       <ErrorText error={error} />
     </div>
-  )
+  );
 }

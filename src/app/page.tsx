@@ -1,26 +1,26 @@
-import { SearchBar } from '@/components/SearchBar'
-import { ThreeDotsDashboard } from '@/components/ThreeDotsDashboard'
-import { deleteCourse } from '@/operations/deleteCourse'
-import { getCourses } from '@/operations/getCourses'
-import AddIcon from '@mui/icons-material/Add'
-import Link from 'next/link'
+import { SearchBar } from "@/components/SearchBar";
+import { SelectSemester } from "@/components/SelectSemester";
+import { ThreeDotsDashboard } from "@/components/ThreeDotsDashboard";
+import { deleteCourse } from "@/operations/deleteCourse";
+import { getCourses } from "@/operations/getCourses";
+import { getCourseProps } from "@/types/courseProps";
+import AddIcon from "@mui/icons-material/Add";
+import Link from "next/link";
 
 export default async function Dashboard({
   searchParams,
 }: {
-  searchParams?: { query?: string }
+  searchParams?: { query?: string; year?: string };
 }) {
-  const query = searchParams?.query || ''
+  const query = searchParams?.query || "";
+  const year = searchParams?.year || "";
 
-  const courses = await getCourses()
+  const courses = (await getCourses(year)) as getCourseProps[];
 
-  const filteredCourses = courses.filter((course) => {
-    return (
-      course.data.name.toLowerCase().includes(query.toLowerCase()) &&
-      course.data.type === 'Extensão'
-    )
-  })
-
+  const filteredCourses = courses.filter(
+    (course) => course.name.includes(query) && course.type === "Extensão",
+  );
+  console.log(filteredCourses);
   return (
     <div>
       <SearchBar />
@@ -36,6 +36,7 @@ export default async function Dashboard({
               <li className="font-regular text-lg max-sm:text-sm">Ensino</li>
             </Link>
           </ul>
+          <SelectSemester />
 
           <Link
             href="createCourse"
@@ -47,49 +48,43 @@ export default async function Dashboard({
         </div>
 
         <div className="grid 2xl:grid-cols-4 m-0 lg:grid-cols-3 md:grid-cols-2">
-          {filteredCourses.map((response) => {
-            return (
-              <div
-                key={response.id}
-                className="w-52 h-52 flex items-center flex-col m-auto mb-14"
+          {filteredCourses.map((course) => (
+            <div
+              key={course.courseId}
+              className="w-52 h-52 flex items-center flex-col m-auto mb-14"
+            >
+              <Link
+                href={`course/${course.year}/${course.courseId}/dadosGerais`}
+                className="bg-darkBlue/50 p-4 rounded-lg m-auto w-full h-full"
               >
-                <Link
-                  href={`course/${response.id}/dadosGerais`}
-                  className="bg-darkBlue/50 p-4 rounded-lg m-auto w-full h-full"
+                <img
+                  src={course.courseImg}
+                  alt=""
+                  className={`object-cover w-full h-full 
+                      ${course.courseImg ? "" : "hidden"}`}
+                />
+                <div
+                  className={`flex items-center justify-center h-full w-full
+                      ${course.courseImg ? "hidden" : ""}`}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={response.data.courseImg}
-                    alt=""
-                    className={`object-cover w-full h-full 
-                      ${response.data.courseImg ? '' : 'hidden'}`}
-                  />
-                  <div
-                    className={`flex items-center justify-center h-full w-full
-                      ${response.data.courseImg ? 'hidden' : ''}`}
-                  >
-                    <span
-                      className={`text-center rotate-[315deg] w-full  
-                      `}
-                    >
-                      Adicionar Foto do curso
-                    </span>
-                  </div>
-                </Link>
-                <div className="flex  items-center justify-between w-full">
-                  <span className="w-full truncate">{response.data.name}</span>
-                  <ThreeDotsDashboard
-                    id={response.id}
-                    edit="editCourse"
-                    name={response.data.name}
-                    remove={deleteCourse}
-                  />
+                  <span className="text-center rotate-[315deg] w-full">
+                    Adicionar Foto do curso
+                  </span>
                 </div>
+              </Link>
+              <div className="flex items-center justify-between w-full">
+                <span className="w-full truncate">{course.name}</span>
+                <ThreeDotsDashboard
+                  id={course.courseId}
+                  edit="editCourse"
+                  name={course.name}
+                  remove={deleteCourse}
+                />
               </div>
-            )
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

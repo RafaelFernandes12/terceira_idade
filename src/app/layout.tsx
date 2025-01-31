@@ -1,14 +1,14 @@
-import { Header } from '@/components/Header'
-import { SideMenu } from '@/components/SideMenu'
-import { ToastContainer } from 'react-toastify'
-import './globals.css'
+import { Header } from "@/components/Header";
+import { SideMenu } from "@/components/SideMenu";
+import { ToastContainer } from "react-toastify";
+import "./globals.css";
 
-export const revalidate = 1
+export const revalidate = 1;
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="pt-br">
@@ -20,19 +20,8 @@ export default function RootLayout({
           </div>
           <SideMenu />
         </div>
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
+        <ToastContainer />
       </body>
     </html>
-  )
+  );
 }

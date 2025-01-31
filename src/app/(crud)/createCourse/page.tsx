@@ -1,49 +1,62 @@
-'use client'
+"use client";
 
-import { ErrorText } from '@/components/ErrorText'
-import { daysOfWeek, hoursOfClass, types } from '@/data'
-import { createCourse } from '@/operations/createCourse'
-// import { createCourseSeed } from '@/operations/seed'
-import { imgType } from '@/types/imgType'
-import { localProps } from '@/types/localProps'
-import { useState } from 'react'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import InputField from '../components/InputField'
-import SelectField from '../components/SelectField'
-import { SubmitButton } from '../components/SubmitButton'
+import { ErrorText } from "@/components/ErrorText";
+import { daysOfWeek, hoursOfClass, types } from "@/data";
+import { createCourse } from "@/operations/createCourse";
+import { imgType } from "@/types/imgType";
+import { localProps } from "@/types/localProps";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import InputField from "../components/InputField";
+import SelectField from "../components/SelectField";
+import { SubmitButton } from "../components/SubmitButton";
+import { getAllSemesters } from "@/operations/getAllSemesters";
+import { Modal } from "./components/Modal";
+import { semesterProps } from "@/types/semester";
+
 export default function CreateCourse() {
-  const [name, setName] = useState('')
-  const [courseImg, setCourseImg] = useState<imgType>()
-  const [professorName, setProfessorName] = useState('')
-  const [professorImg, setProfessorImg] = useState<imgType>()
-  const [error, setError] = useState('')
-  const [type, setType] = useState('Extensão')
-  const [local, setLocal] = useState<Array<localProps>>([])
+  const [name, setName] = useState("");
+  const [courseImg, setCourseImg] = useState<imgType>();
+  const [professorName, setProfessorName] = useState("");
+  const [professorImg, setProfessorImg] = useState<imgType>();
+  const [error, setError] = useState("");
+  const [type, setType] = useState("Extensão");
+  const [local, setLocal] = useState<Array<localProps>>([]);
+  const [semesters, setSemesters] = useState<semesterProps[]>([]);
+  const [semesterId, setSemesterId] = useState("");
 
+  useEffect(() => {
+    getAllSemesters().then((response) => {
+      setSemesters(response);
+    });
+  }, []);
   async function addCourse() {
-    setError('')
-    createCourse({
-      name,
-      courseImg,
-      type,
-      professorName,
-      professorImg,
-      local,
-    })
+    setError("");
+    createCourse(
+      {
+        name,
+        courseImg,
+        type,
+        professorName,
+        professorImg,
+        local,
+      },
+      semesterId,
+    )
       .then(() => {
-        toast.success('Criado com sucesso', {
-          position: 'top-center',
+        toast.success("Criado com sucesso", {
+          position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
           progress: undefined,
-          theme: 'colored',
-        })
+          theme: "colored",
+        });
       })
       .catch((e) => {
-        setError(e.toString())
-        console.log(e)
-      })
+        setError(e.toString());
+        console.log(e);
+      });
   }
   function handleInputChange(
     index: number,
@@ -51,21 +64,20 @@ export default function CreateCourse() {
     value: string,
   ) {
     setLocal((prevLocal) => {
-      const updatedLocal = [...prevLocal]
+      const updatedLocal = [...prevLocal];
       updatedLocal[index] = {
         ...updatedLocal[index],
         [propertyName]: value,
-      }
-      return updatedLocal
-    })
+      };
+      return updatedLocal;
+    });
   }
   function handleCreateNewLocal() {
-    setLocal((prevLocal) => [...prevLocal, { date: '', hour: '', place: '' }])
+    setLocal((prevLocal) => [...prevLocal, { date: "", hour: "", place: "" }]);
   }
 
   return (
     <div className="flex flex-col justify-center gap-4">
-      {/* <button onClick={createCourseSeed}>hello</button> */}
       <h1 className="font-semibold text-2xl my-7">Criar curso</h1>
       <div className="flex flex-col gap-4 mb-4">
         <div className="flex items-center gap-6 max-sm:flex-col max-sm:items-baseline max-sm:gap-0 max-sm:mb-4">
@@ -109,6 +121,14 @@ export default function CreateCourse() {
             />
           </div>
         </div>
+        <SelectField
+          inputLabel="Semestre"
+          value={semesterId}
+          label="Semestre"
+          onChange={(e) => setSemesterId(e)}
+          itens={semesters.map((item) => item.year)}
+        />
+        <Modal />
         <div className="flex gap-4 items-center my-4 max-md:flex-col">
           {local.map((item, index) => (
             <div key={index} className="flex flex-col gap-4">
@@ -116,14 +136,14 @@ export default function CreateCourse() {
                 inputLabel="Dia"
                 value={item.date}
                 label="Dia"
-                onChange={(e) => handleInputChange(index, 'date', e)}
+                onChange={(e) => handleInputChange(index, "date", e)}
                 itens={daysOfWeek}
               />
               <SelectField
                 inputLabel="Hora"
                 value={item.hour}
                 label="Hora"
-                onChange={(e) => handleInputChange(index, 'hour', e)}
+                onChange={(e) => handleInputChange(index, "hour", e)}
                 itens={hoursOfClass}
               />
               <InputField
@@ -131,7 +151,7 @@ export default function CreateCourse() {
                 length={20}
                 label="Lugar do curso:"
                 value={item.place}
-                onChange={(e: string) => handleInputChange(index, 'place', e)}
+                onChange={(e: string) => handleInputChange(index, "place", e)}
               />
             </div>
           ))}
@@ -146,5 +166,5 @@ export default function CreateCourse() {
       <SubmitButton text="Criar" onClick={addCourse} path="/" />
       <ErrorText error={error} />
     </div>
-  )
+  );
 }

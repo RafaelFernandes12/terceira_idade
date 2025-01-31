@@ -1,11 +1,13 @@
-import { getCourse } from '@/operations/getCourse'
-import { idProps } from '@/types/idProps'
-import Link from 'next/link'
-import DataTable from '../../components/DataTable'
+import { getCourse } from "@/operations/getCourse";
+import Link from "next/link";
+import DataTable from "../../../components/DataTable";
 
-export default async function DadosGerais({ params }: idProps) {
-  const id = params.id
-  const course = await getCourse(id)
+export default async function DadosGerais({
+  params,
+}: {
+  params: { id: string; year: string };
+}) {
+  const course = await getCourse(params.year, params.id);
 
   return (
     <div className="border-2 border-black rounded-lg p-4 ">
@@ -30,5 +32,5 @@ export default async function DadosGerais({ params }: idProps) {
         />
       </div>
     </div>
-  )
+  );
 }

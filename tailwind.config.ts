@@ -14,22 +14,22 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       backgroundColor: {
-        "darkBlue": "#161250",
-        "hoverColor":"#191280",
-        "violet": "#9D9DBC"
+        darkBlue: "#161250",
+        hoverColor: "#191280",
+        violet: "#9D9DBC",
       },
       borderWidth: {
-        1:"1px"
+        1: "1px",
       },
       fontFamily: {
-        "poppins": ["Poppins"],
+        poppins: ["Poppins"],
       },
       colors: {
         "background-light": "#ECF1F8",
-        "darkBlue": "#292272"
+        darkBlue: "#292272",
       },
     },
   },
-  plugins: [],
+  // plugins: [require("daisyui")],
 };
 export default config;

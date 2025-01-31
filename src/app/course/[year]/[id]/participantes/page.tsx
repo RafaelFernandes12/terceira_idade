@@ -1,14 +1,17 @@
-import { getCourse } from '@/operations/getCourse'
-import { getSubcollectionOfCourse } from '@/operations/getSubcollectionOfCourse'
-import { idProps } from '@/types/idProps'
-import Link from 'next/link'
-import StudentData from '../../components/StudentsData'
+import { getCourse } from "@/operations/getCourse";
+import { getSubcollectionOfCourse } from "@/operations/getSubcollectionOfCourse";
+import Link from "next/link";
+import StudentData from "../../../components/StudentsData";
 
-export default async function Participantes({ params }: idProps) {
-  const id = params.id
-  const course = await getCourse(id)
-  const studentsFromCourse = await getSubcollectionOfCourse(id)
-  console.log(id)
+export default async function Participantes({
+  params,
+}: {
+  params: { id: string; year: string };
+}) {
+  const id = params.id;
+  const course = await getCourse(params.year, params.id);
+  const studentsFromCourse = await getSubcollectionOfCourse(id);
+
   return (
     <div className="border-2 border-black rounded-lg p-4 ">
       <div className="border-b-2 border-black w-full font-medium my-4 text-4xl truncate max-md:text-2xl">
@@ -28,5 +31,5 @@ export default async function Participantes({ params }: idProps) {
         <StudentData students={studentsFromCourse} />
       </div>
     </div>
-  )
+  );
 }

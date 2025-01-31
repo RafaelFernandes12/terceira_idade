@@ -1,14 +1,36 @@
-import { db } from '@/config/firestore'
-import { getStudentProps } from '@/types/studentProps'
-import { doc, getDoc } from 'firebase/firestore'
+import { db } from "@/config/firestore";
+import { getStudentProps } from "@/types/studentProps";
+import { doc, getDoc } from "firebase/firestore";
 
-export async function getStudent(id: string): Promise<getStudentProps> {
-  const docRef = doc(db, 'students', id)
-  const docSnap = await getDoc(docRef)
+export async function getStudent(
+  id: string,
+  course: { semesterId: string; courseId: string },
+): Promise<getStudentProps> {
+  // Reference to the student document
+  const docRef = doc(
+    db,
+    "semesters",
+    course.semesterId,
+    "courses",
+    course.courseId,
+    "students",
+    id,
+  );
 
-  const data = docSnap.data() as getStudentProps
+  // Fetch the student document
+  const docSnap = await getDoc(docRef);
 
-  const student: getStudentProps = {
+  // Check if the document exists
+  if (!docSnap.exists()) {
+    throw new Error("Student not found");
+  }
+
+  // Extract the student data
+  const data = docSnap.data() as getStudentProps;
+
+  // Return the student object
+  return {
+    id: docSnap.id, // Include the student ID in the returned object
     name: data.name,
     cpf: data.cpf,
     dataNascimento: data.dataNascimento,
@@ -25,7 +47,6 @@ export async function getStudent(id: string): Promise<getStudentProps> {
     vacina: data.vacina,
     courseId: data.courseId,
     courses: data.courses,
-  }
-
-  return student
+    year: data.year,
+  };
 }

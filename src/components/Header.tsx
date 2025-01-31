@@ -1,6 +1,6 @@
-import Image from 'next/image'
-import CPSIWeb from '../assets/CPSI Web.svg'
-import { ResponsiveMenu } from './ResponsiveMenu'
+import Image from "next/image";
+import CPSIWeb from "../assets/CPSI Web.svg";
+import { ResponsiveMenu } from "./ResponsiveMenu";
 
 export function Header() {
   return (
@@ -12,5 +12,5 @@ export function Header() {
         <ResponsiveMenu />
       </div>
     </div>
-  )
+  );
 }

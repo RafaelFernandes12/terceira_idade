@@ -1,32 +1,17 @@
-import { db, storage } from '@/config/firestore'
-import { postStudentProps } from '@/types/studentProps'
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from 'firebase/firestore'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import uniqid from 'uniqid'
+import { db, storage } from "@/config/firestore";
+import { postStudentProps } from "@/types/studentProps";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import uniqid from "uniqid";
 
 export async function createStudent(props: postStudentProps) {
   try {
-    const valRef = collection(db, 'students')
-    const querySnapshot = await getDocs(
-      query(valRef, where('name', '==', props.name)),
-    )
-
+    // Validate required fields
     if (!props.name) {
-      throw new Error('Estudante tem que possuir um nome')
-    }
-    if (!querySnapshot.empty) {
-      throw new Error('Estudante com o mesmo nome já existe')
+      throw new Error("Estudante tem que possuir um nome");
     }
 
+    // Upload all images to Firebase Storage
     const uploadTasks = [
       props.foto
         ? uploadBytes(
@@ -70,7 +55,7 @@ export async function createStudent(props: postStudentProps) {
             props.vacina,
           )
         : null,
-    ]
+    ];
 
     const [
       fotoSnapshot,
@@ -80,12 +65,13 @@ export async function createStudent(props: postStudentProps) {
       cardiologistaSnapshot,
       dermatologistaSnapshot,
       vacinaSnapshot,
-    ] = await Promise.all(uploadTasks)
+    ] = await Promise.all(uploadTasks);
 
+    // Get download URLs for the uploaded images
     const [
-      downloadstudentURL,
-      downloadrgFrenteURL,
-      downloadrgVersoURL,
+      downloadFotoURL,
+      downloadRgFrenteURL,
+      downloadRgVersoURL,
       downloadResidenciaURL,
       downloadCardiologistaURL,
       downloadDermatologistaURL,
@@ -100,59 +86,51 @@ export async function createStudent(props: postStudentProps) {
         ? getDownloadURL(dermatologistaSnapshot.ref)
         : null,
       vacinaSnapshot ? getDownloadURL(vacinaSnapshot.ref) : null,
-    ])
+    ]);
 
-    const docRef = await addDoc(valRef, {
-      name: props.name,
-      cpf: props.cpf,
-      dataNascimento: props.dataNascimento,
-      responsavelNome: props.responsavelNome,
-      responsavelVinculo: props.responsavelVinculo,
-      telefoneContato: props.telefoneContato,
-      telefoneEmergencia: props.telefoneEmergencia,
-      foto: downloadstudentURL,
-      rgFrente: downloadrgFrenteURL,
-      rgVerso: downloadrgVersoURL,
+    // Create the student data object
+    const studentData = {
+      ...props,
+      foto: downloadFotoURL,
+      rgFrente: downloadRgFrenteURL,
+      rgVerso: downloadRgVersoURL,
       residencia: downloadResidenciaURL,
       cardiologista: downloadCardiologistaURL,
       dermatologista: downloadDermatologistaURL,
       vacina: downloadVacinaURL,
-    })
-    await Promise.all(
-      props.courseId!.map(async (course) => {
-        const studentRef = doc(db, 'students', docRef.id)
-        const subCollectionOfStudentsFromCourse = doc(
-          db,
-          'courses',
-          course,
-          'students',
-          docRef.id,
-        )
-        await getDoc(studentRef).then(async (doc) => {
-          const docData = doc.data()
-          await setDoc(subCollectionOfStudentsFromCourse, {
-            students: docData,
-          })
-        })
+    };
 
-        const subCollectionOfCourseFromStudents = doc(
+    // Loop through the courseId array and add the student to each course's students subcollection
+    if (props.courseId) {
+      for (const course of props.courseId) {
+        const courseRef = doc(
           db,
-          'students',
-          docRef.id,
-          'courses',
-          course,
-        )
+          "semesters",
+          course.year,
+          "courses",
+          course.id,
+        );
 
-        const courseRef = doc(db, 'courses', course)
-        await getDoc(courseRef).then(async (doc) => {
-          const docData = doc.data()
-          await setDoc(subCollectionOfCourseFromStudents, {
-            courses: docData,
-          })
-        })
-      }),
-    )
+        // Check if the course exists
+        const courseDoc = await getDoc(courseRef);
+        if (!courseDoc.exists()) {
+          throw new Error(`Course ${course.id} does not exist`);
+        }
+
+        // Add the student to the course's students subcollection
+        const studentsRef = collection(
+          db,
+          "semesters",
+          course.year,
+          "courses",
+          course.id,
+          "students",
+        );
+        await addDoc(studentsRef, studentData);
+      }
+    }
   } catch (e) {
-    console.log(e)
+    console.error("Error creating student:", e);
+    throw e; // Re-throw the error for handling in the calling function
   }
 }
