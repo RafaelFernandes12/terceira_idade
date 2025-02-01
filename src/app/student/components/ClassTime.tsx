@@ -1,3 +1,4 @@
+import { SelectSemester } from "@/components/SelectSemester";
 import { daysOfWeek, hoursOfClass } from "@/data";
 import { getSubcollectionOfStudent } from "@/operations/getSubcollectionOfStudent";
 import { getCourseProps } from "@/types/courseProps";
@@ -11,7 +12,7 @@ interface classTimeProps {
 
 export async function ClassTime({ courseIds, semesterId }: classTimeProps) {
   const subCourse = await getSubcollectionOfStudent(semesterId, courseIds);
-
+  console.log(subCourse);
   const getInfo = (day: string, hour: string) => {
     const entries = subCourse.flatMap((response: getCourseProps) =>
       response.local.flatMap((item: localProps) => {
@@ -31,6 +32,7 @@ export async function ClassTime({ courseIds, semesterId }: classTimeProps) {
 
   return (
     <div>
+      <SelectSemester />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <table className="border-2 border-black w-11/12 m-auto my-5 text-center max-sm:text-xs">
         <thead>

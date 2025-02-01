@@ -20,7 +20,6 @@ export default function CreateCourse() {
   const [courseImg, setCourseImg] = useState<imgType>();
   const [professorName, setProfessorName] = useState("");
   const [professorImg, setProfessorImg] = useState<imgType>();
-  const [error, setError] = useState("");
   const [type, setType] = useState("Extensão");
   const [local, setLocal] = useState<Array<localProps>>([]);
   const [semesters, setSemesters] = useState<semesterProps[]>([]);
@@ -32,7 +31,6 @@ export default function CreateCourse() {
     });
   }, []);
   async function addCourse() {
-    setError("");
     createCourse(
       {
         name,
@@ -45,16 +43,10 @@ export default function CreateCourse() {
       semesterId,
     )
       .then(() => {
-        toast.success("Criado com sucesso", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.success("Criado com sucesso");
       })
       .catch((e) => {
-        setError(e.toString());
+        toast.error(e.toString());
         console.log(e);
       });
   }
@@ -164,7 +156,6 @@ export default function CreateCourse() {
         </button>
       </div>
       <SubmitButton text="Criar" onClick={addCourse} path="/" />
-      <ErrorText error={error} />
     </div>
   );
 }

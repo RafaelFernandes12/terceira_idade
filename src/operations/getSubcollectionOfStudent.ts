@@ -6,9 +6,10 @@ export async function getSubcollectionOfStudent(
   semesterId: string,
   courseIds: string[],
 ): Promise<getCourseProps[]> {
-  if (!courseIds) return [];
+  if (!courseIds || !semesterId) return [];
   const coursePromises = courseIds.map(async (courseId) => {
     const docRef = doc(db, "semesters", semesterId, "courses", courseId);
+    console.log(courseId);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) return null;

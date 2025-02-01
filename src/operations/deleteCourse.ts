@@ -44,8 +44,6 @@ export async function deleteCourse(
       return deleteObject(courseImgNameRef);
     });
     await Promise.all(courseImgs);
-
-    console.log("Curso excluído com sucesso.");
   } catch (e) {
     console.error("Erro ao excluir o curso:", e);
     throw e;

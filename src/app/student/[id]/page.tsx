@@ -1,5 +1,4 @@
 import { getStudent } from "@/operations/getStudent";
-import { idProps } from "@/types/idProps";
 import { Person } from "@mui/icons-material";
 import ErrorIcon from "@mui/icons-material/Error";
 import { ClassTime } from "../components/ClassTime";
@@ -7,27 +6,33 @@ import { ContentBox } from "../components/ContentBox";
 import { DialogButton } from "../components/DialogButton";
 import { TableRow } from "../components/TableRow";
 
-export default async function Student({ params }: idProps) {
+export default async function Student({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { year: string };
+}) {
   const id = params.id;
+  const year = searchParams.year;
   const student = await getStudent(id);
-  console.log(student);
+
   const courseIds = student.courseId?.map((course) => course.id) || [];
   return (
     <div>
       <div
         className={`m-auto rounded-2xl w-full p-2 pb-6 bg-red-500/20 mb-10
-      ${
-        student.foto &&
-        student.cardiologista &&
-        student.dermatologista &&
-        student.vacina &&
-        student.residencia &&
-        student.rgFrente &&
-        student.rgVerso &&
-        student.foto
-          ? "hidden"
-          : ""
-      }`}
+      ${student.foto &&
+            student.cardiologista &&
+            student.dermatologista &&
+            student.vacina &&
+            student.residencia &&
+            student.rgFrente &&
+            student.rgVerso &&
+            student.foto
+            ? "hidden"
+            : ""
+          }`}
       >
         <div className="flex items-center gap-2">
           <ErrorIcon className="text-red-500 rounded-full w-7 h-7" />
@@ -54,7 +59,7 @@ export default async function Student({ params }: idProps) {
               />
               <p>{student.name}</p>
               <DialogButton>
-                <ClassTime courseIds={courseIds || []} semesterId="2026" />
+                <ClassTime courseIds={courseIds || []} semesterId={year} />
               </DialogButton>
             </div>
             <hr className="border-black" />
@@ -73,7 +78,7 @@ export default async function Student({ params }: idProps) {
           </ContentBox>
 
           <ContentBox title="Atividade">
-            <ClassTime courseIds={courseIds || []} semesterId="2026" />
+            <ClassTime courseIds={courseIds || []} semesterId={year} />
           </ContentBox>
           <ContentBox title="Documentação">
             <table className="mb-10 m-auto w-11/12 mt-8">
